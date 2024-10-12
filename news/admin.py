@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Category, News
-from .models import User
+from .models import ReporterProfile
 from django.contrib.admin import RelatedOnlyFieldListFilter
 from .models import Subtitle
 
@@ -26,13 +26,11 @@ class NewsAdmin(admin.ModelAdmin):
 
 admin.site.register(News, NewsAdmin)
 
-class UserAdmin(admin.ModelAdmin):
-    list_display = ('name', 'phone_number', 'role', 'status')  # اصلاح فیلدهای موجود در list_display
-    search_fields = ('name', 'phone_number')
-    list_filter = ('role', 'status')
-
+@admin.register(ReporterProfile)
+class ReporterProfileAdmin(admin.ModelAdmin):
+    list_display = ('reporter', 'phone')
+    search_fields = ('reporter__username', 'phone')
     
-admin.site.register(User, UserAdmin)
 
 class SubtitleAdmin(admin.ModelAdmin):
     list_display = ('title', 'date', 'operation')  # فیلدهایی که در لیست نمایش داده می‌شوند

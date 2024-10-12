@@ -4,6 +4,7 @@ from .views import UserList, UserDetail, NewsList, NewsDetail, UserProfile, Chan
 from .views import CategoryViewSet, CategoryList, AddCategory, EditCategory, DeleteCategory, Category, CategoryDetail
 from . import views
 from .views import subtitle_list, add_subtitle
+from .views import ReporterProfileListCreateView, ReporterProfileDetailView
 
 
 
@@ -37,4 +38,9 @@ urlpatterns = [
     path('categories/<int:pk>/', CategoryDetail.as_view(), name='category-detail'),
     path('subtitles/', subtitle_list, name='subtitle-list'),
     path('subtitles/add/', add_subtitle, name='add-subtitle'),
+    path('reporters/', ReporterProfileListCreateView.as_view(), name='reporter-list-create'),
+    path('reporters/<int:pk>/', ReporterProfileDetailView.as_view(), name='reporter-detail'),
+    path('news/', NewsList.as_view(), name='news-list'),
+    path('news/<int:pk>/', NewsDetail.as_view(), name='news-detail'),
+
 ]

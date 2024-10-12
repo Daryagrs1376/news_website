@@ -1,23 +1,29 @@
 from django import forms
 from .models import User
 from .models import Subtitle
+from .models import ReporterProfile
 
 
 
-class AddUserForm(forms.ModelForm):
+class ReporterProfileForm(forms.ModelForm):
     class Meta:
-        model = User
-        fields = ['username', 'email', 'first_name', 'last_name', 'name', 'phone_number', 'password', 'role']
+        model = ReporterProfile
+        fields = ['reporter', 'phone']
+        
+# class AddUserForm(forms.ModelForm):
+#     class Meta:
+#         model = User
+#         fields = ['username', 'email', 'first_name', 'last_name', 'name', 'phone_number', 'password', 'role']
 
-    def clean(self):
-        cleaned_data = super().clean()
-        password = cleaned_data.get("password")
-        confirm_password = cleaned_data.get("confirm_password")
+#     def clean(self):
+#         cleaned_data = super().clean()
+#         password = cleaned_data.get("password")
+#         confirm_password = cleaned_data.get("confirm_password")
 
-        if password != confirm_password:
-            raise forms.ValidationError("Passwords do not match")
+#         if password != confirm_password:
+#             raise forms.ValidationError("Passwords do not match")
 
-        return cleaned_data
+#         return cleaned_data
 
 class AddCategoryForm(forms.Form):
     title = forms.CharField(max_length=255, label='عنوان')

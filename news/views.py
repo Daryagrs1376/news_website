@@ -1,34 +1,26 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, viewsets
-from .models import News, User
-from .serializers import NewsSerializer, AddUserSerializer, NewsEditSerializer, UserSerializer
+from rest_framework import status, viewsets, generics
+# from .serializers import NewsSerializer, AddUserSerializer, NewsEditSerializer, UserSerializer
 from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect, render
-from .forms import AddUserForm
-from rest_framework import generics
-from .models import Category
-from .serializers import CategorySerializer
+# from .forms import AddUserForm
+from .serializers import CategorySerializer, ReporterProfileSerializer, AddUserSerializer, NewsSerializer, NewsEditSerializer
 from rest_framework.decorators import action
-from .forms import AddCategoryForm
 from django.http import HttpResponse, JsonResponse
-from .serializers import UserSerializer 
-from django.shortcuts import get_object_or_404
-from.models import News
-from .models import Subtitle
-from .forms import SubtitleForm
+from.models import News, Category, Subtitle, ReporterProfile
+from.forms import SubtitleForm, ReporterProfileForm, AddCategoryForm
 from django.views import View
 
 
-
-class UserDetail(APIView):
-    def get(self, request, pk):
-        try:
-            user = User.objects.get(pk=pk)
-            serializer = UserSerializer(user)
-            return Response(serializer.data)
-        except User.DoesNotExist:
-            return Response({"error": "User not found"}, status=404)
+# class UserDetail(APIView):
+#     def get(self, request, pk):
+#         try:
+#             user = User.objects.get(pk=pk)
+#             serializer = UserSerializer(user)
+#             return Response(serializer.data)
+#         except User.DoesNotExist:
+#             return Response({"error": "User not found"}, status=404)
         
 def edit_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
@@ -101,209 +93,209 @@ class CategoryDetail(APIView):
         category.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-class NewsList(APIView):
-    def get(self, request):
-        news = News.objects.all()
-        serializer = NewsSerializer(news, many=True)
-        return Response(serializer.data)
+# class NewsList(APIView):
+#     def get(self, request):
+#         news = News.objects.all()
+#         serializer = NewsSerializer(news, many=True)
+#         return Response(serializer.data)
 
-    def post(self, request):
-        serializer = NewsSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def post(self, request):
+#         serializer = NewsSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class NewsDetail(APIView):
+# class NewsDetail(APIView):
     
-    def get_object(self, pk):
-        try:
-            return News.objects.get(pk=pk)
-        except News.DoesNotExist:
-            return None
+#     def get_object(self, pk):
+#         try:
+#             return News.objects.get(pk=pk)
+#         except News.DoesNotExist:
+#             return None
         
-    def get(self, request, pk):
-        news = self.get_object(pk)
-        if news is None:
-            return Response({'error': 'News not found.'}, status=status.HTTP_404_NOT_FOUND)
+#     def get(self, request, pk):
+#         news = self.get_object(pk)
+#         if news is None:
+#             return Response({'error': 'News not found.'}, status=status.HTTP_404_NOT_FOUND)
         
-        return Response({'title': news.title, 'content': news.content})
+#         return Response({'title': news.title, 'content': news.content})
 
-    def get(self, request, pk):
-        news = self.get_object(pk)
-        if news is None:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = NewsSerializer(news)
-        return Response(serializer.data)
+#     def get(self, request, pk):
+#         news = self.get_object(pk)
+#         if news is None:
+#             return Response(status=status.HTTP_404_NOT_FOUND)
+#         serializer = NewsSerializer(news)
+#         return Response(serializer.data)
 
-    def put(self, request, pk):
-        news = self.get_object(pk)
-        if news is None:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+#     def put(self, request, pk):
+#         news = self.get_object(pk)
+#         if news is None:
+#             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        serializer = NewsEditSerializer(news, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         serializer = NewsEditSerializer(news, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk):
-        news = self.get_object(pk)
-        if news is None:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        news.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+#     def delete(self, request, pk):
+#         news = self.get_object(pk)
+#         if news is None:
+#             return Response(status=status.HTTP_404_NOT_FOUND)
+#         news.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
     
-class NewsDetail(APIView):
-    def get_object(self, pk):
-        try:
-            return News.objects.get(pk=pk)
-        except News.DoesNotExist:
-            return None
+# class NewsDetail(APIView):
+#     def get_object(self, pk):
+#         try:
+#             return News.objects.get(pk=pk)
+#         except News.DoesNotExist:
+#             return None
 
-    def get(self, request, pk):
-        news = self.get_object(pk)
-        if news is None:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = NewsSerializer(news)
-        return Response(serializer.data)
+#     def get(self, request, pk):
+#         news = self.get_object(pk)
+#         if news is None:
+#             return Response(status=status.HTTP_404_NOT_FOUND)
+#         serializer = NewsSerializer(news)
+#         return Response(serializer.data)
 
-    def put(self, request, pk):
-        news = self.get_object(pk)
-        if news is None:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+#     def put(self, request, pk):
+#         news = self.get_object(pk)
+#         if news is None:
+#             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        serializer = NewsSerializer(news, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         serializer = NewsSerializer(news, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk):
-        news = self.get_object(pk)
-        if news is None:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        news.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+#     def delete(self, request, pk):
+#         news = self.get_object(pk)
+#         if news is None:
+#             return Response(status=status.HTTP_404_NOT_FOUND)
+#         news.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
     
-class UserProfile(APIView):
-    def get_object(self, username):
-        try:
-            return User.objects.get(username=username)
-        except User.DoesNotExist:
-            return None
+# class UserProfile(APIView):
+#     def get_object(self, username):
+#         try:
+#             return User.objects.get(username=username)
+#         except User.DoesNotExist:
+#             return None
 
-    def get(self, request, username):
-        user = self.get_object(username)
-        if user is None:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
+#     def get(self, request, username):
+#         user = self.get_object(username)
+#         if user is None:
+#             return Response(status=status.HTTP_404_NOT_FOUND)
+#         serializer = UserSerializer(user)
+#         return Response(serializer.data)
 
-    def put(self, request, username):
-        user = self.get_object(username)
-        if user is None:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = UserSerializer(user, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def put(self, request, username):
+#         user = self.get_object(username)
+#         if user is None:
+#             return Response(status=status.HTTP_404_NOT_FOUND)
+#         serializer = UserSerializer(user, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class ChangePassword(APIView):
-    def put(self, request, username):
-        user = User.objects.get(username=username)
-        if user is None:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+# class ChangePassword(APIView):
+#     def put(self, request, username):
+#         user = User.objects.get(username=username)
+#         if user is None:
+#             return Response(status=status.HTTP_404_NOT_FOUND)
         
-        current_password = request.data.get('current_password')
-        new_password = request.data.get('new_password')
+#         current_password = request.data.get('current_password')
+#         new_password = request.data.get('new_password')
         
-        if user.password != current_password:
-            return Response({'error': 'Current password is incorrect.'}, status=status.HTTP_400_BAD_REQUEST)
+#         if user.password != current_password:
+#             return Response({'error': 'Current password is incorrect.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        user.password = new_password
-        user.save()
-        return Response({'message': 'Password changed successfully.'})
+#         user.password = new_password
+#         user.save()
+#         return Response({'message': 'Password changed successfully.'})
 
-class SignOut(APIView):
-    def post(self, request):
-        return Response({'message': 'User signed out successfully.'})
+# class SignOut(APIView):
+#     def post(self, request):
+#         return Response({'message': 'User signed out successfully.'})
     
-def list_users(request):
-    query = request.GET.get('search', '')
-    users = User.objects.filter(name__icontains=query) if query else User.objects.all()
-    return render(request, 'list_users.html', {'users': users})
+# def list_users(request):
+#     query = request.GET.get('search', '')
+#     users = User.objects.filter(name__icontains=query) if query else User.objects.all()
+#     return render(request, 'list_users.html', {'users': users})
 
-def add_user(request):
-    if request.method == 'POST':
-        form = AddUserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            # ارسال پیامک برای رمز عبور
-            # your_sms_function(phone_number=form.cleaned_data['phone_number'], password=form.cleaned_data['password'])
-            return redirect('list_users')
-    else:
-        form = AddUserForm()
-    return render(request, 'add_user.html', {'form': form})
+# def add_user(request):
+#     if request.method == 'POST':
+#         form = AddUserForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             # ارسال پیامک برای رمز عبور
+#             # your_sms_function(phone_number=form.cleaned_data['phone_number'], password=form.cleaned_data['password'])
+#             return redirect('list_users')
+#     else:
+#         form = AddUserForm()
+#     return render(request, 'add_user.html', {'form': form})
 
-def edit_user(request, user_id):
-    user = User.objects.get(id=user_id)
-    if request.method == 'POST':
-        form = AddUserForm(request.POST, instance=user)
-        if form.is_valid():
-            form.save()
-            return redirect('list_users')
-    else:
-        form = AddUserForm(instance=user)
-    return render(request, 'edit_user.html', {'form': form})
+# def edit_user(request, user_id):
+#     user = User.objects.get(id=user_id)
+#     if request.method == 'POST':
+#         form = AddUserForm(request.POST, instance=user)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('list_users')
+#     else:
+#         form = AddUserForm(instance=user)
+#     return render(request, 'edit_user.html', {'form': form})
 
-def delete_user(request, user_id):
-    user = User.objects.get(id=user_id)
-    user.delete()
-    return redirect('list_users')
+# def delete_user(request, user_id):
+#     user = User.objects.get(id=user_id)
+#     user.delete()
+#     return redirect('list_users')
 
-class UserList(APIView):
-    def get(self, request):
-        search_query = request.GET.get('search', '')
-        if search_query:
-            users = User.objects.filter(name__icontains=search_query)
-        else:
-            users = User.objects.all()
-        serializer = UserSerializer(users, many=True)
-        return Response(serializer.data)
+# class UserList(APIView):
+#     def get(self, request):
+#         search_query = request.GET.get('search', '')
+#         if search_query:
+#             users = User.objects.filter(name__icontains=search_query)
+#         else:
+#             users = User.objects.all()
+#         serializer = UserSerializer(users, many=True)
+#         return Response(serializer.data)
 
-    def post(self, request):
-        serializer = AddUserSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def post(self, request):
+#         serializer = AddUserSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-class UserDetail(APIView):
-    def get_object(self, user_id):
-        try:
-            return User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return None
+# class UserDetail(APIView):
+#     def get_object(self, user_id):
+#         try:
+#             return User.objects.get(id=user_id)
+#         except User.DoesNotExist:
+#             return None
 
-    def put(self, request, user_id):
-        user = self.get_object(user_id)
-        if user is None:
-            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+#     def put(self, request, user_id):
+#         user = self.get_object(user_id)
+#         if user is None:
+#             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         
-        serializer = AddUserSerializer(user, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         serializer = AddUserSerializer(user, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, user_id):
-        user = self.get_object(user_id)
-        if user is None:
-            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+#     def delete(self, request, user_id):
+#         user = self.get_object(user_id)
+#         if user is None:
+#             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+#         user.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class AddCategory(APIView):
     def post(self, request):
@@ -324,11 +316,11 @@ def delete_category(request, pk):
         return JsonResponse({"message": "Category deleted successfully!"})
     return JsonResponse({"error": "Only POST method is allowed"}, status=400)
 
-class UserList(APIView):
-    def get(self, request):
-        users = User.objects.all()
-        serializer = UserSerializer(users, many=True)
-        return Response(serializer.data)
+# class UserList(APIView):
+#     def get(self, request):
+#         users = User.objects.all()
+#         serializer = UserSerializer(users, many=True)
+#         return Response(serializer.data)
 
 def subtitle_list(request):
     subtitles = Subtitle.objects.all()
@@ -378,3 +370,56 @@ def delete_subtitle(request, pk):
         subtitle.delete()
         return redirect('some_view_name')  # نام view مناسب برای ریدایرکت بعد از حذف
     return render(request, 'template_name.html', {'subtitle': subtitle})
+
+class ReporterProfileListCreateView(generics.ListCreateAPIView):
+    queryset = ReporterProfile.objects.all()
+    serializer_class = ReporterProfileSerializer
+
+class ReporterProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ReporterProfile.objects.all()
+    serializer_class = ReporterProfileSerializer
+
+class NewsList(APIView):
+    def get(self, request):
+        news = News.objects.all()
+        serializer = NewsSerializer(news, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = NewsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class NewsDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return News.objects.get(pk=pk)
+        except News.DoesNotExist:
+            return None
+
+    def get(self, request, pk):
+        news = self.get_object(pk)
+        if news is None:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = NewsSerializer(news)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        news = self.get_object(pk)
+        if news is None:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = NewsEditSerializer(news, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        news = self.get_object(pk)
+        if news is None:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        news.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

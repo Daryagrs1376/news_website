@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import User
 from .models import News
 from .models import Category
+from .models import ReporterProfile
 
 
 
@@ -10,13 +11,18 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id', 'name', 'subcategory_name', 'status']
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['username', 'phone_number', 'password', 'profile_picture']
-        extra_kwargs = {'password': {'write_only': True}}
-        fields = ['id', 'name', 'phone_number', 'role', 'status']
+# class UserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ['username', 'phone_number', 'password', 'profile_picture']
+#         extra_kwargs = {'password': {'write_only': True}}
+#         fields = ['id', 'name', 'phone_number', 'role', 'status']
 
+class ReporterProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReporterProfile
+        fields = ['id', 'reporter', 'phone']
+        
 class NewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
