@@ -44,17 +44,21 @@ class News(models.Model):
 
     def __str__(self):
         return self.title
+
+class ReporterProfile(models.Model):
+    reporter  = models.ForeignKey(User,  on_delete=models.CASCADE, null=True)
+    phone = models.CharField(max_length=13, null=True)
+
+# class User(models.Model):
+#     name = models.CharField(max_length=100)
+#     phone_number = models.CharField(max_length=15, unique=True)
+#     password = models.CharField(max_length=128)
+#     role = models.CharField(max_length=20, choices=[('admin', 'Admin'), ('reporter', 'Reporter')])
+#     status = models.BooleanField(default=True)
+#     last_login = models.DateTimeField(blank=True, null=True)  # فیلد last_login اضافه شده است
     
-class User(models.Model):
-    name = models.CharField(max_length=100)
-    phone_number = models.CharField(max_length=15, unique=True)
-    password = models.CharField(max_length=128)
-    role = models.CharField(max_length=20, choices=[('admin', 'Admin'), ('reporter', 'Reporter')])
-    status = models.BooleanField(default=True)
-    last_login = models.DateTimeField(blank=True, null=True)  # فیلد last_login اضافه شده است
-    
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
 
     
 class UserManager(BaseUserManager):
@@ -72,30 +76,30 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-class User(AbstractBaseUser):
-    name = models.CharField(max_length=100, blank=True, null=True)
-    phone_number = models.CharField(max_length=15, unique=True)
-    password = models.CharField(max_length=128)
-    role = models.CharField(max_length=10, choices=[('admin', 'Admin'), ('reporter', 'Reporter')])
-    status = models.BooleanField(default=True)
-    is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
-    username = models.CharField(max_length=255, unique=True)
-    email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=30, blank=True, null=True)
-    last_name = models.CharField(max_length=30, blank=True, null=True)
+# class User(AbstractBaseUser):
+#     name = models.CharField(max_length=100, blank=True, null=True)
+#     phone_number = models.CharField(max_length=15, unique=True)
+#     password = models.CharField(max_length=128)
+#     role = models.CharField(max_length=10, choices=[('admin', 'Admin'), ('reporter', 'Reporter')])
+#     status = models.BooleanField(default=True)
+#     is_active = models.BooleanField(default=True)
+#     is_admin = models.BooleanField(default=False)
+#     username = models.CharField(max_length=255, unique=True)
+#     email = models.EmailField(unique=True)
+#     first_name = models.CharField(max_length=30, blank=True, null=True)
+#     last_name = models.CharField(max_length=30, blank=True, null=True)
     
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
+#     USERNAME_FIELD = 'username'
+#     REQUIRED_FIELDS = ['email']
     
-    objects = UserManager()
+#     objects = UserManager()
 
-    USERNAME_FIELD = 'phone_number'
+#     USERNAME_FIELD = 'phone_number'
 
-    pass
+#     pass
 
-    def __str__(self):
-        return self.phone_number
+#     def __str__(self):
+#         return self.phone_number
     
 class AddUserForm(forms.ModelForm):
     class Meta:
