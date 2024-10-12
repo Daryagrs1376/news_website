@@ -19,3 +19,33 @@ class AddUserForm(forms.ModelForm):
             raise forms.ValidationError("Passwords do not match")
 
         return cleaned_data
+
+class AddCategoryForm(forms.Form):
+    title = forms.CharField(max_length=255, label='عنوان')
+    main_category = forms.ChoiceField(choices=[(1, 'Category 1'), (2, 'Category 2')])  # Add your categories here
+    selectcategory= forms.CharField()
+    
+    main_category = forms.ChoiceField(
+        choices=[
+            (1, 'sport'),
+            (2, 'economy'),
+            (3, 'iran'),
+            (4, 'world'),
+            (5, 'politics'),
+            (6, 'culture'),
+        ],
+        label='انتخاب دسته‌بندی اصلی'
+    )
+
+    add_button = forms.BooleanField(required=False, label='افزودن')
+
+    close_button = forms.BooleanField(required=False, label='بستن')
+
+class EditCategoryForm(forms.Form):
+    onvan_news = forms.CharField(max_length=255)
+    short_description = forms.CharField(widget=forms.Textarea)
+    add_media = forms.FileField(required=False)
+    remove_media = forms.BooleanField(required=False)
+    category = forms.ChoiceField(choices=[(1, 'Category 1'), (2, 'Category 2')])  # Add your categories here
+    keywords = forms.CharField(max_length=255)
+    record_news = forms.BooleanField(required=False)    

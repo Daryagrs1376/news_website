@@ -5,11 +5,14 @@ from django.contrib.auth.models import User
 from django import forms
 
 
+
 class Category(models.Model):
+    title = models.CharField(max_length=255) 
     search_query = models.CharField(max_length=100, blank=True, null=True)
-    name = models.CharField(max_length=100) 
-    subcategory_name = models.CharField(max_length=100, blank=True, null=True)  # زیرمجموعه
-    status = models.BooleanField(default=True) 
+    name = models.CharField(max_length=255)
+    parent_category = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='subcategories')
+    subcategory_name = models.CharField(max_length=255, blank=True, null=True)
+    status = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -43,14 +46,16 @@ class News(models.Model):
         return self.title
     
 class User(models.Model):
-    name = models.CharField(max_length=100) 
-    phone_number = models.CharField(max_length=15, unique=True)  
+    name = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=15, unique=True)
     password = models.CharField(max_length=128)
     role = models.CharField(max_length=20, choices=[('admin', 'Admin'), ('reporter', 'Reporter')])
     status = models.BooleanField(default=True)
-
+    last_login = models.DateTimeField(blank=True, null=True)  # فیلد last_login اضافه شده است
+    
     def __str__(self):
         return self.name
+
     
 class UserManager(BaseUserManager):
     def create_user(self, phone_number, password=None):

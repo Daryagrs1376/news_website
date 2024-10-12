@@ -1,12 +1,20 @@
 from django.contrib import admin
 from .models import Category, News
 from .models import User
+from django.contrib.admin import RelatedOnlyFieldListFilter
+
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'subcategory_name', 'status')
-    search_fields = ('name',)
-    list_filter = ('status',)
+    list_display = ('name', 'parent_category', 'status')
+    list_filter = ('status', ('parent_category', RelatedOnlyFieldListFilter))
+    search_fields = ('name', 'parent_category__name')
+
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'parent_category', 'status')
+        }),
+    )
 
 admin.site.register(Category, CategoryAdmin)
 
@@ -18,7 +26,7 @@ class NewsAdmin(admin.ModelAdmin):
 admin.site.register(News, NewsAdmin)
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'phone_number', 'role', 'status')
+    list_display = ('name', 'phone_number', 'role', 'status')  # اصلاح فیلدهای موجود در list_display
     search_fields = ('name', 'phone_number')
     list_filter = ('role', 'status')
 

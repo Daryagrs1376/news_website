@@ -1,11 +1,22 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from .views import UserList, UserDetail, NewsList, NewsDetail, UserProfile, ChangePassword, SignOut
+from .views import CategoryViewSet, CategoryList, AddCategory, EditCategory, DeleteCategory, Category, CategoryDetail
 from . import views
-from .views import CategoryList, AddCategory, EditCategory, DeleteCategory
 
+
+
+router = DefaultRouter()
+router.register(r'categories', CategoryViewSet)
 
 
 urlpatterns = [
+    path('api/', include(router.urls)),
+    path('categories/', CategoryList.as_view(), name='category-list'),
+    path('categories/add/', AddCategory, name='add-category'),
+    path('categories/edit/<int:category_id>/', EditCategory, name='edit-category'),
+    path('categories/delete/<int:category_id>/', DeleteCategory, name='delete-category'),
+    path('', include(router.urls)),
     path('news/', NewsList.as_view(), name='news-list'),
     path('news/<int:pk>/', NewsDetail.as_view(), name='news-detail'),
     path('profile/<str:username>/', UserProfile.as_view(), name='user-profile'),
@@ -21,4 +32,6 @@ urlpatterns = [
     path('categories/add/', AddCategory.as_view(), name='category-add'),
     path('categories/edit/<int:pk>/', EditCategory.as_view(), name='category-edit'),
     path('categories/delete/<int:pk>/', DeleteCategory.as_view(), name='category-delete'),
+    path('categories/', CategoryList.as_view(), name='category-list'),
+    path('categories/<int:pk>/', CategoryDetail.as_view(), name='category-detail'),
 ]
