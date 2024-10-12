@@ -371,10 +371,13 @@ def delete_subtitle(request, pk):
         return redirect('some_view_name')  # نام view مناسب برای ریدایرکت بعد از حذف
     return render(request, 'template_name.html', {'subtitle': subtitle})
 
+# TODO: change this to UserListCreateView
 class ReporterProfileListCreateView(generics.ListCreateAPIView):
+    # TODO: change this to User.objects.all()
     queryset = ReporterProfile.objects.all()
     serializer_class = ReporterProfileSerializer
 
+# TODO: change this to UserProfileDetailView
 class ReporterProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = ReporterProfile.objects.all()
     serializer_class = ReporterProfileSerializer
@@ -393,6 +396,13 @@ class NewsList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class NewsDetail(APIView):
+    # TODO: add permissions
+    # only owner must can delete news
+    # def get_permissions(self):
+    #     if self.request.user.is_authenticated:
+    #         return HAS_PERM
+    #     return None
+    
     def get_object(self, pk):
         try:
             return News.objects.get(pk=pk)
@@ -421,5 +431,7 @@ class NewsDetail(APIView):
         news = self.get_object(pk)
         if news is None:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        news.delete()
+        # TODO: هر خبرنگار فقط باید بتونه خبر خودش رو پاک بکنه
+        # if news.reporter == self.request.user:
+        #     news.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

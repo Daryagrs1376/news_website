@@ -8,10 +8,9 @@ from django import forms
 
 class Category(models.Model):
     title = models.CharField(max_length=255) 
+    # TODO: delete search query
     search_query = models.CharField(max_length=100, blank=True, null=True)
-    name = models.CharField(max_length=255)
     parent_category = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='subcategories')
-    subcategory_name = models.CharField(max_length=255, blank=True, null=True)
     status = models.BooleanField(default=True)
 
     def __str__(self):
@@ -26,8 +25,10 @@ class News(models.Model):
         ('politics', 'Politics'),
         ('culture', 'Culture'),
     ]
-
+    # TODO: news must hav reporter
+    # reporter = models.ForeignKey(User)
     title = models.CharField(max_length=255)
+    # TODO: کتگوری باید فارنکی باشه به مدل کتگوری نباید چویسس باشه
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
     short_description = models.TextField(null=True, blank=True)
     news_text = models.TextField()
@@ -35,7 +36,9 @@ class News(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     status = models.BooleanField(default=True) 
     date = models.DateTimeField(auto_now_add=True)
+    # TODO: کلمات کلیدی مثل کتگوری باید خودشون یه جدول بشن
     keywords = models.CharField(max_length=255) 
+    # TODO: این پنج تا فیلد باید شبیه به کتگوری خودشون یه جدول بشن
     special_feature1 = models.BooleanField(default=False)  
     special_feature2 = models.BooleanField(default=False) 
     featured = models.BooleanField(default=False)  
