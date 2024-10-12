@@ -101,3 +101,16 @@ class AddUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name']
+        
+class Subtitle(models.Model):
+    title = models.CharField(max_length=255)  # عنوان زیرنویس
+    subtitle_title = models.CharField(max_length=85)  # متن زیرنویس، حداقل 85 حرف
+    date = models.DateTimeField(default=timezone.now)  # تاریخ ثبت
+    registration = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.subtitle_title
+
+    class Meta:
+        verbose_name = 'Subtitle'
+        verbose_name_plural = 'Subtitles'

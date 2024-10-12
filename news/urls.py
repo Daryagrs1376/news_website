@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import UserList, UserDetail, NewsList, NewsDetail, UserProfile, ChangePassword, SignOut
 from .views import CategoryViewSet, CategoryList, AddCategory, EditCategory, DeleteCategory, Category, CategoryDetail
 from . import views
+from .views import subtitle_list, add_subtitle
 
 
 
@@ -34,4 +35,6 @@ urlpatterns = [
     path('categories/delete/<int:pk>/', DeleteCategory.as_view(), name='category-delete'),
     path('categories/', CategoryList.as_view(), name='category-list'),
     path('categories/<int:pk>/', CategoryDetail.as_view(), name='category-detail'),
+    path('subtitles/', subtitle_list, name='subtitle-list'),
+    path('subtitles/add/', add_subtitle, name='add-subtitle'),
 ]

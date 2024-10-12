@@ -18,6 +18,9 @@ from django.contrib import admin
 from django.urls import path
 from news import views
 from news.views import NewsDetail
+from news import views
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,4 +31,9 @@ urlpatterns = [
     path('api/categories/delete/<int:pk>/', views.delete_category, name='delete-category'),
     path('api/users/', views.UserList.as_view(), name='user-list'),
     path('api/users/<int:pk>/', views.UserDetail.as_view(), name='user-detail'),
+    path('api/subtitles/', views.subtitle_list, name='subtitle-list'),
+    path('api/subtitles/add/', views.add_subtitle, name='add-subtitle'),
+    path('api/subtitles/edit/<int:pk>/', views.edit_subtitle, name='edit-subtitle'), 
+    path('api/subtitles/delete/<int:pk>/', views.delete_subtitle, name='delete-subtitle'),  # اطمینان از نام صحیح تابع
+
 ]

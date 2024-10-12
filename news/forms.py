@@ -1,9 +1,8 @@
 from django import forms
 from .models import User
+from .models import Subtitle
 
-# class AddUserForm(forms.ModelForm):
-#     password = forms.CharField(widget=forms.PasswordInput)
-#     confirm_password = forms.CharField(widget=forms.PasswordInput)
+
 
 class AddUserForm(forms.ModelForm):
     class Meta:
@@ -49,3 +48,14 @@ class EditCategoryForm(forms.Form):
     category = forms.ChoiceField(choices=[(1, 'Category 1'), (2, 'Category 2')])  # Add your categories here
     keywords = forms.CharField(max_length=255)
     record_news = forms.BooleanField(required=False)    
+    
+class SubtitleForm(forms.ModelForm):
+    class Meta:
+        model = Subtitle
+        fields = ['subtitle_title']
+
+    def clean_subtitle(self):
+        subtitle = self.cleaned_data.get('subtitle')
+        if len(subtitle) < 85:
+            raise forms.ValidationError('زیرنویس باید حداقل 85 حرف باشد.')
+        return subtitle

@@ -15,7 +15,9 @@ from django.http import HttpResponse, JsonResponse
 from .serializers import UserSerializer 
 from django.shortcuts import get_object_or_404
 from.models import News
-
+from .models import Subtitle
+from .forms import SubtitleForm
+from django.views import View
 
 
 
@@ -314,11 +316,6 @@ class AddCategory(APIView):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    
-# class DeleteCategory(viewsets.ViewSet):  # اگر وجود ندارد، آن را اضافه کنید
-#     def destroy(self, request, pk=None):
-#         # منطق حذف
-#         pass
 
 def delete_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
@@ -332,3 +329,52 @@ class UserList(APIView):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
+
+def subtitle_list(request):
+    subtitles = Subtitle.objects.all()
+    return render(request, 'subtitle_list.html', {'subtitles': subtitles})
+
+def add_subtitle(request):
+    if request.method == 'POST':
+        form = SubtitleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('subtitle-list')
+    else:
+        form = SubtitleForm()
+    return render(request, 'add_subtitle.html', {'form': form})
+
+class SubtitleList(View):
+    def get(self, request):
+        subtitles = Subtitle.objects.all()
+        return render(request, 'news/subtitle_list.html', {'subtitles': subtitles}) 
+    
+class AddSubtitle(View):
+    def get(self, request):
+        form = SubtitleForm()
+        return render(request, 'news/add_subtitle.html', {'form': form}) 
+
+    def post(self, request):
+        form = SubtitleForm(request.POST) 
+        if form.is_valid():
+            form.save() 
+            return redirect('subtitle-list')  
+        return render(request, 'news/add_subtitle.html', {'form': form})  
+
+def edit_subtitle(request, pk):
+    subtitle = get_object_or_404(Subtitle, pk=pk)
+    if request.method == "POST":
+        form = SubtitleForm(request.POST, instance=subtitle)
+        if form.is_valid():
+            form.save()
+            return redirect('some_view_name')  # نام view مناسب برای ریدایرکت بعد از ویرایش
+    else:
+        form = SubtitleForm(instance=subtitle)
+    return render(request, 'template_name.html', {'form': form})
+
+def delete_subtitle(request, pk):
+    subtitle = get_object_or_404(Subtitle, pk=pk)
+    if request.method == "POST":
+        subtitle.delete()
+        return redirect('some_view_name')  # نام view مناسب برای ریدایرکت بعد از حذف
+    return render(request, 'template_name.html', {'subtitle': subtitle})

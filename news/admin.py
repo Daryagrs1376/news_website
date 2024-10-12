@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import Category, News
 from .models import User
 from django.contrib.admin import RelatedOnlyFieldListFilter
+from .models import Subtitle
 
 
 
@@ -32,3 +33,16 @@ class UserAdmin(admin.ModelAdmin):
 
     
 admin.site.register(User, UserAdmin)
+
+class SubtitleAdmin(admin.ModelAdmin):
+    list_display = ('title', 'date', 'operation')  # فیلدهایی که در لیست نمایش داده می‌شوند
+    search_fields = ('title',)  # فیلدهایی که برای جستجو استفاده می‌شوند
+    list_filter = ('date',)  # فیلدهایی که برای فیلتر استفاده می‌شوند
+    list_per_page = 10  # تعداد ردیف‌ها در هر صفحه
+
+    def operation(self, obj):
+        return f'ویرایش | حذف'  # عمل ویرایش و حذف
+
+    operation.short_description = 'عملیات'
+
+admin.site.register(Subtitle, SubtitleAdmin)
