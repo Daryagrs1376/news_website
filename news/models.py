@@ -13,7 +13,7 @@ class Category(models.Model):
     status = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.name
+        return self.title
 
 # TODO: کتگوری باید فارنکی باشه به مدل کتگوری نباید چویسس باشه
 class Keyword(models.Model):
