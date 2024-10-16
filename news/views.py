@@ -178,6 +178,7 @@ class NewsList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# TODO: یه فایل جدا باید به اسم پرمیشنس‌دات‌پی‌وای درست کنی این ها باید اون تو باشند
 class IsOwner(permissions.BasePermission):
     """
     Custom permission to only allow owners of an object to delete it.

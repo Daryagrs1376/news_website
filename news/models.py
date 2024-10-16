@@ -17,17 +17,29 @@ class Category(models.Model):
 
 # TODO: کتگوری باید فارنکی باشه به مدل کتگوری نباید چویسس باشه
 class Keyword(models.Model):
+    """
+    در این مدل کلیدواژه های هر خبر ذخیره میشود
+    """
+    # TODO: پس فارنکیت کو؟
     word = models.CharField(max_length=50)
 
     def __str__(self):
         return self.word
 
+# TODO: اسم این مدل باید به یه چیزی مثل پوزیشن یا لوکیشن تغییر کنه
 class SpecialFeature(models.Model):
+    """
+    در این قسمت مشخص میشود که هر خبر در کدام قسمت سایت قرار است نمایش داده شود
+    """
+    # TODO: الان این به کدام خبر وصل است؟
+    # TODO: اگر هر خبر بتواند در چند موقعیت نمایش داده شود و یا اینکه یک موقعیت بتواند
+    # چند خبر داشته باشند رابطه بین این مدل با خبر منی‌تو‌منی میشود
     feature_name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.feature_name
 
+# TODO: اسم مدل به کتگوری تغییر کند
 class SpecialCategory(models.Model):
     category_name = models.CharField(max_length=50)
 
@@ -38,6 +50,7 @@ class SpecialCategory(models.Model):
 # TODO: کلمات کلیدی مثل کتگوری باید خودشون یه جدول بشن(انجام شد)
 class News(models.Model):
     reporter = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    # TODO: این فیلد باید منی‌تو‌منی
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=255)
     short_description = models.TextField(null=True, blank=True)
@@ -51,11 +64,11 @@ class News(models.Model):
     
     # TODO: این پنج تا فیلد باید شبیه به کتگوری خودشون یه جدول بشن(انجام شد)
     # ویژگی‌های خاص (ForeignKey به مدل‌های SpecialFeature و SpecialCategory)
-    special_feature1 = models.ForeignKey(SpecialFeature, on_delete=models.SET_NULL, null=True, related_name='special_feature1')
-    special_feature2 = models.ForeignKey(SpecialFeature, on_delete=models.SET_NULL, null=True, blank=True)
-    featured = models.BooleanField(default=False)
-    special_category1 = models.ForeignKey(SpecialCategory, on_delete=models.SET_NULL, null=True, related_name='special_category1')
-    special_category2 = models.ForeignKey(SpecialCategory, on_delete=models.SET_NULL, null=True, related_name='special_category2')
+    # special_feature1 = models.ForeignKey(SpecialFeature, on_delete=models.SET_NULL, null=True, related_name='special_feature1')
+    # special_feature2 = models.ForeignKey(SpecialFeature, on_delete=models.SET_NULL, null=True, blank=True)
+    # featured = models.BooleanField(default=False)
+    # special_category1 = models.ForeignKey(SpecialCategory, on_delete=models.SET_NULL, null=True, related_name='special_category1')
+    # special_category2 = models.ForeignKey(SpecialCategory, on_delete=models.SET_NULL, null=True, related_name='special_category2')
 
     def __str__(self):
         return self.title
