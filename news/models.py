@@ -8,42 +8,54 @@ from django import forms
 
 class Category(models.Model):
     title = models.CharField(max_length=255) 
-    # TODO: delete search query
-    search_query = models.CharField(max_length=100, blank=True, null=True)
+    # TODO: delete search query (انجام شد)
     parent_category = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='subcategories')
     status = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
 
+# TODO: کتگوری باید فارنکی باشه به مدل کتگوری نباید چویسس باشه
+class Keyword(models.Model):
+    word = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.word
+
+class SpecialFeature(models.Model):
+    feature_name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.feature_name
+
+class SpecialCategory(models.Model):
+    category_name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.category_name
+    
+    
+# TODO: کلمات کلیدی مثل کتگوری باید خودشون یه جدول بشن(انجام شد)
 class News(models.Model):
-    CATEGORY_CHOICES = [
-        ('sport', 'Sport'),
-        ('economy', 'Economy'),
-        ('iran', 'Iran'),
-        ('world', 'World'),
-        ('politics', 'Politics'),
-        ('culture', 'Culture'),
-    ]
-    # TODO: news must hav reporter
-    # reporter = models.ForeignKey(User)
+    reporter = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=255)
-    # TODO: کتگوری باید فارنکی باشه به مدل کتگوری نباید چویسس باشه
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
     short_description = models.TextField(null=True, blank=True)
     news_text = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
-    status = models.BooleanField(default=True) 
+    status = models.BooleanField(default=True)
     date = models.DateTimeField(auto_now_add=True)
-    # TODO: کلمات کلیدی مثل کتگوری باید خودشون یه جدول بشن
-    keywords = models.CharField(max_length=255) 
-    # TODO: این پنج تا فیلد باید شبیه به کتگوری خودشون یه جدول بشن
-    special_feature1 = models.BooleanField(default=False)  
-    special_feature2 = models.BooleanField(default=False) 
-    featured = models.BooleanField(default=False)  
-    special_category1 = models.BooleanField(default=False)  
-    special_category2 = models.BooleanField(default=False)  
+    keywords = models.ManyToManyField(Keyword)
+    
+    
+    # TODO: این پنج تا فیلد باید شبیه به کتگوری خودشون یه جدول بشن(انجام شد)
+    # ویژگی‌های خاص (ForeignKey به مدل‌های SpecialFeature و SpecialCategory)
+    special_feature1 = models.ForeignKey(SpecialFeature, on_delete=models.SET_NULL, null=True, related_name='special_feature1')
+    special_feature2 = models.ForeignKey(SpecialFeature, on_delete=models.SET_NULL, null=True, blank=True)
+    featured = models.BooleanField(default=False)
+    special_category1 = models.ForeignKey(SpecialCategory, on_delete=models.SET_NULL, null=True, related_name='special_category1')
+    special_category2 = models.ForeignKey(SpecialCategory, on_delete=models.SET_NULL, null=True, related_name='special_category2')
 
     def __str__(self):
         return self.title
@@ -51,19 +63,7 @@ class News(models.Model):
 class ReporterProfile(models.Model):
     reporter  = models.ForeignKey(User,  on_delete=models.CASCADE, null=True)
     phone = models.CharField(max_length=13, null=True)
-
-# class User(models.Model):
-#     name = models.CharField(max_length=100)
-#     phone_number = models.CharField(max_length=15, unique=True)
-#     password = models.CharField(max_length=128)
-#     role = models.CharField(max_length=20, choices=[('admin', 'Admin'), ('reporter', 'Reporter')])
-#     status = models.BooleanField(default=True)
-#     last_login = models.DateTimeField(blank=True, null=True)  # فیلد last_login اضافه شده است
-    
-#     def __str__(self):
-#         return self.name
-
-    
+  
 class UserManager(BaseUserManager):
     def create_user(self, phone_number, password=None):
         if not phone_number:
@@ -78,31 +78,6 @@ class UserManager(BaseUserManager):
         user.is_admin = True
         user.save(using=self._db)
         return user
-
-# class User(AbstractBaseUser):
-#     name = models.CharField(max_length=100, blank=True, null=True)
-#     phone_number = models.CharField(max_length=15, unique=True)
-#     password = models.CharField(max_length=128)
-#     role = models.CharField(max_length=10, choices=[('admin', 'Admin'), ('reporter', 'Reporter')])
-#     status = models.BooleanField(default=True)
-#     is_active = models.BooleanField(default=True)
-#     is_admin = models.BooleanField(default=False)
-#     username = models.CharField(max_length=255, unique=True)
-#     email = models.EmailField(unique=True)
-#     first_name = models.CharField(max_length=30, blank=True, null=True)
-#     last_name = models.CharField(max_length=30, blank=True, null=True)
-    
-#     USERNAME_FIELD = 'username'
-#     REQUIRED_FIELDS = ['email']
-    
-#     objects = UserManager()
-
-#     USERNAME_FIELD = 'phone_number'
-
-#     pass
-
-#     def __str__(self):
-#         return self.phone_number
     
 class AddUserForm(forms.ModelForm):
     class Meta:
