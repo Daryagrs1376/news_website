@@ -3,54 +3,114 @@ from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import User
 from django import forms
+# from .models import News
+from django.contrib.auth.models import AbstractUser, Group, Permission
 
 
 
-class Category(models.Model):
-    title = models.CharField(max_length=255) 
-    # TODO: delete search query (انجام شد)
+class Newscategory(models.Model):
+    category_name = models.CharField(max_length=255)
+    title = models.CharField(max_length=100) 
     parent_category = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='subcategories')
     status = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.title
+        return self.category_name
 
-# TODO: کتگوری باید فارنکی باشه به مدل کتگوری نباید چویسس باشه
+
+
+# TODO: کتگوری باید فارنکی باشه به مدل کتگوری نباید چویسس باشه(انجام شد)
+class Category(models.Model):
+    """
+    این مدل برای ذخیره دسته‌بندی‌های مختلف خبری استفاده می‌شود(انجام شد)
+    """
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
 class Keyword(models.Model):
-    """
-    در این مدل کلیدواژه های هر خبر ذخیره میشود
-    """
-    # TODO: پس فارنکیت کو؟
     word = models.CharField(max_length=50)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)  # به مدل Category اشاره دارد
 
     def __str__(self):
         return self.word
 
-# TODO: اسم این مدل باید به یه چیزی مثل پوزیشن یا لوکیشن تغییر کنه
-class SpecialFeature(models.Model):
-    """
-    در این قسمت مشخص میشود که هر خبر در کدام قسمت سایت قرار است نمایش داده شود
-    """
-    # TODO: الان این به کدام خبر وصل است؟
-    # TODO: اگر هر خبر بتواند در چند موقعیت نمایش داده شود و یا اینکه یک موقعیت بتواند
-    # چند خبر داشته باشند رابطه بین این مدل با خبر منی‌تو‌منی میشود
+
+# TODO: اسم این مدل باید به یه چیزی مثل پوزیشن یا لوکیشن تغییر کنه(انجام شد)
+class location(models.Model):
+    title = models.CharField(max_length=255)
+    news_text = models.TextField()
+    content = models.TextField()
+
+    def __str__(self):
+        return self.title
+
+
+class Feature(models.Model):
     feature_name = models.CharField(max_length=50)
+    # TODO: اگر هر خبر بتواند در چند موقعیت نمایش داده شود و یا اینکه یک موقعیت بتواند(انجام شد)
+    # چند خبر داشته باشد رابطه بین این مدل با خبر منی‌تو‌منی میشود
+    news = models.ForeignKey('News', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.feature_name
 
-# TODO: اسم مدل به کتگوری تغییر کند
-class SpecialCategory(models.Model):
-    category_name = models.CharField(max_length=50)
+# TODO: اسم مدل به کتگوری تغییر کند(انجام شد)
+class grouping(models.Model):
+    category_name = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.category_name
+        return self.grouping_name
     
     
 # TODO: کلمات کلیدی مثل کتگوری باید خودشون یه جدول بشن(انجام شد)
 class News(models.Model):
     reporter = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    # TODO: این فیلد باید منی‌تو‌منی
+    # TODO: این فیلد باید منی‌تو‌منی(انجام شد)
+    category = models.ManyToManyField(Category)
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    short_description = models.TextField(null=True, blank=True)
+    news_text = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+    status = models.BooleanField(default=True)
+    date = models.DateTimeField(auto_now_add=True)
+    keywords = models.ManyToManyField(Keyword)
+    
+    def __str__(self):
+        return self.title
+     
+class SpecialFeature(models.Model):
+    feature_name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.feature_name
+
+class SpecialCategory(models.Model):
+    category_name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.category_name
+
+
+class NewsSpecialAttributes(models.Model):
+    """
+    مدلی برای ذخیره ویژگی‌های خاص مرتبط با اخبار
+    """
+    special_feature1 = models.ForeignKey(SpecialFeature, on_delete=models.SET_NULL, null=True, related_name='special_feature1')
+    special_feature2 = models.ForeignKey(SpecialFeature, on_delete=models.SET_NULL, null=True, blank=True)
+    featured = models.BooleanField(default=False)
+    special_category1 = models.ForeignKey(SpecialCategory, on_delete=models.SET_NULL, null=True, related_name='special_category1')
+    special_category2 = models.ForeignKey(SpecialCategory, on_delete=models.SET_NULL, null=True, related_name='special_category2')
+
+    def __str__(self):
+        return f"Attributes: {self.special_feature1}, {self.special_category1}"
+
+
+class News_reporter(models.Model):
+    reporter = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=255)
     short_description = models.TextField(null=True, blank=True)
@@ -60,16 +120,12 @@ class News(models.Model):
     status = models.BooleanField(default=True)
     date = models.DateTimeField(auto_now_add=True)
     keywords = models.ManyToManyField(Keyword)
-    
-    
-    # TODO: این پنج تا فیلد باید شبیه به کتگوری خودشون یه جدول بشن(انجام شد)
-    # ویژگی‌های خاص (ForeignKey به مدل‌های SpecialFeature و SpecialCategory)
-    # special_feature1 = models.ForeignKey(SpecialFeature, on_delete=models.SET_NULL, null=True, related_name='special_feature1')
-    # special_feature2 = models.ForeignKey(SpecialFeature, on_delete=models.SET_NULL, null=True, blank=True)
-    # featured = models.BooleanField(default=False)
-    # special_category1 = models.ForeignKey(SpecialCategory, on_delete=models.SET_NULL, null=True, related_name='special_category1')
-    # special_category2 = models.ForeignKey(SpecialCategory, on_delete=models.SET_NULL, null=True, related_name='special_category2')
 
+    # TODO: اتصال به مدل ویژگی‌های خاص(انجام شد)
+    special_attributes = models.OneToOneField(NewsSpecialAttributes, on_delete=models.CASCADE, null=True, blank=True)
+    class Meta:
+        abstract = False 
+        
     def __str__(self):
         return self.title
 
@@ -109,3 +165,109 @@ class Subtitle(models.Model):
     class Meta:
         verbose_name = 'Subtitle'
         verbose_name_plural = 'Subtitles'
+        
+class NewsKeywords(models.Model):
+    news = models.ForeignKey('News', on_delete=models.CASCADE)
+    keyword = models.ForeignKey('Keyword', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.news.title} - {self.keyword.word}"
+
+class AnotherModel(models.Model):
+    news = models.ForeignKey('News', on_delete=models.CASCADE)
+
+# مدل نقش (Role)
+class Role(models.Model):
+    ADMIN = 'admin'
+    REPORTER = 'reporter'
+    ROLE_CHOICES = [
+        (ADMIN, 'Admin'),
+        (REPORTER, 'Reporter'),
+    ]
+    
+    name = models.CharField(max_length=50, choices=ROLE_CHOICES)
+
+    def __str__(self):
+        return self.name
+
+class User(AbstractUser):
+    mobile = models.CharField(max_length=15, unique=True)  # فیلد موبایل اضافه شده
+    role = models.ForeignKey('Role', on_delete=models.SET_NULL, null=True)  # نقش کاربر
+    status = models.BooleanField(default=True)  # وضعیت فعال/غیرفعال بودن
+    
+     # تغییر نام دسترسی معکوس (related_name) برای جلوگیری از تداخل با مدل پیش‌فرض auth.User
+    groups = models.ManyToManyField(
+        Group,
+        related_name='news_user_groups',  # اضافه کردن related_name منحصر به فرد
+        blank=True,
+        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.'
+    )
+
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name='news_user_permissions',  # اضافه کردن related_name منحصر به فرد
+        blank=True,
+        help_text='Specific permissions for this user.'
+    )
+    
+# مدل تبلیغات
+class Advertising(models.Model):
+    LOCATION_CHOICES = [
+        ('header', 'Header'),
+        ('sidebar', 'Sidebar'),
+        ('footer', 'Footer'),
+    ]
+
+    onvan_tabligh = models.CharField(max_length=255)  # عنوان تبلیغ
+    link = models.URLField()  # لینک تبلیغ
+    banner = models.ImageField(upload_to='banners/')  # بنر تبلیغ
+    location = models.CharField(max_length=50, choices=LOCATION_CHOICES)  # موقعیت تبلیغ
+    start_date = models.DateField()  # تاریخ شروع
+    expiration_date = models.DateField()  # تاریخ انقضا
+    status = models.BooleanField(default=True)  # وضعیت فعال/غیرفعال بودن تبلیغ
+
+    def __str__(self):
+        return self.onvan_tabligh
+    
+# مدل تنظیمات (Setting)
+class Setting(models.Model):
+    subcategory_name = models.CharField(max_length=255)  # نام زیرمجموعه
+    status = models.BooleanField(default=True)  # وضعیت فعال یا غیرفعال
+    logo = models.ImageField(upload_to='logos/')  # لوگو
+    contact_us = models.TextField()  # اطلاعات تماس
+    about_us = models.TextField()  # اطلاعات درباره ما
+
+    def __str__(self):
+        return self.subcategory_name
+    
+# مدل Dashboard
+class Dashboard(models.Model):
+    admin_panel = models.BooleanField(default=False)
+    news = models.ForeignKey(News, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Dashboard for {self.news.title}"
+
+# مدل برای Operation (ویرایش و حذف)
+class Operation(models.Model):
+    EDIT = 'edit'
+    DELETE = 'delete'
+    OPERATION_CHOICES = [
+        (EDIT, 'Edit'),
+        (DELETE, 'Delete'),
+    ]
+
+    news = models.ForeignKey(News, on_delete=models.CASCADE)
+    operation_type = models.CharField(max_length=10, choices=OPERATION_CHOICES)
+    performed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.get_operation_type_display()} on {self.news.title}"
+
+# مدل برای مدیریت پروفایل کاربرانUserProfile
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
+
+    def __str__(self):
+        return self.user.username

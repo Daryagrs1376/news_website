@@ -1,105 +1,102 @@
 from django.contrib import admin
-from .models import News, Category, Subtitle, ReporterProfile, Keyword, SpecialFeature, SpecialCategory
+from .models import (
+    Newscategory, Category, Keyword, location, Feature, grouping,
+    News, SpecialFeature, SpecialCategory, NewsSpecialAttributes,
+    ReporterProfile, Role, User, Advertising, Setting, Dashboard,
+    Operation, UserProfile
+)
 
 
 
-# ثبت مدل News
-@admin.register(News)
-class NewsAdmin(admin.ModelAdmin):
-    list_display = ('title', 'reporter', 'category', 'created_at', 'status')
-    list_filter = ('status', 'category', 'created_at')
-    search_fields = ('title', 'reporter__username', 'category__name', 'keywords__word')
-    date_hierarchy = 'created_at'
-    ordering = ['created_at']
+# تنظیمات مربوط به مدل Newscategory
+class NewscategoryAdmin(admin.ModelAdmin):
+    list_display = ('category_name', 'title', 'parent_category', 'status')
+    search_fields = ('category_name', 'title')
+    list_filter = ('status',)
 
-@admin.register(Category)
+# تنظیمات مربوط به مدل Category
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'parent_category_display', 'status')
-    list_filter = ('status', 'parent_category')
+    list_display = ('name',)
+    search_fields = ('name',)
 
-    # متدی برای نمایش نام دسته‌بندی والد در لیست نمایش
-    def parent_category_display(self, obj):
-        return obj.parent_category.title if obj.parent_category else '-'
-    
-    parent_category_display.short_description = 'Parent Category'
-    
-
-# ثبت مدل Keyword
-@admin.register(Keyword)
+# تنظیمات مربوط به مدل Keyword
 class KeywordAdmin(admin.ModelAdmin):
-    list_display = ('word',)
+    list_display = ('word', 'category')
     search_fields = ('word',)
+    list_filter = ('category',)
 
-# ثبت مدل SpecialFeature
-@admin.register(SpecialFeature)
-class SpecialFeatureAdmin(admin.ModelAdmin):
+# تنظیمات مربوط به مدل location
+class LocationAdmin(admin.ModelAdmin):
+    list_display = ('title', 'news_text', 'content')
+    search_fields = ('title',)
+
+# تنظیمات مربوط به مدل Feature
+class FeatureAdmin(admin.ModelAdmin):
     list_display = ('feature_name',)
     search_fields = ('feature_name',)
 
-# ثبت مدل SpecialCategory
-@admin.register(SpecialCategory)
-class SpecialCategoryAdmin(admin.ModelAdmin):
-    list_display = ('category_name',)
-    search_fields = ('category_name',)
+# تنظیمات مربوط به مدل News
+class NewsAdmin(admin.ModelAdmin):
+    list_display = ('title', 'reporter', 'created_at', 'status')
+    search_fields = ('title', 'short_description', 'news_text')
+    list_filter = ('status', 'created_at', 'updated_at')
+    date_hierarchy = 'created_at'
 
-# ثبت مدل ReporterProfile
-@admin.register(ReporterProfile)
-class ReporterProfileAdmin(admin.ModelAdmin):
-    list_display = ('reporter', 'phone')
-    search_fields = ('reporter__username', 'phone')
+# تنظیمات مربوط به مدل Role
+class RoleAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
 
-# ثبت مدل Subtitle
-@admin.register(Subtitle)
-class SubtitleAdmin(admin.ModelAdmin):
-    list_display = ('title', 'subtitle_title', 'date', 'registration')
-    list_filter = ('date', 'registration')
-    search_fields = ('title', 'subtitle_title')
-    date_hierarchy = 'date'
+# تنظیمات مربوط به مدل User
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('username', 'email', 'mobile', 'role', 'status')
+    search_fields = ('username', 'email', 'mobile')
+    list_filter = ('role', 'status')
 
+# تنظیمات مربوط به مدل Advertising
+class AdvertisingAdmin(admin.ModelAdmin):
+    list_display = ('onvan_tabligh', 'link', 'location', 'start_date', 'expiration_date', 'status')
+    search_fields = ('onvan_tabligh', 'location')
+    list_filter = ('location', 'status', 'start_date', 'expiration_date')
 
-# from django.contrib import admin
-# from .models import Category, News
-# from .models import ReporterProfile
-# from django.contrib.admin import RelatedOnlyFieldListFilter
-# from .models import Subtitle
+# تنظیمات مربوط به مدل Setting
+class SettingAdmin(admin.ModelAdmin):
+    list_display = ('subcategory_name', 'status')
+    search_fields = ('subcategory_name',)
+    list_filter = ('status',)
 
+# تنظیمات مربوط به مدل Dashboard
+class DashboardAdmin(admin.ModelAdmin):
+    list_display = ('news', 'admin_panel')
+    search_fields = ('news__title',)
 
+# تنظیمات مربوط به مدل Operation
+class OperationAdmin(admin.ModelAdmin):
+    list_display = ('news', 'operation_type', 'performed_at')
+    search_fields = ('news__title', 'operation_type')
+    list_filter = ('operation_type', 'performed_at')
 
-# class CategoryAdmin(admin.ModelAdmin):
-#     list_display = ('name', 'parent_category', 'status')
-#     list_filter = ('status', ('parent_category', RelatedOnlyFieldListFilter))
-#     search_fields = ('name', 'parent_category__name')
+# تنظیمات مربوط به مدل UserProfile
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'phone_number')
+    search_fields = ('user__username', 'phone_number')
 
-#     fieldsets = (
-#         (None, {
-#             'fields': ('name', 'parent_category', 'status')
-#         }),
-#     )
-
-# admin.site.register(Category, CategoryAdmin)
-
-# class NewsAdmin(admin.ModelAdmin):
-#     list_display = ('title', 'category', 'status', 'date')
-#     search_fields = ('title', 'keywords')
-#     list_filter = ('category', 'status', 'date')
-
-# admin.site.register(News, NewsAdmin)
-
-# @admin.register(ReporterProfile)
-# class ReporterProfileAdmin(admin.ModelAdmin):
-#     list_display = ('reporter', 'phone')
-#     search_fields = ('reporter__username', 'phone')
-    
-
-# class SubtitleAdmin(admin.ModelAdmin):
-#     list_display = ('title', 'date', 'operation')  # فیلدهایی که در لیست نمایش داده می‌شوند
-#     search_fields = ('title',)  # فیلدهایی که برای جستجو استفاده می‌شوند
-#     list_filter = ('date',)  # فیلدهایی که برای فیلتر استفاده می‌شوند
-#     list_per_page = 10  # تعداد ردیف‌ها در هر صفحه
-
-#     def operation(self, obj):
-#         return f'ویرایش | حذف'  # عمل ویرایش و حذف
-
-#     operation.short_description = 'عملیات'
-
-# admin.site.register(Subtitle, SubtitleAdmin)
+# ثبت مدل‌ها در پنل ادمین
+admin.site.register(Newscategory, NewscategoryAdmin)
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Keyword, KeywordAdmin)
+admin.site.register(location, LocationAdmin)
+admin.site.register(Feature, FeatureAdmin)
+admin.site.register(grouping)
+admin.site.register(News, NewsAdmin)
+admin.site.register(SpecialFeature)
+admin.site.register(SpecialCategory)
+admin.site.register(NewsSpecialAttributes)
+admin.site.register(ReporterProfile)
+admin.site.register(Role, RoleAdmin)
+admin.site.register(User, UserAdmin)
+admin.site.register(Advertising, AdvertisingAdmin)
+admin.site.register(Setting, SettingAdmin)
+admin.site.register(Dashboard, DashboardAdmin)
+admin.site.register(Operation, OperationAdmin)
+admin.site.register(UserProfile, UserProfileAdmin)

@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, viewsets, generics
+from rest_framework import status, viewsets
 from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect, render
 from .serializers import CategorySerializer, ReporterProfileSerializer, AddUserSerializer, NewsSerializer, NewsEditSerializer
@@ -12,9 +12,78 @@ from django.views import View
 from django.contrib.auth.models import User
 from rest_framework import permissions
 from rest_framework.exceptions import PermissionDenied
+from .permissions import IsOwner
+from rest_framework import generics, filters
+from .serializers import UserSerializer, UserCreateSerializer
+from .models import Advertising, Setting, User, Role
+from .serializers import AdvertisingSerializer, AdvertisingCreateUpdateSerializer
+from rest_framework import generics
+from .serializers import SettingSerializer, SettingCreateUpdateSerializer
+from rest_framework import viewsets
+from .models import News, Category, UserProfile, Operation
+from .serializers import UserProfileSerializer, OperationSerializer
 
 
 
+# لیست تنظیمات
+class SettingListView(generics.ListAPIView):
+    queryset = Setting.objects.all()
+    serializer_class = SettingSerializer
+
+# افزودن تنظیمات جدید
+class SettingCreateView(generics.CreateAPIView):
+    queryset = Setting.objects.all()
+    serializer_class = SettingCreateUpdateSerializer
+
+# ویرایش تنظیمات
+class SettingUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = Setting.objects.all()
+    serializer_class = SettingCreateUpdateSerializer
+
+# لیست تبلیغات با امکان جستجو
+class AdvertisingListView(generics.ListAPIView):
+    queryset = Advertising.objects.all()
+    serializer_class = AdvertisingSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['onvan_tabligh', 'location']  # فیلتر بر اساس عنوان و موقعیت
+
+# افزودن تبلیغ جدید
+class AdvertisingCreateView(generics.CreateAPIView):
+    queryset = Advertising.objects.all()
+    serializer_class = AdvertisingCreateUpdateSerializer
+
+# ویرایش تبلیغ
+class AdvertisingUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = Advertising.objects.all()
+    serializer_class = AdvertisingCreateUpdateSerializer
+
+# حذف تبلیغ
+class AdvertisingDeleteView(generics.DestroyAPIView):
+    queryset = Advertising.objects.all()
+    serializer_class = AdvertisingSerializer
+
+
+# لیست و فیلتر کاربران
+class UserListView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username', 'mobile', 'role__name']  # فیلتر بر اساس نام، موبایل و نقش
+
+# اضافه کردن کاربر
+class UserCreateView(generics.CreateAPIView):
+    serializer_class = UserCreateSerializer
+
+    def perform_create(self, serializer):
+        user = serializer.save()
+        # ارسال پیام به موبایل کاربر جدید (پیاده‌سازی شده با سیستم پیام‌رسانی)
+        # send_password_to_user(user.mobile, user.password)
+        return Response({'detail': 'User created and password sent to mobile'})
+
+# عملیات ویرایش و حذف کاربر
+class UserUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserCreateSerializer
 
 def edit_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
@@ -94,9 +163,9 @@ class AddCategory(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+# class CategoryViewSet(viewsets.ModelViewSet):
+#     queryset = Category.objects.all()
+#     serializer_class = CategorySerializer
 
 def delete_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
@@ -156,7 +225,7 @@ def delete_subtitle(request, pk):
 
 # TODO: change this to UserListCreateView (انجام شد)
 class UserListCreateView(generics.ListCreateAPIView):
-    # TODO: change this to User.objects.all()
+    # TODO: change this to User.objects.all() (انجام شد)
     queryset = User.objects.all()
     serializer_class = ReporterProfileSerializer
 
@@ -177,14 +246,6 @@ class NewsList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# TODO: یه فایل جدا باید به اسم پرمیشنس‌دات‌پی‌وای درست کنی این ها باید اون تو باشند
-class IsOwner(permissions.BasePermission):
-    """
-    Custom permission to only allow owners of an object to delete it.
-    """
-    def has_object_permission(self, request, view, obj):
-        return obj.reporter == request.user 
 
 #TODO:only owner must can delete news(انجام شد)
 class NewsDetail(APIView):
@@ -231,3 +292,48 @@ class NewsDetail(APIView):
         
         news.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+# ویوست News برای مدیریت اخبار
+class NewsViewSet(viewsets.ModelViewSet):
+    queryset = News.objects.all()
+    serializer_class = NewsSerializer
+
+    @action(detail=False, methods=['get'])
+    def search(self, request):
+        query = request.query_params.get('q')
+        if query:
+            news = self.queryset.filter(title__icontains=query)
+            serializer = self.get_serializer(news, many=True)
+            return Response(serializer.data)
+        return Response({"message": "No search query provided."})
+
+# ویوست Category برای فیلتر دسته‌بندی‌ها
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+# ویوست UserProfile برای مدیریت پروفایل کاربران
+class UserProfileViewSet(viewsets.ModelViewSet):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+
+    @action(detail=False, methods=['patch'])
+    def change_phone(self, request, pk=None):
+        profile = self.get_object()
+        new_phone = request.data.get('phone_number')
+        profile.phone_number = new_phone
+        profile.save()
+        return Response({"message": "Phone number updated successfully."})
+
+    @action(detail=False, methods=['patch'])
+    def change_username(self, request, pk=None):
+        user = request.user
+        new_username = request.data.get('username')
+        user.username = new_username
+        user.save()
+        return Response({"message": "Username updated successfully."})
+
+# ویوست Operation برای ویرایش و حذف اخبار
+class OperationViewSet(viewsets.ModelViewSet):
+    queryset = Operation.objects.all()
+    serializer_class = OperationSerializer
