@@ -5,6 +5,7 @@ from .models import (
     ReporterProfile, Role, User, Advertising, Setting, Dashboard,
     Operation, UserProfile
 )
+from .models import PageView
 
 
 
@@ -81,6 +82,13 @@ class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'phone_number')
     search_fields = ('user__username', 'phone_number')
 
+# تعریف نحوه نمایش مدل در پنل ادمین
+class PageViewAdmin(admin.ModelAdmin):
+    list_display = ('date', 'total_visits', 'social_visits', 'bounce_rate')  # فیلدهایی که در لیست ادمین نمایش داده می‌شوند
+    list_filter = ('date',)  # فیلتر کردن بر اساس تاریخ
+    search_fields = ('date',)  # امکان جستجو بر اساس تاریخ
+
+
 # ثبت مدل‌ها در پنل ادمین
 admin.site.register(Newscategory, NewscategoryAdmin)
 admin.site.register(Category, CategoryAdmin)
@@ -100,3 +108,4 @@ admin.site.register(Setting, SettingAdmin)
 admin.site.register(Dashboard, DashboardAdmin)
 admin.site.register(Operation, OperationAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(PageView, PageViewAdmin)

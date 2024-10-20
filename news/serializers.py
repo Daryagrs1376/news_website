@@ -1,9 +1,14 @@
 from rest_framework import serializers
 from .models import News, Setting, User, Role, Category, UserProfile, ReporterProfile, Operation, Advertising
+from .models import PageView
 
 
-
-
+# آمار بازدید
+class PageViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PageView
+        fields = '__all__'
+        
 # سریالایزر برای نمایش تنظیمات
 class SettingSerializer(serializers.ModelSerializer):
     class Meta:

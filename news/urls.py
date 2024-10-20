@@ -12,6 +12,9 @@ from .views import (
     subtitle_list, add_subtitle, SubtitleList, AddSubtitle, 
     edit_subtitle, delete_subtitle, UserProfileDetailView
 )
+from .views import DailyStatsView, WeeklyStatsView
+
+
 
 # Router برای ویوست‌ها
 router = DefaultRouter()
@@ -63,4 +66,11 @@ urlpatterns = [
 
     # استفاده از روت‌های پیش‌فرض برای ویوست‌ها
     path('', include(router.urls)),
+
+    path('daily/', DailyStatsView.as_view(), name='daily-stats'),
+    path('weekly/', WeeklyStatsView.as_view(), name='weekly-stats'),
+
+# آمار بازدید
+    path('daily/', DailyStatsView.as_view(), name='daily-stats'),
+    path('weekly/', WeeklyStatsView.as_view(), name='weekly-stats'),
 ]

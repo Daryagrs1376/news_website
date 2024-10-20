@@ -20,8 +20,9 @@ from .serializers import AdvertisingSerializer, AdvertisingCreateUpdateSerialize
 from rest_framework import generics
 from .serializers import SettingSerializer, SettingCreateUpdateSerializer
 from rest_framework import viewsets
-from .models import News, Category, UserProfile, Operation
-from .serializers import UserProfileSerializer, OperationSerializer
+from .models import News, Category, UserProfile, Operation, PageView
+from .serializers import UserProfileSerializer, OperationSerializer, PageViewSerializer
+from datetime import datetime, timedelta
 
 
 
@@ -337,3 +338,51 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 class OperationViewSet(viewsets.ModelViewSet):
     queryset = Operation.objects.all()
     serializer_class = OperationSerializer
+    
+class DailyStatsView(APIView):
+    def get(self, request):
+        filter_type = request.GET.get('filter_type', 'daily')
+        today = datetime.today()
+
+        if filter_type == 'daily':
+            start_date = today
+            end_date = today
+        elif filter_type == 'weekly':
+            start_date = today - timedelta(days=7)
+            end_date = today
+        elif filter_type == 'monthly':
+            start_date = today.replace(day=1)
+            end_date = today
+        elif filter_type == 'yearly':
+            start_date = today.replace(month=1, day=1)
+            end_date = today
+        else:
+            return Response({"status": "error", "message": "Invalid filter_type"}, status=400)
+
+        stats = PageView.objects.filter(date__range=[start_date, end_date])
+        serializer = PageViewSerializer(stats, many=True)
+        return Response({"status": "success", "data": serializer.data})
+    
+class WeeklyStatsView(APIView):
+    def get(self, request):
+        time_period = request.GET.get('time_period', 'this_week')
+        today = datetime.today()
+
+        if time_period == 'today':
+            start_date = today
+            end_date = today
+        elif time_period == 'this_week':
+            start_date = today - timedelta(days=today.weekday())
+            end_date = today
+        elif time_period == 'this_month':
+            start_date = today.replace(day=1)
+            end_date = today
+        elif time_period == 'yearly':
+            start_date = today.replace(month=1, day=1)
+            end_date = today
+        else:
+            return Response({"status": "error", "message": "Invalid time_period"}, status=400)
+
+        stats = PageView.objects.filter(date__range=[start_date, end_date])
+        serializer = PageViewSerializer(stats, many=True)
+        return Response({"status": "success", "data": serializer.data})

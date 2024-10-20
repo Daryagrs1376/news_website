@@ -271,3 +271,10 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+class PageView(models.Model):
+    date = models.DateField()
+    total_visits = models.IntegerField()
+    social_visits = models.IntegerField()
+    bounce_rate = models.FloatField()
+    page_views = models.JSONField()  # ذخیره جزئیات بازدید هر صفحه
