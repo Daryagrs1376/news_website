@@ -58,7 +58,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
-    # Other allowed domains
+    # دیگر دامنه‌های مجاز
 ]
 
 ROOT_URLCONF = 'news_website.urls'
@@ -129,14 +129,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'static/'
 
-# Additional locations of static files
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # Ensure this directory exists in your project
-]
+# مسیرهای اضافی برای جستجو در فایل‌های استاتیک
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # مطمئن شوید که پوشه 'static' در پروژه شما وجود دارد
 
-# The directory where static files will be collected when running `collectstatic`
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# مسیری که فایل‌های استاتیک بعد از اجرای collectstatic در آن جمع‌آوری می‌شوند
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # مکان نهایی برای جمع‌آوری فایل‌های استاتیک
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
