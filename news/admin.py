@@ -17,7 +17,8 @@ class NewscategoryAdmin(admin.ModelAdmin):
 
 # تنظیمات مربوط به مدل Category
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', 'description')
+    
     search_fields = ('name',)
 
 # تنظیمات مربوط به مدل Keyword

@@ -17,15 +17,23 @@ from rest_framework import generics, filters
 from .serializers import UserSerializer, UserCreateSerializer
 from .models import Advertising, Setting, User, Role
 from .serializers import AdvertisingSerializer, AdvertisingCreateUpdateSerializer
-from rest_framework import generics
 from .serializers import SettingSerializer, SettingCreateUpdateSerializer
 from rest_framework import viewsets
-from .models import News, Category, UserProfile, Operation, PageView
+from .models import News, UserProfile, Operation, PageView
 from .serializers import UserProfileSerializer, OperationSerializer, PageViewSerializer
 from datetime import datetime, timedelta
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.generics import UpdateAPIView
 
 
 
+
+class NewsDetailView(generics.RetrieveAPIView):
+    queryset = News.objects.all()
+    serializer_class = NewsSerializer
+    permission_classes = [IsAuthenticated] 
+    
 # لیست تنظیمات
 class SettingListView(generics.ListAPIView):
     queryset = Setting.objects.all()
@@ -224,13 +232,10 @@ def delete_subtitle(request, pk):
         return redirect('some_view_name') 
     return render(request, 'template_name.html', {'subtitle': subtitle})
 
-# TODO: change this to UserListCreateView (انجام شد)
 class UserListCreateView(generics.ListCreateAPIView):
-    # TODO: change this to User.objects.all() (انجام شد)
     queryset = User.objects.all()
     serializer_class = ReporterProfileSerializer
 
-# TODO: change this to UserProfileDetailView (انجام شد)
 class UserProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = ReporterProfile.objects.all()
     serializer_class = ReporterProfileSerializer
@@ -248,12 +253,10 @@ class NewsList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#TODO:only owner must can delete news(انجام شد)
 class NewsDetail(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_permissions(self):
-        # اگر درخواست DELETE بود، چک کنیم که فقط صاحب خبر اجازه حذف داشته
         if self.request.method == 'DELETE':
             return [IsOwner()]
         return super().get_permissions()
@@ -287,14 +290,12 @@ class NewsDetail(APIView):
         if news is None:
             return Response(status=status.HTTP_404_NOT_FOUND)
         
-        # هر خبرنگار فقط باید بتونه خبر خودش رو پاک بکنه (انجام شد)
         if news.reporter != self.request.user:
             raise PermissionDenied("Only the owner of this news can delete it.")
         
         news.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-# ویوست News برای مدیریت اخبار
 class NewsViewSet(viewsets.ModelViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
@@ -308,12 +309,10 @@ class NewsViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         return Response({"message": "No search query provided."})
 
-# ویوست Category برای فیلتر دسته‌بندی‌ها
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-# ویوست UserProfile برای مدیریت پروفایل کاربران
 class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
@@ -334,7 +333,6 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         user.save()
         return Response({"message": "Username updated successfully."})
 
-# ویوست Operation برای ویرایش و حذف اخبار
 class OperationViewSet(viewsets.ModelViewSet):
     queryset = Operation.objects.all()
     serializer_class = OperationSerializer
@@ -386,3 +384,20 @@ class WeeklyStatsView(APIView):
         stats = PageView.objects.filter(date__range=[start_date, end_date])
         serializer = PageViewSerializer(stats, many=True)
         return Response({"status": "success", "data": serializer.data})
+
+# لیست کردن همه دسته‌بندی‌ها
+class CategoryListView(generics.ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+# جزئیات یک دسته‌بندی خاص
+class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    lookup_field = 'id'
+    
+class NewsUpdateView(UpdateAPIView):
+    queryset = News.objects.all()
+    serializer_class = NewsSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    

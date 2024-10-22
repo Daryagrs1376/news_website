@@ -1,6 +1,13 @@
 from rest_framework import serializers
 from .models import News, Setting, User, Role, Category, UserProfile, ReporterProfile, Operation, Advertising
 from .models import PageView
+from rest_framework import serializers
+
+
+
+class SubtitleSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    text = serializers.CharField(max_length=200)
 
 
 # آمار بازدید
@@ -24,7 +31,7 @@ class SettingCreateUpdateSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name', 'subcategory_name', 'status']
+        fields = ['id', 'name']
 
 # class UserSerializer(serializers.ModelSerializer):
 #     class Meta:

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-vvds@pd)br9^ltipb+(6aol6!ks1fz8z*l1pgx0kamz-!y4&^l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,7 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'news',
+    'rest_framework.authtoken',
+    'corsheaders',
+    'drf_yasg',
+    'news',  # Assuming you have a 'news' app
 ]
 
 MIDDLEWARE = [
@@ -48,7 +52,13 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'corsheaders.middleware.CorsMiddleware', 
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
+    # دیگر دامنه‌های مجاز
 ]
 
 ROOT_URLCONF = 'news_website.urls'
@@ -56,7 +66,7 @@ ROOT_URLCONF = 'news_website.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -118,7 +128,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'  # URL برای دسترسی به فایل‌های استاتیک
+
+# مسیرهای اضافی برای جستجو در فایل‌های استاتیک
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # مطمئن شوید که پوشه 'static' در پروژه شما وجود دارد
+
+# مسیری که فایل‌های استاتیک بعد از اجرای collectstatic در آن جمع‌آوری می‌شوند
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # مکان نهایی برای جمع‌آوری فایل‌های استاتیک
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

@@ -8,6 +8,10 @@ from django.contrib.auth.models import AbstractUser, Group, Permission
 
 
 
+class Subtitle(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField() 
+
 class Newscategory(models.Model):
     category_name = models.CharField(max_length=255)
     title = models.CharField(max_length=100) 
@@ -21,13 +25,12 @@ class Newscategory(models.Model):
 
 # TODO: کتگوری باید فارنکی باشه به مدل کتگوری نباید چویسس باشه(انجام شد)
 class Category(models.Model):
-    """
-    این مدل برای ذخیره دسته‌بندی‌های مختلف خبری استفاده می‌شود(انجام شد)
-    """
-    name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.name
+    title = models.CharField(max_length=200)
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    
+    # def __str__(self):
+    #     return self.name
 
 class Keyword(models.Model):
     word = models.CharField(max_length=50)
