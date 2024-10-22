@@ -129,6 +129,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'  # URL برای دسترسی به فایل‌های استاتیک
+STATIC_ROOT = 'static/'
 
 # مسیرهای اضافی برای جستجو در فایل‌های استاتیک
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # مطمئن شوید که پوشه 'static' در پروژه شما وجود دارد
