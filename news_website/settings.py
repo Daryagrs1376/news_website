@@ -135,7 +135,7 @@ STATIC_ROOT = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # مطمئن شوید که پوشه 'static' در پروژه شما وجود دارد
 
 # مسیری که فایل‌های استاتیک بعد از اجرای collectstatic در آن جمع‌آوری می‌شوند
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # مکان نهایی برای جمع‌آوری فایل‌های استاتیک
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # مکان نهایی برای جمع‌آوری فایل‌های استاتیک
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
