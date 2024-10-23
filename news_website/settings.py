@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'drf_yasg',
+    'admin_interface',
+    'colorfield',
     'news',  # Assuming you have a 'news' app
 ]
 
