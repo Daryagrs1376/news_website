@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'admin_interface',
     'colorfield',
+    'suit',
     'news',  # Assuming you have a 'news' app
 ]
 
