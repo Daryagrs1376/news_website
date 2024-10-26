@@ -146,9 +146,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # مکان نهایی بر�
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
 }
 
 
@@ -161,11 +164,13 @@ SIMPLE_JWT = {
 }
 
 SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,
     'SECURITY_DEFINITIONS': {
-        'Bearer': {
+        'Token': {
             'type': 'apiKey',
+            'in': 'header',
             'name': 'Authorization',
-            'in': 'header'
+            'description': "Enter the token in the format: Token <your_token>",
         }
-    }
+    },
 }
