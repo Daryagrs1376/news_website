@@ -85,9 +85,9 @@ urlpatterns = [
     path('daily/', DailyStatsView.as_view(), name='daily-stats'),
     path('weekly/', WeeklyStatsView.as_view(), name='weekly-stats'),
 
-    # مسیرهای احراز هویت JWT
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # مسیرهای احراز هویت JWT با نام جدید Token
+    path('Token/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('Token/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     # مسیر مستندات Swagger و Redoc
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
@@ -99,6 +99,7 @@ urlpatterns = [
     # استفاده از روت‌های پیش‌فرض برای ویوست‌ها
     path('', include(router.urls)),
 ]
+
 
 
 # from django.contrib import admin
