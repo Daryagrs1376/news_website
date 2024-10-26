@@ -3,7 +3,6 @@ from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import User
 from django import forms
-# from .models import News
 from django.contrib.auth.models import AbstractUser, Group, Permission
 
 
