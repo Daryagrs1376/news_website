@@ -43,7 +43,7 @@ router.register(r'userprofiles', UserProfileViewSet, basename='userprofiles')
 router.register(r'operations', OperationViewSet, basename='operations')
 
 urlpatterns = [
-    path('admin/', admin.site.urls),  # مسیر پنل مدیریت Django
+    # path('admin/', admin.site.urls),  # مسیر پنل مدیریت Django
 
     # مسیرهای مرتبط با تنظیمات (Settings)
     path('settings/', SettingListView.as_view(), name='setting-list'),
