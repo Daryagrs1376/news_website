@@ -3,5 +3,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('news.urls')),  # اتصال به urls اپلیکیشن اصلی
+    path('', include('news.urls')),
 ]
