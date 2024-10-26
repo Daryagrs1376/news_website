@@ -25,9 +25,47 @@ from datetime import datetime, timedelta
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.generics import UpdateAPIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets, permissions
+from .models import Advertising
+from .serializers import AdvertisingSerializer
 
 
 
+def delete_advertising(request, id):
+    # فرض کنید می‌خواهید یک شیء تبلیغاتی را حذف کنید
+    advertising = get_object_or_404(Advertising, id=id)
+    advertising.delete()
+    return redirect('some_view_name')
+
+class IsAdminOrReadOnly(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        # اگر کاربر ادمین باشد یا درخواست از نوع SAFE_METHODS باشد، اجازه دسترسی داده می‌شود
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return request.user and request.user.is_staff
+
+class AdvertisingViewSet(viewsets.ModelViewSet):
+    queryset = Advertising.objects.all()
+    serializer_class = AdvertisingSerializer
+    permission_classes = [IsAdminOrReadOnly]
+
+class ProtectedView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({"message": "This is a protected view."})
+
+class MyView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({'message': 'You are authenticated!'})
 
 class NewsDetailView(generics.RetrieveAPIView):
     queryset = News.objects.all()

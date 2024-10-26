@@ -14,23 +14,20 @@ class Subtitle(models.Model):
 
 class Newscategory(models.Model):
     category_name = models.CharField(max_length=255)
-    title = models.CharField(max_length=100) 
+    title = models.CharField(max_length=255) 
     parent_category = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='subcategories')
     status = models.BooleanField(default=True)
 
     def __str__(self):
         return self.category_name
 
-
-
-# TODO: کتگوری باید فارنکی باشه به مدل کتگوری نباید چویسس باشه(انجام شد)
 class Category(models.Model):
     title = models.CharField(max_length=200)
     name = models.CharField(max_length=100)
     description = models.TextField()
     
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return self.title
 
 class Keyword(models.Model):
     word = models.CharField(max_length=50)
@@ -39,8 +36,6 @@ class Keyword(models.Model):
     def __str__(self):
         return self.word
 
-
-# TODO: اسم این مدل باید به یه چیزی مثل پوزیشن یا لوکیشن تغییر کنه(انجام شد)
 class location(models.Model):
     title = models.CharField(max_length=255)
     news_text = models.TextField()

@@ -18,6 +18,13 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.urls import path
 from .views import CategoryListView, CategoryDetailView
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+from django.urls import path
+from .views import ProtectedView
+from . import views
 
 
 # اطلاعات مستندات API
@@ -54,7 +61,7 @@ urlpatterns = [
     path('advertising/', AdvertisingListView.as_view(), name='advertising-list'),
     path('advertising/add/', AdvertisingCreateView.as_view(), name='advertising-create'),
     path('advertising/<int:pk>/edit/', AdvertisingUpdateView.as_view(), name='advertising-update'),
-    path('advertising/<int:pk>/delete/', AdvertisingDeleteView.as_view(), name='advertising-delete'),
+    path('advertising/<int:id>/delete/', views.delete_advertising, name='delete_advertising'),
 
     # مسیرهای مرتبط با کاربران (User)
     path('users/', UserListView.as_view(), name='user-list'),
@@ -99,4 +106,5 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     # مسیر ReDoc
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path('protected/', ProtectedView.as_view(), name='protected_view'),
 ]
