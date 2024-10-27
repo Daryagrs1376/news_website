@@ -54,11 +54,11 @@ class Feature(models.Model):
         return self.feature_name
 
 # TODO: اسم مدل به کتگوری تغییر کند(انجام شد)
-class grouping(models.Model):
-    category_name = models.CharField(max_length=255)
+class Grouping(models.Model):
+    Grouping_name = models.CharField(max_length=100)  # فیلد مورد نظر
 
     def __str__(self):
-        return self.grouping_name
+        return self.Grouping_name
     
     
 # TODO: کلمات کلیدی مثل کتگوری باید خودشون یه جدول بشن(انجام شد)

@@ -1,11 +1,12 @@
 from django.contrib import admin
 from .models import (
-    Newscategory, Category, Keyword, location, Feature, grouping,
+    Newscategory, Category, Keyword, location, Feature,
     News, SpecialFeature, SpecialCategory, NewsSpecialAttributes,
     ReporterProfile, Role, User, Advertising, Setting, Dashboard,
     Operation, UserProfile
 )
 from .models import PageView
+from .models import Grouping
 
 
 
@@ -96,7 +97,7 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Keyword, KeywordAdmin)
 admin.site.register(location, LocationAdmin)
 admin.site.register(Feature, FeatureAdmin)
-admin.site.register(grouping)
+admin.site.register(Grouping)
 admin.site.register(News, NewsAdmin)
 admin.site.register(SpecialFeature)
 admin.site.register(SpecialCategory)

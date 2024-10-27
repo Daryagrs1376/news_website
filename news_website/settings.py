@@ -61,7 +61,10 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
-    # دیگر دامنه‌های مجاز
+    "https://grs.pythonanywhere.com/",
+    "https://grs.pythonanywhere.com/redoc/",
+    "https://grs.pythonanywhere.com/swagger/",
+    "https://grs.pythonanywhere.com/admin/",
 ]
 
 ROOT_URLCONF = 'news_website.urls'
