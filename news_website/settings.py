@@ -61,7 +61,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
-    # دیگر دامنه‌های مجاز
+    "https://yourdomain.com",
 ]
 
 ROOT_URLCONF = 'news_website.urls'

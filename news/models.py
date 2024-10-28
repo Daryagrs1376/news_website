@@ -7,6 +7,7 @@ from django.contrib.auth.models import AbstractUser, Group, Permission
 
 
 
+
 class Subtitle(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField() 
@@ -30,7 +31,7 @@ class Category(models.Model):
 
 class Keyword(models.Model):
     word = models.CharField(max_length=50)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)  # به مدل Category اشاره دارد
+    category = models.ForeignKey('Category', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.word
