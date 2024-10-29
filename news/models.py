@@ -70,8 +70,6 @@ class News(models.Model):
     status = models.BooleanField(default=True)
     date = models.DateTimeField(auto_now_add=True)
     keywords = models.ManyToManyField(Keyword)
-    
-    # New field for admin approval
     is_approved = models.BooleanField(default=False)  # Default to False, meaning not approved
 
     def __str__(self):
