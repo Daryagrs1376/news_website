@@ -210,9 +210,6 @@ class AddCategory(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# class CategoryViewSet(viewsets.ModelViewSet):
-#     queryset = Category.objects.all()
-#     serializer_class = CategorySerializer
 
 def delete_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
@@ -280,7 +277,7 @@ class UserProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 class NewsList(APIView):
     def get(self, request):
-        news = News.objects.all()
+        news = News.objects.filter(is_approved=True)
         serializer = NewsSerializer(news, many=True)
         return Response(serializer.data)
 

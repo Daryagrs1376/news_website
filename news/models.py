@@ -46,25 +46,20 @@ class location(models.Model):
 
 class Feature(models.Model):
     feature_name = models.CharField(max_length=50)
-    # TODO: اگر هر خبر بتواند در چند موقعیت نمایش داده شود و یا اینکه یک موقعیت بتواند(انجام شد)
-    # چند خبر داشته باشد رابطه بین این مدل با خبر منی‌تو‌منی میشود
     news = models.ForeignKey('News', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.feature_name
 
-# TODO: اسم مدل به کتگوری تغییر کند(انجام شد)
 class Grouping(models.Model):
-    Grouping_name = models.CharField(max_length=100)  # فیلد مورد نظر
+    Grouping_name = models.CharField(max_length=100) 
 
     def __str__(self):
         return self.Grouping_name
     
     
-# TODO: کلمات کلیدی مثل کتگوری باید خودشون یه جدول بشن(انجام شد)
 class News(models.Model):
     reporter = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    # TODO: این فیلد باید منی‌تو‌منی(انجام شد)
     category = models.ManyToManyField(Category)
     title = models.CharField(max_length=255)
     content = models.TextField()
@@ -76,6 +71,9 @@ class News(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     keywords = models.ManyToManyField(Keyword)
     
+    # New field for admin approval
+    is_approved = models.BooleanField(default=False)  # Default to False, meaning not approved
+
     def __str__(self):
         return self.title
      
