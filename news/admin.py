@@ -40,11 +40,12 @@ class FeatureAdmin(admin.ModelAdmin):
 
 # تنظیمات مربوط به مدل News
 class NewsAdmin(admin.ModelAdmin):
-    list_display = ('title', 'reporter', 'created_at', 'status')
-    search_fields = ('title', 'short_description', 'news_text')
-    list_filter = ('status', 'created_at', 'updated_at')
-    date_hierarchy = 'created_at'
-
+    list_display = ('title', 'reporter', 'created_at', 'is_approved', 'status')
+    list_filter = ('is_approved', 'status', 'created_at')
+    search_fields = ('title', 'short_description')
+    list_editable = ('is_approved', 'status')
+    ordering = ('-created_at',)
+    
 # تنظیمات مربوط به مدل Role
 class RoleAdmin(admin.ModelAdmin):
     list_display = ('name',)

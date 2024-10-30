@@ -41,6 +41,8 @@ router.register(r'news', NewsViewSet, basename='news')
 router.register(r'categories', CategoryViewSet, basename='categories')
 router.register(r'userprofiles', UserProfileViewSet, basename='userprofiles')
 router.register(r'operations', OperationViewSet, basename='operations')
+# router.register(r'news, NewsViewSet')
+
 
 urlpatterns = [
     # path('admin/', admin.site.urls),  # مسیر پنل مدیریت Django
