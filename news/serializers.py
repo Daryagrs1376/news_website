@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import News, Setting, User, Role, Category, UserProfile, ReporterProfile, Operation, Advertising
 from .models import PageView
 from rest_framework import serializers
+from .models import News
 
 
 
@@ -48,8 +49,12 @@ class ReporterProfileSerializer(serializers.ModelSerializer):
 class NewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
-        fields = ['id', 'title', 'short_description', 'category', 'keywords', 'news_text', 'created_at', 'updated_at']
-
+        fields = [
+            'id', 'reporter', 'category', 'title', 'content', 'short_description',
+            'news_text', 'created_at', 'updated_at', 'status', 'date', 'keywords', 'is_approved'
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']
+        
 class NewsEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = News

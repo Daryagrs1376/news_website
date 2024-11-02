@@ -7,6 +7,8 @@ from .models import (
 )
 from .models import PageView
 from .models import Grouping
+from django.contrib import admin
+# from .models import CustomToken
 
 
 
@@ -40,10 +42,12 @@ class FeatureAdmin(admin.ModelAdmin):
 
 # تنظیمات مربوط به مدل News
 class NewsAdmin(admin.ModelAdmin):
-    list_display = ('title', 'reporter', 'created_at', 'status')
-    search_fields = ('title', 'short_description', 'news_text')
-    list_filter = ('status', 'created_at', 'updated_at')
-    date_hierarchy = 'created_at'
+    list_display = ('title', 'reporter', 'created_at', 'is_approved', 'status')
+    list_filter = ('is_approved', 'status', 'created_at')
+    search_fields = ('title', 'short_description')
+    list_editable = ('is_approved', 'status')
+    ordering = ('-created_at',)
+    fields = ('title', 'news_text', 'created_at', 'status', 'keywords', 'is_approved')
 
 # تنظیمات مربوط به مدل Role
 class RoleAdmin(admin.ModelAdmin):
@@ -111,3 +115,4 @@ admin.site.register(Dashboard, DashboardAdmin)
 admin.site.register(Operation, OperationAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(PageView, PageViewAdmin)
+# admin.site.register(CustomToken)

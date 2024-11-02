@@ -25,7 +25,7 @@
 
 ۱. ابتدا مخزن پروژه را کلون کنید یا فایل‌های پروژه را دانلود کنید:
 
-```bash
+``bash
 - git clone git@github.com:Daryagrs1376/ne
 ws_website.gi
 

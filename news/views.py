@@ -33,18 +33,30 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets, permissions
 from .models import Advertising
 from .serializers import AdvertisingSerializer
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+from .models import News
+from .serializers import NewsSerializer
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import api_view, permission_classes
 
 
+
+class NewsViewSet(viewsets.ModelViewSet):
+    queryset = News.objects.all()
+    serializer_class = NewsSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(reporter=self.request.user)
 
 def delete_advertising(request, id):
-    # فرض کنید می‌خواهید یک شیء تبلیغاتی را حذف کنید
     advertising = get_object_or_404(Advertising, id=id)
     advertising.delete()
     return redirect('some_view_name')
 
 class IsAdminOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        # اگر کاربر ادمین باشد یا درخواست از نوع SAFE_METHODS باشد، اجازه دسترسی داده می‌شود
         if request.method in permissions.SAFE_METHODS:
             return True
         return request.user and request.user.is_staff
@@ -72,6 +84,15 @@ class NewsDetailView(generics.RetrieveAPIView):
     serializer_class = NewsSerializer
     permission_classes = [IsAuthenticated] 
     
+from rest_framework.decorators import api_view, permission_classes
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def news_list(request):
+    news = News.objects.filter(is_approved=True)  # تنها اخبار تایید شده نمایش داده می‌شود
+    serializer = NewsSerializer(news, many=True)
+    return Response(serializer.data)
+
 # لیست تنظیمات
 class SettingListView(generics.ListAPIView):
     queryset = Setting.objects.all()
