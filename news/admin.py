@@ -8,7 +8,7 @@ from .models import (
 from .models import PageView
 from .models import Grouping
 from django.contrib import admin
-from .models import CustomToken
+# from .models import CustomToken
 
 
 
@@ -115,4 +115,4 @@ admin.site.register(Dashboard, DashboardAdmin)
 admin.site.register(Operation, OperationAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(PageView, PageViewAdmin)
-admin.site.register(CustomToken)
+# admin.site.register(CustomToken)
