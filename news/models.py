@@ -4,13 +4,13 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import User
 from django import forms
 from django.contrib.auth.models import AbstractUser, Group, Permission
-from rest_framework.authtoken.models import Token
-from django.utils.translation import gettext_lazy as _
+# from rest_framework.authtoken.models import Token
+# from django.utils.translation import gettext_lazy as _
 
-class CustomToken(Token):
-    class Meta:
-        verbose_name = _("token")
-        verbose_name_plural = _("tokens")
+# class CustomToken(Token):
+#     class Meta:
+#         verbose_name = _("token")
+#         verbose_name_plural = _("tokens")
 
 
 class Subtitle(models.Model):
