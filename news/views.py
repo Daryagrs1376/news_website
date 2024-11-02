@@ -39,7 +39,17 @@ from .models import News
 from .serializers import NewsSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import api_view, permission_classes
+from django.http import JsonResponse
 
+
+
+def news_create(request):
+    # کد ایجاد خبر
+    return JsonResponse({'message': 'خبر ایجاد شد'})
+
+def news_search(request):
+    # کد جستجوی خبر
+    return JsonResponse({'message': 'نتایج جستجو'})
 
 
 class NewsListView(generics.ListAPIView):
