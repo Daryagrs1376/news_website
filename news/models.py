@@ -70,7 +70,7 @@ class News(models.Model):
     status = models.BooleanField(default=True)
     date = models.DateTimeField(auto_now_add=True)
     keywords = models.ManyToManyField(Keyword)
-    is_approved = models.BooleanField(default=False)  # Default to False, meaning not approved
+    is_approved = models.BooleanField(default=False) 
 
     def __str__(self):
         return self.title
@@ -89,9 +89,6 @@ class SpecialCategory(models.Model):
 
 
 class NewsSpecialAttributes(models.Model):
-    """
-    مدلی برای ذخیره ویژگی‌های خاص مرتبط با اخبار
-    """
     special_feature1 = models.ForeignKey(SpecialFeature, on_delete=models.SET_NULL, null=True, related_name='special_feature1')
     special_feature2 = models.ForeignKey(SpecialFeature, on_delete=models.SET_NULL, null=True, blank=True)
     featured = models.BooleanField(default=False)
@@ -113,8 +110,6 @@ class News_reporter(models.Model):
     status = models.BooleanField(default=True)
     date = models.DateTimeField(auto_now_add=True)
     keywords = models.ManyToManyField(Keyword)
-
-    # TODO: اتصال به مدل ویژگی‌های خاص(انجام شد)
     special_attributes = models.OneToOneField(NewsSpecialAttributes, on_delete=models.CASCADE, null=True, blank=True)
     class Meta:
         abstract = False 
@@ -203,7 +198,6 @@ class User(AbstractUser):
         help_text='Specific permissions for this user.'
     )
     
-# مدل تبلیغات
 class Advertising(models.Model):
     LOCATION_CHOICES = [
         ('header', 'Header'),
