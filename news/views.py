@@ -40,7 +40,20 @@ from .serializers import NewsSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import api_view, permission_classes
 from django.http import JsonResponse
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
+
+
+@login_required
+def news_update(request, news_id):
+    # کد به‌روزرسانی خبر
+    return JsonResponse({'message': 'خبر به‌روزرسانی شد'})
+
+@login_required
+def news_delete(request, news_id):
+    # کد حذف خبر
+    return JsonResponse({'message': 'خبر حذف شد'})
 
 
 def news_create(request):
