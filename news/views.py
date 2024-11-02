@@ -37,6 +37,8 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from .models import News
 from .serializers import NewsSerializer
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import api_view, permission_classes
 
 
 
@@ -82,6 +84,15 @@ class NewsDetailView(generics.RetrieveAPIView):
     serializer_class = NewsSerializer
     permission_classes = [IsAuthenticated] 
     
+from rest_framework.decorators import api_view, permission_classes
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def news_list(request):
+    news = News.objects.filter(is_approved=True)  # تنها اخبار تایید شده نمایش داده می‌شود
+    serializer = NewsSerializer(news, many=True)
+    return Response(serializer.data)
+
 # لیست تنظیمات
 class SettingListView(generics.ListAPIView):
     queryset = Setting.objects.all()
