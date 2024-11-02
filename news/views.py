@@ -42,11 +42,11 @@ from rest_framework.decorators import api_view, permission_classes
 
 
 
-class NewsViewSet(viewsets.ModelViewSet):
+class NewsListView(generics.ListAPIView):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
-    permission_classes = [IsAuthenticated]
-
+    permission_classes = [AllowAny]
+    
     def perform_create(self, serializer):
         serializer.save(reporter=self.request.user)
 
