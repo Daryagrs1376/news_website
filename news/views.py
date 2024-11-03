@@ -42,6 +42,7 @@ from rest_framework.decorators import api_view, permission_classes
 from django.http import JsonResponse
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from rest_framework.permissions import AllowAny
 
 
 

@@ -20,6 +20,9 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from django.urls import path
+from . import views
+
 
 # تنظیمات مستندات API
 schema_view = get_schema_view(
@@ -46,6 +49,9 @@ router.register(r'operations', OperationViewSet, basename='operations')
 
 urlpatterns = [
     # path('admin/', admin.site.urls),  # مسیر پنل مدیریت Django
+
+    path('news/', views.NewsList.as_view(), name='news_list'),
+    path('news/create/', views.NewsCreate.as_view(), name='news_create'),
 
     # مسیرهای مرتبط با تنظیمات (Settings)
     path('settings/', SettingListView.as_view(), name='setting-list'),
