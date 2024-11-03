@@ -65,6 +65,11 @@ def news_search(request):
     # کد جستجوی خبر
     return JsonResponse({'message': 'نتایج جستجو'})
 
+class NewsCreate(APIView):
+    def post(self, request):
+        # کدهای مربوط به ساخت خبر جدید
+        return Response({"message": "خبر با موفقیت ایجاد شد"}, status=status.HTTP_201_CREATED)
+    
 
 class NewsListView(generics.ListAPIView):
     queryset = News.objects.all()
