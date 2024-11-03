@@ -1,26 +1,21 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, viewsets, generics, filters, permissions
-from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated, IsAdminUser
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import UpdateAPIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, action
+from rest_framework import status, viewsets, generics, filters, permissions
 from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse, JsonResponse
 from django.views import View
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from .serializers import CategorySerializer, ReporterProfileSerializer, AddUserSerializer, NewsSerializer, NewsEditSerializer
-from .serializers import UserSerializer, UserCreateSerializer
-from .serializers import AdvertisingSerializer, AdvertisingCreateUpdateSerializer
-from .serializers import NewsSerializer, SettingSerializer, SettingCreateUpdateSerializer
-from .serializers import UserProfileSerializer, OperationSerializer, PageViewSerializer
+from .serializers import CategorySerializer, ReporterProfileSerializer, AddUserSerializer, NewsSerializer, NewsEditSerializer, UserSerializer, UserCreateSerializer
+from .serializers import AdvertisingSerializer, AdvertisingCreateUpdateSerializer, NewsSerializer, SettingSerializer, SettingCreateUpdateSerializer, UserProfileSerializer, OperationSerializer, PageViewSerializer
 from datetime import datetime, timedelta
-from.models import News, Category, Subtitle, ReporterProfile, UserProfile, Operation, PageView
-from.models import Advertising, Setting, User, Role
+from.models import News, Category, Subtitle, ReporterProfile, UserProfile, Operation, PageView, Advertising, Setting, User, Role
 from.forms import SubtitleForm, AddCategoryForm
 from .permissions import IsOwner
 
@@ -73,13 +68,17 @@ class MyView(APIView):
     def get(self, request):
         return Response({'message': 'You are authenticated!'})
 
+# جزئیات خبر بدون نیاز به لاگین
 class NewsDetailView(generics.RetrieveAPIView):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
-    permission_classes = [IsAuthenticated] 
-    
-from rest_framework.decorators import api_view, permission_classes
+    permission_classes = [AllowAny]  # اجازه دسترسی به همه کاربران
 
+    def get(self, request, pk):
+        news = get_object_or_404(News, pk=pk)
+        serializer = NewsSerializer(news)
+        return Response(serializer.data)
+    
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def news_list(request):
