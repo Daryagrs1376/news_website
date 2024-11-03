@@ -31,6 +31,8 @@ class NewsCreate(APIView):
             return Response({"message": "خبر با موفقیت ایجاد شد"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+# لیست اخبار بدون نیاز به لاگین
 class NewsListView(generics.ListAPIView):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
@@ -79,6 +81,7 @@ class NewsDetailView(generics.RetrieveAPIView):
         serializer = NewsSerializer(news)
         return Response(serializer.data)
     
+# لیست اخبار تأیید شده بدون نیاز به لاگین
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def news_list(request):
