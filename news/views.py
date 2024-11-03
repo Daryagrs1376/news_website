@@ -1,75 +1,40 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, viewsets
+from rest_framework import status, viewsets, generics, filters, permissions
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.generics import UpdateAPIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.decorators import action, api_view, permission_classes
 from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect, render
-from .serializers import CategorySerializer, ReporterProfileSerializer, AddUserSerializer, NewsSerializer, NewsEditSerializer
-from rest_framework.decorators import action
 from django.http import HttpResponse, JsonResponse
-from.models import News, Category, Subtitle, ReporterProfile
-from.forms import SubtitleForm, AddCategoryForm
 from django.views import View
 from django.contrib.auth.models import User
-from rest_framework import permissions
-from rest_framework.exceptions import PermissionDenied
-from .permissions import IsOwner
-from rest_framework import generics, filters
+from django.contrib.auth.decorators import login_required
+from .serializers import CategorySerializer, ReporterProfileSerializer, AddUserSerializer, NewsSerializer, NewsEditSerializer
 from .serializers import UserSerializer, UserCreateSerializer
-from .models import Advertising, Setting, User, Role
 from .serializers import AdvertisingSerializer, AdvertisingCreateUpdateSerializer
-from .serializers import SettingSerializer, SettingCreateUpdateSerializer
-from rest_framework import viewsets
-from .models import News, UserProfile, Operation, PageView
+from .serializers import NewsSerializer, SettingSerializer, SettingCreateUpdateSerializer
 from .serializers import UserProfileSerializer, OperationSerializer, PageViewSerializer
 from datetime import datetime, timedelta
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from rest_framework.generics import UpdateAPIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import viewsets, permissions
-from .models import Advertising
-from .serializers import AdvertisingSerializer
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
-from .models import News
-from .serializers import NewsSerializer
-from rest_framework.permissions import AllowAny
-from rest_framework.decorators import api_view, permission_classes
-from django.http import JsonResponse
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-from rest_framework.permissions import AllowAny
+from.models import News, Category, Subtitle, ReporterProfile, UserProfile, Operation, PageView
+from.models import Advertising, Setting, User, Role
+from.forms import SubtitleForm, AddCategoryForm
+from .permissions import IsOwner
 
 
-
-@login_required
-def news_update(request, news_id):
-    # کد به‌روزرسانی خبر
-    return JsonResponse({'message': 'خبر به‌روزرسانی شد'})
-
-@login_required
-def news_delete(request, news_id):
-    # کد حذف خبر
-    return JsonResponse({'message': 'خبر حذف شد'})
-
-
-def news_create(request):
-    # کد ایجاد خبر
-    return JsonResponse({'message': 'خبر ایجاد شد'})
-
-def news_search(request):
-    # کد جستجوی خبر
-    return JsonResponse({'message': 'نتایج جستجو'})
-
+# ایجاد یک خبر جدید
 class NewsCreate(APIView):
+    permission_classes = [AllowAny]
+
     def post(self, request):
-        # کدهای مربوط به ساخت خبر جدید
-        return Response({"message": "خبر با موفقیت ایجاد شد"}, status=status.HTTP_201_CREATED)
-    
+        serializer = NewsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()  # ذخیره داده‌ها به عنوان خبر جدید
+            return Response({"message": "خبر با موفقیت ایجاد شد"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class NewsListView(generics.ListAPIView):
     queryset = News.objects.all()
