@@ -20,27 +20,30 @@ from.forms import SubtitleForm, AddCategoryForm
 from .permissions import IsOwner
 
 
-# ایجاد یک خبر جدید
+# ایجاد یک خبر جدید (برای کاربران احراز هویت‌شده)
 class NewsCreate(APIView):
-    permission_classes = [AllowAny]
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = NewsSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()  # ذخیره داده‌ها به عنوان خبر جدید
+            serializer.save()
             return Response({"message": "خبر با موفقیت ایجاد شد"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-# لیست اخبار بدون نیاز به لاگین
+# لیست اخبار (نمایش برای همه کاربران)
 class NewsListView(generics.ListAPIView):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
     permission_classes = [AllowAny]
-    
+
     def perform_create(self, serializer):
         serializer.save(reporter=self.request.user)
 
+# حذف تبلیغات (فقط برای ادمین‌ها)
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
 def delete_advertising(request, id):
     advertising = get_object_or_404(Advertising, id=id)
     advertising.delete()
@@ -52,10 +55,12 @@ class IsAdminOrReadOnly(permissions.BasePermission):
             return True
         return request.user and request.user.is_staff
 
+# مشاهده و ویرایش تبلیغات (فقط برای ادمین‌ها)
 class AdvertisingViewSet(viewsets.ModelViewSet):
     queryset = Advertising.objects.all()
     serializer_class = AdvertisingSerializer
-    permission_classes = [IsAdminOrReadOnly]
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAdminUser]
 
 class ProtectedView(APIView):
     permission_classes = [IsAuthenticated]
@@ -89,42 +94,56 @@ def news_list(request):
     serializer = NewsSerializer(news, many=True)
     return Response(serializer.data)
 
-# لیست تنظیمات
+# مشاهده و ویرایش تنظیمات (فقط برای ادمین‌ها)
 class SettingListView(generics.ListAPIView):
     queryset = Setting.objects.all()
     serializer_class = SettingSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAdminUser]
 
 # افزودن تنظیمات جدید
 class SettingCreateView(generics.CreateAPIView):
     queryset = Setting.objects.all()
     serializer_class = SettingCreateUpdateSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAdminUser]
+
 
 # ویرایش تنظیمات
 class SettingUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Setting.objects.all()
     serializer_class = SettingCreateUpdateSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAdminUser]
 
 # لیست تبلیغات با امکان جستجو
 class AdvertisingListView(generics.ListAPIView):
     queryset = Advertising.objects.all()
     serializer_class = AdvertisingSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['onvan_tabligh', 'location']  # فیلتر بر اساس عنوان و موقعیت
-
-# افزودن تبلیغ جدید
+    search_fields = ['onvan_tabligh', 'location']  
+    permission_classes = [AllowAny]  # AllowAny برای دسترسی عمومی
+    
+# افزودن تبلیغ جدید (فقط برای ادمین‌ها)
 class AdvertisingCreateView(generics.CreateAPIView):
     queryset = Advertising.objects.all()
     serializer_class = AdvertisingCreateUpdateSerializer
-
-# ویرایش تبلیغ
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAdminUser]
+    
+# ویرایش تبلیغ (فقط برای ادمین‌ها)
 class AdvertisingUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Advertising.objects.all()
     serializer_class = AdvertisingCreateUpdateSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAdminUser]
 
-# حذف تبلیغ
+# حذف تبلیغ (فقط برای ادمین‌ها)
 class AdvertisingDeleteView(generics.DestroyAPIView):
     queryset = Advertising.objects.all()
     serializer_class = AdvertisingSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAdminUser]
 
 
 # لیست و فیلتر کاربران
@@ -132,36 +151,37 @@ class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['username', 'mobile', 'role__name']  # فیلتر بر اساس نام، موبایل و نقش
-
-# اضافه کردن کاربر
+    search_fields = ['username', 'mobile', 'role__name']  
+    permission_classes = [AllowAny]  # AllowAny برای دسترسی عمومی
+    
+# افزودن کاربر (فقط برای ادمین‌ها)
 class UserCreateView(generics.CreateAPIView):
     serializer_class = UserCreateSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAdminUser]
 
     def perform_create(self, serializer):
         user = serializer.save()
-        # ارسال پیام به موبایل کاربر جدید (پیاده‌سازی شده با سیستم پیام‌رسانی)
-        # send_password_to_user(user.mobile, user.password)
-        return Response({'detail': 'User created and password sent to mobile'})
-
-# عملیات ویرایش و حذف کاربر
+        # ارسال پیام به موبایل کاربر جدید (در صورت نیاز)
+        return Response({'detail': 'User created successfully'})
+    
+# عملیات ویرایش و حذف کاربر (فقط برای ادمین‌ها)
 class UserUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAdminUser]
 
+# ویرایش دسته‌بندی‌ها (فقط برای ادمین‌ها)
 def edit_category(request, pk):
-    category = get_object_or_404(Category, pk=pk)
-    
     if request.method == 'POST':
-        
+        category = get_object_or_404(Category, pk=pk)
         form = AddCategoryForm(request.POST, instance=category)
         if form.is_valid():
             form.save()
-    else:
-        form = AddCategoryForm(instance=category)
-
-        return JsonResponse({"message": "Category edited successfully!"})
+            return JsonResponse({"message": "Category edited successfully!"})
     return JsonResponse({"error": "Only POST method is allowed"}, status=400)
+
 
 def add_category(request):
     if request.method == 'POST':
@@ -228,12 +248,14 @@ class AddCategory(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# حذف دسته‌بندی‌ها (فقط برای ادمین‌ها)
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
 def delete_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
-    if request.method == 'POST':
-        category.delete()
-        return JsonResponse({"message": "Category deleted successfully!"})
-    return JsonResponse({"error": "Only POST method is allowed"}, status=400)
+    category.delete()
+    return JsonResponse({"message": "Category deleted successfully!"})
+
 
 def subtitle_list(request):
     subtitles = Subtitle.objects.all()
@@ -305,8 +327,10 @@ class NewsList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# ویرایش و حذف خبر (مالکیت بررسی شده)
 class NewsDetail(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get_permissions(self):
         if self.request.method == 'DELETE':
@@ -319,40 +343,21 @@ class NewsDetail(APIView):
         except News.DoesNotExist:
             return None
 
-    def get(self, request, pk):
-        news = self.get_object(pk)
-        if news is None:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = NewsSerializer(news)
-        return Response(serializer.data)
-
-    def put(self, request, pk):
-        news = self.get_object(pk)
-        if news is None:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-        serializer = NewsEditSerializer(news, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
     def delete(self, request, pk):
         news = self.get_object(pk)
         if news is None:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
         if news.reporter != self.request.user:
             raise PermissionDenied("Only the owner of this news can delete it.")
-        
         news.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
+# سایر ویو‌ها
 class NewsViewSet(viewsets.ModelViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['get'], permission_classes=[AllowAny])
     def search(self, request):
         query = request.query_params.get('q')
         if query:
@@ -360,6 +365,7 @@ class NewsViewSet(viewsets.ModelViewSet):
             serializer = self.get_serializer(news, many=True)
             return Response(serializer.data)
         return Response({"message": "No search query provided."})
+
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -437,10 +443,11 @@ class WeeklyStatsView(APIView):
         serializer = PageViewSerializer(stats, many=True)
         return Response({"status": "success", "data": serializer.data})
 
-# لیست کردن همه دسته‌بندی‌ها
+# لیست دسته‌بندی‌ها
 class CategoryListView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [AllowAny]  # AllowAny برای دسترسی عمومی
 
 # جزئیات یک دسته‌بندی خاص
 class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -451,5 +458,6 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
 class NewsUpdateView(UpdateAPIView):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]  # مشاهده عمومی، ویرایش نیازمند احراز هویت
+
     
