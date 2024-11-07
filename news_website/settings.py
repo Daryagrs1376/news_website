@@ -147,10 +147,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # مکان نهایی بر�
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',  # حذف یا غیرفعال کردن
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',  # می‌توانید آن را به `AllowAny` تغییر دهید
+        'rest_framework.permissions.AllowAny',  # دسترسی عمومی
     ),
 }
 
