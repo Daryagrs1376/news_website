@@ -30,6 +30,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from .serializers import PasswordResetRequestSerializer, PasswordResetSerializer
 from .serializers import UserRegistrationSerializer
 from .serializers import NewsDetailSerializer
+from rest_framework.decorators import permission_classes  # باید دکوراتور را وارد کنید
 
 
 
@@ -558,7 +559,8 @@ class NewsUpdateView(UpdateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]  # مشاهده عمومی، ویرایش نیازمند احراز هویت
 
 class NewsSearchView(APIView):
-    permission_classes = [AllowAny]
+    
+    @permission_classes([AllowAny])  # استفاده از دکوراتور به درستی
 
     def get(self, request, *args, **kwargs):
         query = request.GET.get("query")
