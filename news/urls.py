@@ -22,6 +22,7 @@ from rest_framework_simplejwt.views import (
 )
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from . import views
+from rest_framework.permissions import AllowAny
 
 
 # تنظیمات مستندات API
@@ -32,8 +33,8 @@ schema_view = get_schema_view(
         description="API documentation",
     ),
     public=True,
-    permission_classes=(permissions.AllowAny,),
-    authentication_classes=(JWTAuthentication,),  # Use JWTAuthentication class directly
+    permission_classes=(AllowAny,),  # بدون نیاز به احراز هویت
+    authentication_classes=(),  # حذف کلاس‌های احراز هویت
 )
 
 # Router برای ویوست‌ها
