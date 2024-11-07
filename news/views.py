@@ -22,8 +22,10 @@ from .permissions import IsOwner
 
 # ایجاد یک خبر جدید (برای کاربران احراز هویت‌شده)
 class NewsCreate(APIView):
+    queryset = News.objects.all()
+    serializer_class = NewsSerializer
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]  # فقط کاربران احراز هویت شده می‌توانند اقدام کنند
 
     def post(self, request):
         serializer = NewsSerializer(data=request.data)
@@ -60,7 +62,14 @@ class AdvertisingViewSet(viewsets.ModelViewSet):
     queryset = Advertising.objects.all()
     serializer_class = AdvertisingSerializer
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAdminUser]
+    
+    # اجازه دسترسی عمومی برای مشاهده تبلیغات
+    permission_classes = [AllowAny]  # مشاهده تبلیغات برای همه کاربران
+
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'destroy']:  # فقط برای عملیات ایجاد، ویرایش، حذف نیاز به ادمین بودن است
+            return [IsAdminUser()]
+        return [AllowAny()]
 
 class ProtectedView(APIView):
     permission_classes = [IsAuthenticated]
@@ -144,6 +153,7 @@ class AdvertisingDeleteView(generics.DestroyAPIView):
     serializer_class = AdvertisingSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAdminUser]
+
 
 
 # لیست و فیلتر کاربران
@@ -351,6 +361,7 @@ class NewsDetail(APIView):
             raise PermissionDenied("Only the owner of this news can delete it.")
         news.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
     
 # سایر ویو‌ها
 class NewsViewSet(viewsets.ModelViewSet):
@@ -459,5 +470,3 @@ class NewsUpdateView(UpdateAPIView):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]  # مشاهده عمومی، ویرایش نیازمند احراز هویت
-
-    

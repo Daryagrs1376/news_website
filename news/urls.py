@@ -34,7 +34,7 @@ schema_view = get_schema_view(
     ),
     public=True,
     permission_classes=(AllowAny,),  # بدون نیاز به احراز هویت
-    authentication_classes=(),  # حذف کلاس‌های احراز هویت
+    authentication_classes=(),  # حذف احراز هویت
 )
 
 # Router برای ویوست‌ها

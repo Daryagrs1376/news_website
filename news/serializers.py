@@ -119,7 +119,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         user.save()
         return user
     
-# سریالایزر تبلیغات
+# سریالایزر برای نمایش تبلیغات (برای مشاهده توسط همه کاربران)
 class AdvertisingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advertising
@@ -127,8 +127,8 @@ class AdvertisingSerializer(serializers.ModelSerializer):
             'id', 'onvan_tabligh', 'link', 'banner', 'location',
             'start_date', 'expiration_date', 'status'
         ]
-
-# سریالایزر برای ایجاد یا ویرایش تبلیغ
+        
+# سریالایزر برای ایجاد، ویرایش یا حذف تبلیغ (برای ادمین‌ها)
 class AdvertisingCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advertising

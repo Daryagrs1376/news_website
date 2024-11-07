@@ -47,7 +47,7 @@ class NewsAdmin(admin.ModelAdmin):
     search_fields = ('title', 'short_description')
     list_editable = ('is_approved', 'status')
     ordering = ('-created_at',)
-    fields = ('title','reporter', 'news_text', 'created_at', 'status', 'keywords', 'is_approved')
+    fields = ('title', 'reporter', 'news_text', 'created_at', 'status', 'keywords', 'is_approved')
 
 # تنظیمات مربوط به مدل Role
 class RoleAdmin(admin.ModelAdmin):
@@ -59,12 +59,25 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'email', 'mobile', 'role', 'status')
     search_fields = ('username', 'email', 'mobile')
     list_filter = ('role', 'status')
-
+    
 # تنظیمات مربوط به مدل Advertising
 class AdvertisingAdmin(admin.ModelAdmin):
     list_display = ('onvan_tabligh', 'link', 'location', 'start_date', 'expiration_date', 'status')
     search_fields = ('onvan_tabligh', 'location')
     list_filter = ('location', 'status', 'start_date', 'expiration_date')
+    
+    # فقط ادمین‌ها قادر به ویرایش یا حذف خواهند بود
+    def has_change_permission(self, request, obj=None):
+        # فقط ادمین‌ها می‌توانند تغییرات را اعمال کنند
+        return request.user.is_superuser
+
+    def has_delete_permission(self, request, obj=None):
+        # فقط ادمین‌ها می‌توانند تبلیغ را حذف کنند
+        return request.user.is_superuser
+
+    def has_add_permission(self, request):
+        # فقط ادمین‌ها می‌توانند تبلیغ جدید اضافه کنند
+        return request.user.is_superuser
 
 # تنظیمات مربوط به مدل Setting
 class SettingAdmin(admin.ModelAdmin):
@@ -96,11 +109,11 @@ class PageViewAdmin(admin.ModelAdmin):
 
 
 # ثبت مدل‌ها در پنل ادمین
-admin.site.register(Newscategory, NewscategoryAdmin)
-admin.site.register(Category, CategoryAdmin)
-admin.site.register(Keyword, KeywordAdmin)
-admin.site.register(location, LocationAdmin)
-admin.site.register(Feature, FeatureAdmin)
+admin.site.register(Newscategory)
+admin.site.register(Category)
+admin.site.register(Keyword)
+admin.site.register(location)
+admin.site.register(Feature)
 admin.site.register(Grouping)
 admin.site.register(News, NewsAdmin)
 admin.site.register(SpecialFeature)
@@ -111,8 +124,7 @@ admin.site.register(Role, RoleAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Advertising, AdvertisingAdmin)
 admin.site.register(Setting, SettingAdmin)
-admin.site.register(Dashboard, DashboardAdmin)
-admin.site.register(Operation, OperationAdmin)
-admin.site.register(UserProfile, UserProfileAdmin)
-admin.site.register(PageView, PageViewAdmin)
-# admin.site.register(CustomToken)
+admin.site.register(Dashboard)
+admin.site.register(Operation)
+admin.site.register(UserProfile)
+admin.site.register(PageView)

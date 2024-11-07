@@ -61,9 +61,10 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
-    "https://yourdomain.com",
+    "http://localhost:8000",  # Localhost for development
+    "https://yourdomain.com",  # Replace with your actual domain
 ]
+
 
 ROOT_URLCONF = 'news_website.urls'
 
@@ -100,6 +101,8 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
+
+# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -136,29 +139,40 @@ STATIC_URL = '/static/'
 STATIC_ROOT = 'static/'
 
 # مسیرهای اضافی برای جستجو در فایل‌های استاتیک
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # مطمئن شوید که پوشه 'static' در پروژه شما وجود دارد
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Ensure 'static' folder exists
 
 # مسیری که فایل‌های استاتیک بعد از اجرای collectstatic در آن جمع‌آوری می‌شوند
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # مکان نهایی برای جمع‌آوری فایل‌های استاتیک
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Media files settings for user-uploaded content
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Time zone settings
+TIME_ZONE = 'UTC'
+USE_TZ = True
+LANGUAGE_CODE = 'en-us'
+USE_I18N = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 
+# REST framework settings (AllowAny gives public access to API endpoints)
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',  # حذف یا غیرفعال کردن
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.AllowAny',  # دسترسی عمومی
-    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',  # Public access for all users
+    ],
 }
 
 
+# JWT Configuration for token-based authentication
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # Token expiry time (1 hour)
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # Refresh token expiry time (7 days)
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'ALGORITHM': 'HS256',
@@ -166,6 +180,8 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
+
+# Swagger documentation settings for REST API
 SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': False,
     'SECURITY_DEFINITIONS': {
