@@ -146,9 +146,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # مکان نهایی بر�
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
 }
 
 
@@ -162,11 +165,11 @@ SIMPLE_JWT = {
 SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': False,
     'SECURITY_DEFINITIONS': {
-        'Token': {
+        'Bearer': {
             'type': 'apiKey',
-            'in': 'header',
             'name': 'Authorization',
-            'description': "Enter the token in the format: Token <your_token>",
+            'in': 'header',
+            'description': "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
         }
     },
 }

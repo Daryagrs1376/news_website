@@ -26,17 +26,15 @@ from . import views
 
 # تنظیمات مستندات API
 schema_view = get_schema_view(
-    openapi.Info(
-        title="API Documentation",
-        default_version='v1',
-        description="API documentation for news site",
-        terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="contact@yourapi.local"),
-        license=openapi.License(name="License"),
-    ),
-    public=True,
-    permission_classes=(permissions.AllowAny,),
+   openapi.Info(
+      title="Your API",
+      default_version='v1',
+      description="API documentation",
+   ),
+   public=True,
+   permission_classes=(permissions.AllowAny,),
 )
+
 
 # Router برای ویوست‌ها
 router = DefaultRouter()
