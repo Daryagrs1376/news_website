@@ -454,6 +454,7 @@ class NewsDetail(APIView):
 class NewsViewSet(viewsets.ModelViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
+    permission_classes = [IsAuthenticated]  # فقط کاربران احراز هویت شده می‌توانند خبر ایجاد کنند
 
     @action(detail=False, methods=['get'], permission_classes=[AllowAny])
     def search(self, request):
@@ -580,12 +581,19 @@ class NewsSearchView(APIView):
 class NewsCreateView(generics.CreateAPIView):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
-    permission_classes = [IsAuthenticated]  # فقط کاربرانی که وارد شده‌اند قادر به ارسال درخواست هستند
+    permission_classes = [IsAuthenticated]  # فقط کاربران احراز هویت شده می‌توانند دسترسی داشته باشند
     
     def perform_create(self, serializer):
         # اطمینان حاصل می‌کنیم که "reporter" به کاربری که خبر را ایجاد کرده نسبت داده شود.
         serializer.save(reporter=self.request.user)
         
+    def post(self, request, *args, **kwargs):
+        serializer = NewsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
     def post(self, request):
         # سریالایز کردن داده‌ها
         serializer = NewsSerializer(data=request.data, context={'request': request})  # ارسال context با request
