@@ -172,4 +172,5 @@ SWAGGER_SETTINGS = {
             'description': "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
         }
     },
+    'DEFAULT_API_URL': 'https://your-api-url/',  # اگر لازم است آدرس API را وارد کنید
 }

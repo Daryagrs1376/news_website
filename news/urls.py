@@ -33,8 +33,8 @@ schema_view = get_schema_view(
    ),
    public=True,
    permission_classes=(permissions.AllowAny,),
+   authentication_classes=('rest_framework_simplejwt.authentication.JWTAuthentication',),
 )
-
 
 # Router برای ویوست‌ها
 router = DefaultRouter()
