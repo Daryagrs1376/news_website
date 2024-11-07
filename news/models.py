@@ -69,11 +69,19 @@ class News(models.Model):
     status = models.BooleanField(default=True)
     date = models.DateTimeField(auto_now_add=True)
     keywords = models.ManyToManyField(Keyword)
-    is_approved = models.BooleanField(default=False) 
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
+
      
+    # تابع برای افزودن کیورد
+    def add_keyword(self, keyword_name):
+        # بررسی اینکه آیا کیورد از قبل وجود دارد یا خیر
+        keyword, created = Keyword.objects.get_or_create(word=keyword_name)
+        # اضافه کردن کیورد به لیست کیوردهای این خبر
+        self.keywords.add(keyword)
+        
 class SpecialFeature(models.Model):
     feature_name = models.CharField(max_length=50)
 

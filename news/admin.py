@@ -47,8 +47,7 @@ class NewsAdmin(admin.ModelAdmin):
     search_fields = ('title', 'short_description')
     list_editable = ('is_approved', 'status')
     ordering = ('-created_at',)
-    fields = ('title', 'reporter', 'news_text', 'created_at', 'status', 'keywords', 'is_approved')
-
+    
 # تنظیمات مربوط به مدل Role
 class RoleAdmin(admin.ModelAdmin):
     list_display = ('name',)

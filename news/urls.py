@@ -23,6 +23,12 @@ from rest_framework_simplejwt.views import (
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from . import views
 from rest_framework.permissions import AllowAny
+from .views import AdminAdvertisingListView, PublicAdvertisingListView
+from .views import PasswordResetRequestView, PasswordResetView
+from .views import UserRegistrationView
+from .views import NewsDetailView
+from .views import NewsCreateView
+from .views import NewsListView
 
 
 # تنظیمات مستندات API
@@ -97,9 +103,23 @@ urlpatterns = [
     # سایر مسیرها
     path('protected/', ProtectedView.as_view(), name='protected_view'),
 
+    path('api/register/', UserRegistrationView.as_view(), name='user_registration'),
+
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     
+    path('api/news/', NewsListView.as_view(), name='news_list'),
+
+    path('api/admin/advertisements/', AdminAdvertisingListView.as_view(), name='admin_advertising_list'),
+    path('api/advertisements/', PublicAdvertisingListView.as_view(), name='public_advertising_list'),
+    
+    path('api/password-reset-request/', PasswordResetRequestView.as_view(), name='password_reset_request'),
+    path('api/password-reset/<uidb64>/<token>/', PasswordResetView.as_view(), name='password_reset'),
+    
+    path('api/news/<int:pk>/', NewsDetailView.as_view(), name='news_detail'),
+
+    path('api/news/create/', NewsCreateView.as_view(), name='create_news'),
+
     # استفاده از روت‌های پیش‌فرض برای ویوست‌ها
     path('', include(router.urls)),
 ]

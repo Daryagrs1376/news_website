@@ -3,9 +3,76 @@ from .models import News, Setting, User, Role, Category, UserProfile, ReporterPr
 from .models import PageView
 from rest_framework import serializers
 from .models import News
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.contrib.auth.models import User
+from .models import News, Keyword
 
 
 
+class KeywordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Keyword
+        fields = ['word']
+
+class NewsDetailSerializer(serializers.ModelSerializer):
+    keywords = KeywordSerializer(many=True)
+    reporter_name = serializers.CharField(source='reporter.username', read_only=True)
+
+    class Meta:
+        model = News
+        fields = [
+            'id', 
+            'title', 
+            'reporter_name',
+            'category', 
+            'content', 
+            'short_description',
+            'news_text', 
+            'created_at', 
+            'status', 
+            'keywords'
+        ]
+
+
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, min_length=8)
+    confirm_password = serializers.CharField(write_only=True, min_length=8)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password', 'confirm_password']
+
+    def validate(self, data):
+        # بررسی مطابقت رمز عبور و تایید رمز عبور
+        if data['password'] != data['confirm_password']:
+            raise serializers.ValidationError("رمز عبور و تایید رمز عبور باید یکسان باشند.")
+        return data
+
+    def create(self, validated_data):
+        # حذف confirm_password قبل از ذخیره در دیتابیس
+        validated_data.pop('confirm_password')
+        user = User.objects.create_user(**validated_data)
+        return user
+
+class PasswordResetRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        # چک می‌کند که آیا ایمیل در دیتابیس وجود دارد یا خیر
+        if not User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("کاربری با این ایمیل یافت نشد.")
+        return value
+    
+class PasswordResetSerializer(serializers.Serializer):
+    token = serializers.CharField()
+    new_password = serializers.CharField(min_length=8)
+
+    def validate_token(self, value):
+        # اعتبارسنجی توکن برای اطمینان از اینکه معتبر است
+        user = self.context.get('user')
+        if not PasswordResetTokenGenerator().check_token(user, value):
+            raise serializers.ValidationError("توکن معتبر نیست یا منقضی شده است.")
+        return value
 class SubtitleSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     text = serializers.CharField(max_length=200)
@@ -55,6 +122,12 @@ class NewsSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id', 'created_at', 'updated_at']
         
+    def create(self, validated_data):
+        # به طور خودکار reporter را از request.user بگیرید
+        user = self.context['request'].user  # گرفتن کاربر از request
+        news = News.objects.create(reporter=user, **validated_data)  # ایجاد خبر
+        return news
+
 class NewsEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
@@ -148,3 +221,18 @@ class OperationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Operation
         fields = ['id', 'news', 'operation_type', 'performed_at']
+        
+class AdminAdvertisingSerializer(serializers.ModelSerializer):
+    status = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Advertising
+        fields = ['id', 'location', 'start_date', 'expiration_date', 'status']
+
+    def get_status(self, obj):
+        return "approved" if obj.status else "pending"
+
+class PublicAdvertisingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Advertising
+        fields = ['id', 'link', 'banner', 'location']

@@ -18,7 +18,72 @@ from datetime import datetime, timedelta
 from.models import News, Category, Subtitle, ReporterProfile, UserProfile, Operation, PageView, Advertising, Setting, User, Role
 from.forms import SubtitleForm, AddCategoryForm
 from .permissions import IsOwner
+from rest_framework.filters import SearchFilter
+from .serializers import AdminAdvertisingSerializer, PublicAdvertisingSerializer
+from rest_framework.generics import ListAPIView
+from .permissions import IsAdminUserOrReadOnly
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from .serializers import PasswordResetRequestSerializer, PasswordResetSerializer
+from .serializers import UserRegistrationSerializer
+from .serializers import NewsDetailSerializer
 
+
+
+class NewsDetailView(generics.RetrieveAPIView):
+    queryset = News.objects.all()
+    serializer_class = NewsDetailSerializer
+    permission_classes = [AllowAny]
+
+class UserRegistrationView(APIView):
+    def post(self, request):
+        serializer = UserRegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "ثبت‌نام با موفقیت انجام شد."}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PasswordResetRequestView(APIView):
+    def post(self, request):
+        serializer = PasswordResetRequestSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            user = User.objects.get(email=email)
+            token = PasswordResetTokenGenerator().make_token(user)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            
+            # ایجاد لینک بازیابی رمز عبور
+            reset_link = f"http://yourfrontend.com/reset-password/{uid}/{token}/"
+            
+            # ارسال ایمیل
+            send_mail(
+                subject="Password Reset Request",
+                message=f"Use the following link to reset your password: {reset_link}",
+                from_email="noreply@yourdomain.com",
+                recipient_list=[email],
+            )
+            return Response({"message": "ایمیل بازیابی رمز عبور ارسال شد."}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PasswordResetView(APIView):
+    def post(self, request, uidb64, token):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            return Response({"error": "لینک معتبر نیست."}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = PasswordResetSerializer(data=request.data, context={'user': user})
+        if serializer.is_valid():
+            new_password = serializer.validated_data['new_password']
+            user.set_password(new_password)
+            user.save()
+            return Response({"message": "رمز عبور با موفقیت تغییر کرد."}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # ایجاد یک خبر جدید (برای کاربران احراز هویت‌شده)
 class NewsCreate(APIView):
@@ -38,11 +103,32 @@ class NewsCreate(APIView):
 class NewsListView(generics.ListAPIView):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
+    filter_backends = (SearchFilter,)  # فعال کردن جستجو
+    search_fields = ['title', 'content', 'short_description']  # فیلدهایی که می‌توان جستجو کرد
+    pagination_class = None  # می‌توانید پیجینیشن هم اضافه کنید
     permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
         serializer.save(reporter=self.request.user)
 
+    def get_queryset(self):
+        """
+        این متد queryset را فیلتر می‌کند. می‌توانیم فیلترهای بیشتری اضافه کنیم.
+        """
+        queryset = News.objects.all()
+        # اضافه کردن فیلترهای اضافی به درخواست
+        # به عنوان مثال، فیلتر وضعیت اخبار یا دسته‌بندی
+        status = self.request.query_params.get('status', None)
+        if status:
+            queryset = queryset.filter(status=status)
+
+        # فیلتر براساس تاریخ ایجاد (می‌توانید فیلترهای دیگر هم اضافه کنید)
+        created_at = self.request.query_params.get('created_at', None)
+        if created_at:
+            queryset = queryset.filter(created_at__date=created_at)
+
+        return queryset
+    
 # حذف تبلیغات (فقط برای ادمین‌ها)
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
@@ -470,3 +556,68 @@ class NewsUpdateView(UpdateAPIView):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]  # مشاهده عمومی، ویرایش نیازمند احراز هویت
+
+class NewsSearchView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        query = request.GET.get("query")
+        # جستجو در اخبار بر اساس query
+        results = News.objects.filter(title__icontains=query)
+        serialized_results = ...  # سریالایز کردن خروجی
+        return Response(serialized_results)
+    
+    @api_view(['GET'])
+    @permission_classes([AllowAny])
+    def news_search(request):
+        query = request.GET.get("query")
+        results = News.objects.filter(title__icontains=query)
+        serialized_results = ...  # سریالایز کردن خروجی
+        return Response(serialized_results)
+    
+class NewsCreateView(generics.CreateAPIView):
+    queryset = News.objects.all()
+    serializer_class = NewsSerializer
+    permission_classes = [IsAuthenticated]  # فقط کاربرانی که وارد شده‌اند قادر به ارسال درخواست هستند
+    
+    def perform_create(self, serializer):
+        # اطمینان حاصل می‌کنیم که "reporter" به کاربری که خبر را ایجاد کرده نسبت داده شود.
+        serializer.save(reporter=self.request.user)
+        
+    def post(self, request):
+        # سریالایز کردن داده‌ها
+        serializer = NewsSerializer(data=request.data, context={'request': request})  # ارسال context با request
+        if serializer.is_valid():
+            serializer.save()  # خبر جدید را ذخیره می‌کند
+
+            # ذخیره خبر
+            news = serializer.save()
+            
+            # اضافه کردن کیوردها به خبر
+            keywords = request.data.get('keywords', [])
+            for keyword_name in keywords:
+                news.add_keyword(keyword_name)
+            
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+# ویوی لیست تبلیغات برای ادمین
+class AdminAdvertisingListView(ListAPIView):
+    permission_classes = [IsAdminUserOrReadOnly]
+    serializer_class = AdminAdvertisingSerializer
+    queryset = Advertising.objects.all()
+    
+# ویوی لیست تبلیغات برای کاربران
+class PublicAdvertisingListView(ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = PublicAdvertisingSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['location']
+    
+    def get_queryset(self):
+        # فیلتر تبلیغات تایید شده که تاریخ انقضای آن‌ها نگذشته باشد
+        return Advertising.objects.filter(
+            status=True,
+            expiration_date__gte=timezone.now()
+        )
+        
