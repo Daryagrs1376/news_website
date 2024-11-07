@@ -565,7 +565,7 @@ class NewsSearchView(APIView):
         # جستجو در اخبار بر اساس query
         results = News.objects.filter(title__icontains=query)
         serialized_results = ...  # سریالایز کردن خروجی
-        return Response(serialized_results)
+        return Response({"message": "News search works!"})
     
     @api_view(['GET'])
     @permission_classes([AllowAny])

@@ -1,5 +1,17 @@
 from rest_framework import permissions
+from rest_framework.decorators import permission_classes
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 
+
+
+class NewsSearchView(APIView):
+
+    @permission_classes([AllowAny])  # در اینجا از دکوراتور برای تعریف پرمیشن استفاده می‌کنیم
+    def get(self, request):
+        # عملیات جستجو
+        return Response({"message": "News search works!"})
 
 
 class IsOwner(permissions.BasePermission):
