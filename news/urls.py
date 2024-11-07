@@ -93,8 +93,9 @@ urlpatterns = [
     path('weekly/', WeeklyStatsView.as_view(), name='weekly-stats'),
 
     # مسیرهای احراز هویت JWT
-    path('token/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token_create/', views.obtain_auth_token, name='token_create'),
 
     # مسیر مستندات Swagger و Redoc
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
