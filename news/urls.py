@@ -29,6 +29,7 @@ from .views import UserRegistrationView
 from .views import NewsDetailView
 from .views import NewsCreateView
 from .views import NewsListView
+from rest_framework.authtoken.views import obtain_auth_token  # اضافه کردن این خط
 
 
 # تنظیمات مستندات API
@@ -95,7 +96,7 @@ urlpatterns = [
     # مسیرهای احراز هویت JWT
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/token_create/', views.obtain_auth_token, name='token_create'),
+    path('api/token_create/', obtain_auth_token, name='token_create'),  # اصلاح شده برای استفاده از obtain_auth_token به صورت مستقیم
 
     # مسیر مستندات Swagger و Redoc
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
@@ -108,6 +109,7 @@ urlpatterns = [
 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # path('api/token_create/', obtain_auth_token, name='token_create'), 
     
     path('api/news/', NewsListView.as_view(), name='news_list'),
 
