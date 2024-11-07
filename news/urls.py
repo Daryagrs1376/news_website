@@ -20,20 +20,20 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from django.urls import path
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from . import views
 
 
 # تنظیمات مستندات API
 schema_view = get_schema_view(
-   openapi.Info(
-      title="Your API",
-      default_version='v1',
-      description="API documentation",
-   ),
-   public=True,
-   permission_classes=(permissions.AllowAny,),
-   authentication_classes=('rest_framework_simplejwt.authentication.JWTAuthentication',),
+    openapi.Info(
+        title="Your API",
+        default_version='v1',
+        description="API documentation",
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+    authentication_classes=(JWTAuthentication,),  # Use JWTAuthentication class directly
 )
 
 # Router برای ویوست‌ها
@@ -42,12 +42,10 @@ router.register(r'news', NewsViewSet, basename='news')
 router.register(r'categories', CategoryViewSet, basename='categories')
 router.register(r'userprofiles', UserProfileViewSet, basename='userprofiles')
 router.register(r'operations', OperationViewSet, basename='operations')
-# router.register(r'news, NewsViewSet')
 
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),  # مسیر پنل مدیریت Django
-
+    # مسیرهای مرتبط با اخبار (News)
     path('news/', views.NewsList.as_view(), name='news_list'),
     path('news/create/', views.NewsCreate.as_view(), name='news_create'),
 
@@ -66,10 +64,6 @@ urlpatterns = [
     path('users/', UserListView.as_view(), name='user-list'),
     path('users/add/', UserCreateView.as_view(), name='user-create'),
     path('users/<int:pk>/edit/', UserUpdateDeleteView.as_view(), name='user-update-delete'),
-
-    # مسیرهای مرتبط با اخبار (News)
-    path('news/', NewsList.as_view(), name='news-list'),
-    path('news/<int:pk>/', NewsDetail.as_view(), name='news-detail'),
 
     # مسیرهای مرتبط با دسته‌بندی‌ها (Categories)
     path('categories/add/', AddCategory.as_view(), name='category-add'),
@@ -91,7 +85,7 @@ urlpatterns = [
     path('daily/', DailyStatsView.as_view(), name='daily-stats'),
     path('weekly/', WeeklyStatsView.as_view(), name='weekly-stats'),
 
-    # مسیرهای احراز هویت JWT با نام جدید Token
+    # مسیرهای احراز هویت JWT
     path('token/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
