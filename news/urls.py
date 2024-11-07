@@ -102,6 +102,9 @@ urlpatterns = [
     # سایر مسیرها
     path('protected/', ProtectedView.as_view(), name='protected_view'),
 
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    
     # استفاده از روت‌های پیش‌فرض برای ویوست‌ها
     path('', include(router.urls)),
 ]
