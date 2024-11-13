@@ -161,11 +161,19 @@ class RoleSerializer(serializers.ModelSerializer):
         model = Role
         fields = ['id', 'name']
 
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['id', 'phone_number']
+
 # سریالایزر کاربر (User)
 class UserSerializer(serializers.ModelSerializer):
+    profile = UserProfileSerializer()
+    
     class Meta:
         model = User
-        fields = ['email','id', 'username', 'phone_number', 'role', 'status']
+        fields = ['email','id', 'username', 'profile']
 
 # سریالایزر اضافه کردن کاربر
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -206,12 +214,6 @@ class AdvertisingCreateUpdateSerializer(serializers.ModelSerializer):
             'onvan_tabligh', 'link', 'banner', 'location',
             'start_date', 'expiration_date', 'status'
         ]
-        
-# سریالایزر UserProfile برای مدیریت پروفایل کاربران
-class UserProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfile
-        fields = ['phone_number', 'user']
 
 # سریالایزر Operation برای عملیات ویرایش و حذف
 class OperationSerializer(serializers.ModelSerializer):

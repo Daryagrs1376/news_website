@@ -6,7 +6,19 @@ from django import forms
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE,  null=True)
+    phone_number = models.CharField(null=True)
     
+    def __str__(self):
+        return self.user.username
+
 
 class Subtitle(models.Model):
     title = models.CharField(max_length=100)
