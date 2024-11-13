@@ -79,7 +79,7 @@ urlpatterns = [
 
     # # مسیرهای مرتبط با کاربران (User)
     path('users/', UserListView.as_view(), name='user-list'),
-    # path('users/add/', UserCreateView.as_view(), name='user-create'),
+    path('users/add/', UserCreateView.as_view(), name='user-create'),
     # path('users/<int:pk>/edit/', UserUpdateDeleteView.as_view(), name='user-update-delete'),
 
     # # مسیرهای مرتبط با دسته‌بندی‌ها (Categories)
