@@ -6,7 +6,6 @@ from .models import News
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.auth import get_user_model
 from .models import News, Keyword
-from .models import CustomUser, Newscategory
 
 
 User = get_user_model()
