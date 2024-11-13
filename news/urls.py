@@ -57,7 +57,10 @@ router.register(r'operations', OperationViewSet, basename='operations')
 
 
 urlpatterns = [
-    # path('api/news/', NewsListView.as_view(), name='news-list'),
+    # مسیر مستندات Swagger و Redoc
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path('api/news/', NewsListView.as_view(), name='news-list'),
 
     # مسیرهای مرتبط با اخبار (News)
     path('news/', NewsListView.as_view(), name='news-list'),
@@ -74,25 +77,25 @@ urlpatterns = [
     path('advertising/<int:pk>/edit/', AdvertisingUpdateView.as_view(), name='advertising-update'),
     path('advertising/<int:id>/delete/', AdvertisingDeleteView.as_view(), name='delete_advertising'),
 
-    # مسیرهای مرتبط با کاربران (User)
+    # # مسیرهای مرتبط با کاربران (User)
     path('users/', UserListView.as_view(), name='user-list'),
     path('users/add/', UserCreateView.as_view(), name='user-create'),
     path('users/<int:pk>/edit/', UserUpdateDeleteView.as_view(), name='user-update-delete'),
 
-    # مسیرهای مرتبط با دسته‌بندی‌ها (Categories)
+    # # مسیرهای مرتبط با دسته‌بندی‌ها (Categories)
     path('categories/add/', AddCategory.as_view(), name='category-add'),
     path('categories/<int:pk>/edit/', edit_category, name='category-edit'),
     path('categories/<int:pk>/delete/', delete_category, name='category-delete'),
     path('categories/', CategoryListView.as_view(), name='category-list'),
     path('categories/<int:id>/', CategoryDetailView.as_view(), name='category-detail'),
 
-    # مسیرهای مرتبط با زیرنویس‌ها (Subtitles)
+    # # مسیرهای مرتبط با زیرنویس‌ها (Subtitles)
     path('subtitles/', subtitle_list, name='subtitle-list'),
     path('subtitles/add/', add_subtitle, name='subtitle-add'),
     path('subtitles/<int:pk>/edit/', edit_subtitle, name='subtitle-edit'),
     path('subtitles/<int:pk>/delete/', delete_subtitle, name='subtitle-delete'),
 
-    # مسیرهای مرتبط با پروفایل کاربر (UserProfile)
+    # # مسیرهای مرتبط با پروفایل کاربر (UserProfile)
     path('userprofiles/<int:pk>/', UserProfileDetailView.as_view(), name='userprofile-detail'),
 
     # مسیرهای مرتبط با آمار بازدید
@@ -104,10 +107,6 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token_create/', obtain_auth_token, name='token_create'),  # اصلاح شده برای استفاده از obtain_auth_token به صورت مستقیم
 
-    # مسیر مستندات Swagger و Redoc
-    path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
-    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
-
     # سایر مسیرها
     path('protected/', ProtectedView.as_view(), name='protected_view'),
 
@@ -115,7 +114,7 @@ urlpatterns = [
 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    # path('api/token_create/', obtain_auth_token, name='token_create'), 
+    path('api/token_create/', obtain_auth_token, name='token_create'), 
     
     path('api/news/', NewsListView.as_view(), name='news_list'),
 

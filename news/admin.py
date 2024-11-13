@@ -55,8 +55,8 @@ class RoleAdmin(admin.ModelAdmin):
 
 # تنظیمات مربوط به مدل User
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'mobile', 'role', 'status')
-    search_fields = ('username', 'email', 'mobile')
+    list_display = ('username', 'email', 'phone_number', 'role', 'status')
+    search_fields = ('username', 'email', 'phone_number')
     list_filter = ('role', 'status')
     
 # تنظیمات مربوط به مدل Advertising

@@ -32,6 +32,8 @@ from .serializers import NewsDetailSerializer
 from rest_framework.decorators import permission_classes  # باید دکوراتور را وارد کنید
 
 
+User = get_user_model()
+
 
 class NewsDetailView(generics.RetrieveAPIView):
     queryset = News.objects.all()
@@ -242,11 +244,10 @@ class AdvertisingDeleteView(generics.DestroyAPIView):
 
 # لیست و فیلتر کاربران
 class UserListView(generics.ListAPIView):
-    User = get_user_model()
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['username', 'mobile', 'role__name']  
+    search_fields = ['username', 'phone_number', 'role__name']  
     permission_classes = [AllowAny]  # AllowAny برای دسترسی عمومی
     
 # افزودن کاربر (فقط برای ادمین‌ها)
