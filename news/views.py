@@ -10,7 +10,6 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse, JsonResponse
 from django.views import View
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .serializers import CategorySerializer, ReporterProfileSerializer, AddUserSerializer, NewsSerializer, NewsEditSerializer, UserSerializer, UserCreateSerializer
 from .serializers import AdvertisingSerializer, AdvertisingCreateUpdateSerializer, NewsSerializer, SettingSerializer, SettingCreateUpdateSerializer, UserProfileSerializer, OperationSerializer, PageViewSerializer
@@ -22,7 +21,7 @@ from rest_framework.filters import SearchFilter
 from .serializers import AdminAdvertisingSerializer, PublicAdvertisingSerializer
 from rest_framework.generics import ListAPIView
 from .permissions import IsAdminUserOrReadOnly
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
@@ -40,13 +39,13 @@ class NewsDetailView(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
 
 class UserRegistrationView(APIView):
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"message": "ثبت‌نام با موفقیت انجام شد."}, status=status.HTTP_201_CREATED)
+            return Response({"message": "User registered successfully!"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    
 class PasswordResetRequestView(APIView):
     def post(self, request):
         serializer = PasswordResetRequestSerializer(data=request.data)
@@ -241,10 +240,9 @@ class AdvertisingDeleteView(generics.DestroyAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAdminUser]
 
-
-
 # لیست و فیلتر کاربران
 class UserListView(generics.ListAPIView):
+    User = get_user_model()
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = [filters.SearchFilter]

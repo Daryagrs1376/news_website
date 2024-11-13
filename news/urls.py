@@ -30,19 +30,23 @@ from .views import NewsDetailView
 from .views import NewsCreateView
 from .views import NewsListView
 from rest_framework.authtoken.views import obtain_auth_token  # اضافه کردن این خط
+from .views import NewsListView
 
 
 # تنظیمات مستندات API
 schema_view = get_schema_view(
     openapi.Info(
-        title="Your API",
+        title="News API",
         default_version='v1',
-        description="API documentation",
+        description="Test description",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="contact@news.local"),
+        license=openapi.License(name="BSD License"),
     ),
     public=True,
-    permission_classes=(AllowAny,),  # بدون نیاز به احراز هویت
-    authentication_classes=(),  # حذف احراز هویت
+    permission_classes=[permissions.AllowAny],
 )
+
 
 # Router برای ویوست‌ها
 router = DefaultRouter()
@@ -53,9 +57,11 @@ router.register(r'operations', OperationViewSet, basename='operations')
 
 
 urlpatterns = [
+    # path('api/news/', NewsListView.as_view(), name='news-list'),
+
     # مسیرهای مرتبط با اخبار (News)
-    path('news/', views.NewsList.as_view(), name='news_list'),
-    path('news/create/', views.NewsCreate.as_view(), name='news_create'),
+    path('news/', NewsListView.as_view(), name='news-list'),
+    path('news/create/', NewsCreateView.as_view(), name='news-create'),
 
     # مسیرهای مرتبط با تنظیمات (Settings)
     path('settings/', SettingListView.as_view(), name='setting-list'),

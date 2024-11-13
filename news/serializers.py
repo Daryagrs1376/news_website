@@ -1,11 +1,12 @@
 from rest_framework import serializers
-from .models import News, Setting, User, Role, Category, UserProfile, ReporterProfile, Operation, Advertising
+from .models import News, Setting, Role, Category, UserProfile, ReporterProfile, Operation, Advertising
 from .models import PageView
 from rest_framework import serializers
 from .models import News
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.auth.models import User
 from .models import News, Keyword
+from .models import CustomUser, Newscategory
 
 
 
@@ -58,11 +59,10 @@ class PasswordResetRequestSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
     def validate_email(self, value):
-        # چک می‌کند که آیا ایمیل در دیتابیس وجود دارد یا خیر
         if not User.objects.filter(email=value).exists():
             raise serializers.ValidationError("کاربری با این ایمیل یافت نشد.")
         return value
-    
+
 class PasswordResetSerializer(serializers.Serializer):
     token = serializers.CharField()
     new_password = serializers.CharField(min_length=8)
@@ -101,32 +101,30 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id', 'name']
 
-# class UserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ['username', 'phone_number', 'password', 'profile_picture']
-#         extra_kwargs = {'password': {'write_only': True}}
-#         fields = ['id', 'name', 'phone_number', 'role', 'status']
-
 class ReporterProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReporterProfile
         fields = ['id', 'reporter', 'phone']
         
 class NewsSerializer(serializers.ModelSerializer):
+    categories = CategorySerializer(many=True, read_only=True)
+    keywords = KeywordSerializer(many=True, read_only=True)
+
     class Meta:
         model = News
         fields = [
-            'id', 'reporter', 'category', 'title', 'content', 'short_description',
+            'id', 'reporter', 'categories', 'title', 'content', 'short_description',
             'news_text', 'created_at', 'updated_at', 'status', 'date', 'keywords', 'is_approved'
         ]
         read_only_fields = ['id', 'created_at', 'updated_at']
-        
-    def create(self, validated_data):
-        # به طور خودکار reporter را از request.user بگیرید
-        user = self.context['request'].user  # گرفتن کاربر از request
-        news = News.objects.create(reporter=user, **validated_data)  # ایجاد خبر
-        return news
+
+    def validate(self, data):
+        if not data.get('categories'):
+            raise serializers.ValidationError("فیلد 'categories' نمی‌تواند خالی باشد.")
+        if not data.get('keywords'):
+            raise serializers.ValidationError("فیلد 'keywords' نمی‌تواند خالی باشد.")
+        return data
+
 
 class NewsEditSerializer(serializers.ModelSerializer):
     class Meta:
@@ -155,7 +153,7 @@ class AddUserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
-    
+
 # سریالایزر نقش (Role)
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -164,11 +162,9 @@ class RoleSerializer(serializers.ModelSerializer):
 
 # سریالایزر کاربر (User)
 class UserSerializer(serializers.ModelSerializer):
-    role = RoleSerializer()  # نمایش نقش به صورت آبجکت
-
     class Meta:
         model = User
-        fields = ['id', 'username', 'mobile', 'role', 'status']
+        fields = ['email','id', 'username', 'mobile', 'role', 'status']
 
 # سریالایزر اضافه کردن کاربر
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -236,3 +232,9 @@ class PublicAdvertisingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advertising
         fields = ['id', 'link', 'banner', 'location']
+        
+class NewsSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = News
+        fields = ['id', 'title', 'subtitle', 'content', 'created_at', 'author']
+
