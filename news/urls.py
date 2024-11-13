@@ -44,7 +44,7 @@ schema_view = get_schema_view(
         license=openapi.License(name="BSD License"),
     ),
     public=True,
-    permission_classes=(permissions.AllowAny,),  # استفاده از tuple
+    permission_classes=(AllowAny,), # استفاده از tuple
 )
 
 
@@ -58,8 +58,8 @@ router.register(r'operations', OperationViewSet, basename='operations')
 
 urlpatterns = [
     # مسیر مستندات Swagger و Redoc
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
+    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     path('api/news/', NewsListView.as_view(), name='news-list'),
 
     # مسیرهای مرتبط با اخبار (News)
