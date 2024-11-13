@@ -926,8 +926,8 @@
 .fa-tablet:before {
   content: "\f10a";
 }
-.fa-mobile-phone:before,
-.fa-mobile:before {
+.fa-phone_number-phone:before,
+.fa-phone_number:before {
   content: "\f10b";
 }
 .fa-circle-o:before {

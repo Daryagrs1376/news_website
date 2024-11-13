@@ -6,45 +6,20 @@ from django import forms
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth import get_user_model
 
 
+User = get_user_model()
 
 
-
-class CustomUserManager(BaseUserManager):
-    def create_user(self, username, email, password=None, **extra_fields):
-        if not email:
-            raise ValueError('The Email field must be set')
-        email = self.normalize_email(email)
-        user = self.model(username=username, email=email, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self, username, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-
-        return self.create_user(username, email, password, **extra_fields)
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE,  null=True)
+    phone_number = models.CharField(null=True)
     
-    
-class CustomUser(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=30, unique=True)
-    email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    phone_number = models.CharField(max_length=15, null=True, blank=True)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-
-    objects = CustomUserManager()
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
-
     def __str__(self):
-        return self.email
-    
+        return self.user.username
+
+
 class Subtitle(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField() 
@@ -260,7 +235,7 @@ class Role(models.Model):
 
 # مدل User
 class User(AbstractUser):
-    mobile = models.CharField(max_length=15, unique=True)  # فیلد موبایل اضافه شده
+    phone_number = models.CharField(max_length=15, unique=True)  # فیلد موبایل اضافه شده
     role = models.ForeignKey('Role', on_delete=models.SET_NULL, null=True)  # نقش کاربر
     status = models.BooleanField(default=True)  # وضعیت فعال/غیرفعال بودن
     
