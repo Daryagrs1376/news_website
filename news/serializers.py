@@ -166,7 +166,7 @@ class RoleSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['email','id', 'username', 'mobile', 'role', 'status']
+        fields = ['email','id', 'username', 'phone_number', 'role', 'status']
 
 # سریالایزر اضافه کردن کاربر
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -175,7 +175,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'mobile', 'password', 'password2', 'role']
+        fields = ['username', 'phone_number', 'password', 'password2', 'role']
 
     def validate(self, data):
         if data['password'] != data['password2']:

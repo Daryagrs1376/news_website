@@ -278,7 +278,7 @@ class Migration(migrations.Migration):
                 ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')),
                 ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
                 ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
-                ('mobile', models.CharField(max_length=15, unique=True)),
+                ('phone_number', models.CharField(max_length=15, unique=True)),
                 ('status', models.BooleanField(default=True)),
                 ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='news_user_groups', to='auth.group')),
                 ('role', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='news.role')),

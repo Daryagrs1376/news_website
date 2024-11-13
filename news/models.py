@@ -260,7 +260,7 @@ class Role(models.Model):
 
 # مدل User
 class User(AbstractUser):
-    mobile = models.CharField(max_length=15, unique=True)  # فیلد موبایل اضافه شده
+    phone_number = models.CharField(max_length=15, unique=True)  # فیلد موبایل اضافه شده
     role = models.ForeignKey('Role', on_delete=models.SET_NULL, null=True)  # نقش کاربر
     status = models.BooleanField(default=True)  # وضعیت فعال/غیرفعال بودن
     

@@ -247,7 +247,7 @@ class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['username', 'mobile', 'role__name']  
+    search_fields = ['username', 'phone_number', 'role__name']  
     permission_classes = [AllowAny]  # AllowAny برای دسترسی عمومی
     
 # افزودن کاربر (فقط برای ادمین‌ها)
