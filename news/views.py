@@ -243,6 +243,7 @@ class AdvertisingDeleteView(generics.DestroyAPIView):
 # لیست و فیلتر کاربران
 class UserListView(generics.ListAPIView):
     User = get_user_model()
+    print(User)
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = [filters.SearchFilter]

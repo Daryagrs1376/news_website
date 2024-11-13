@@ -4,10 +4,12 @@ from .models import PageView
 from rest_framework import serializers
 from .models import News
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from .models import News, Keyword
 from .models import CustomUser, Newscategory
 
+
+User = get_user_model()
 
 
 class KeywordSerializer(serializers.ModelSerializer):

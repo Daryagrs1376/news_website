@@ -160,15 +160,15 @@ USE_I18N = True
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 
-# REST framework settings (AllowAny gives public access to API endpoints)
-REST_FRAMEWORK = {
-    # 'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework.permissions.IsAuthenticated',
-# ],
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.AllowAny',  # Public access for all users
-    # ],
-}
+# # REST framework settings (AllowAny gives public access to API endpoints)
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticated',
+#     ],
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.AllowAny',  # Public access for all users
+#     ],
+# }
 
 
 # JWT Configuration for token-based authentication
