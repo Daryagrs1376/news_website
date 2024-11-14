@@ -14,7 +14,7 @@ User = get_user_model()
 class KeywordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Keyword
-        fields = ['word']
+        fields = ['id', 'title', 'word']
 
 class NewsDetailSerializer(serializers.ModelSerializer):
     keywords = KeywordSerializer(many=True)
@@ -114,8 +114,20 @@ class NewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
         fields = [
-            'id', 'reporter', 'categories', 'title', 'content', 'short_description',
-            'news_text', 'created_at', 'updated_at', 'status', 'date', 'keywords', 'is_approved'
+            'id',
+            'reporter',
+            'categories'
+            'title'
+            'content'
+            'short_description',
+            'news_text'
+            'created_at'
+            'updated_at'
+            'published_at',
+            'status'
+            'date'
+            'keywords'
+            'is_approved'
         ]
         read_only_fields = ['id', 'created_at', 'updated_at']
 

@@ -24,21 +24,6 @@ class Subtitle(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField() 
 
-
-# مدل Newscategory (رابطه میان News و Category)
-# class Newscategory(models.Model):
-#     news = models.ForeignKey('News', on_delete=models.CASCADE)
-#     category = models.ForeignKey('Category', on_delete=models.CASCADE)
-
-#     category_name = models.CharField(max_length=255)
-#     title = models.CharField(max_length=255)
-#     parent_category = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='subcategories')
-#     status = models.BooleanField(default=True)
-
-#     def __str__(self):
-#         return self.category_name
-
-# مدل Newscategory (رابطه میان News و Category)
 class Newscategory(models.Model):
     news = models.ForeignKey('News', on_delete=models.CASCADE)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)  # استفاده از رشته به جای وارد کردن مستقیم
@@ -47,8 +32,6 @@ class Newscategory(models.Model):
     def __str__(self):
         return f"{self.news.title} - {self.category.title}"
 
-    
-# مدل Category
 class Category(models.Model):
     title = models.CharField(max_length=200)
     name = models.CharField(max_length=100)
@@ -57,9 +40,6 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
-
-
-# مدل Keyword
 class Keyword(models.Model):
     word = models.CharField(max_length=50)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)  # استفاده از رشته به جای وارد کردن مستقیم
@@ -68,9 +48,7 @@ class Keyword(models.Model):
         return self.word
 
     def add_keyword(self, keyword_name):
-        # بررسی اینکه آیا کیورد از قبل وجود دارد یا خیر
         keyword, created = Keyword.objects.get_or_create(word=keyword_name)
-        # اضافه کردن کیورد به لیست کیوردهای این خبر
         self.keywords.add(keyword)
         
 class location(models.Model):
@@ -96,41 +74,28 @@ class Grouping(models.Model):
         return self.Grouping_name
     
     
-
-# مدل News
 class News(models.Model):
     reporter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     categories = models.ManyToManyField('Category', through='Newscategory', related_name='news_categories')
     title = models.CharField(max_length=255)
     content = models.TextField()
     short_description = models.TextField(null=True, blank=True)
-    news_text = models.TextField()
-    created_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    status = models.BooleanField(default=True)
-    date = models.DateTimeField(auto_now_add=True)
-    keywords = models.ManyToManyField('Keyword', blank=True)  # اصلاح شده
+    published_at = models.DateTimeField(null=True, blank=True)
+    keywords = models.ManyToManyField('Keyword', blank=True)
     is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
 
-# class Keyword(models.Model):
-#     word = models.CharField(max_length=50)
-#     category = models.ForeignKey('Category', on_delete=models.CASCADE)
-
-#     def __str__(self):
-#         return self.word
-
         
-# مدل SpecialFeature
 class SpecialFeature(models.Model):
     feature_name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.feature_name
 
-# مدل SpecialCategory
 class SpecialCategory(models.Model):
     category_name = models.CharField(max_length=50)
 
@@ -138,7 +103,6 @@ class SpecialCategory(models.Model):
         return self.category_name
 
 
-# مدل NewsSpecialAttributes
 class NewsSpecialAttributes(models.Model):
     special_feature1 = models.ForeignKey(SpecialFeature, on_delete=models.SET_NULL, null=True, related_name='special_feature1')
     special_feature2 = models.ForeignKey(SpecialFeature, on_delete=models.SET_NULL, null=True, blank=True)
@@ -149,8 +113,6 @@ class NewsSpecialAttributes(models.Model):
     def __str__(self):
         return f"Attributes: {self.special_feature1}, {self.special_category1}"
 
-
-# مدل News_reporter
 class News_reporter(models.Model):
     reporter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True)
@@ -172,8 +134,7 @@ class ReporterProfile(models.Model):
     phone = models.CharField(max_length=13, null=True)
 
     def __str__(self):
-        return f"Profile of {self.reporter.username}"  # اینجا می‌توانید به نام کاربری دسترسی داشته باشید
-
+        return f"Profile of {self.reporter.username}"
 class UserManager(BaseUserManager):
     def create_user(self, phone_number, password=None):
         if not phone_number:
@@ -194,7 +155,6 @@ class AddUserForm(forms.ModelForm):
         model = User
         fields = ['username', 'email', 'first_name', 'last_name']
         
-# مدل Subtitle
 class Subtitle(models.Model):
     title = models.CharField(max_length=255)
     subtitle_title = models.CharField(max_length=85)
@@ -219,7 +179,6 @@ class NewsKeywords(models.Model):
 class AnotherModel(models.Model):
     news = models.ForeignKey('News', on_delete=models.CASCADE)
 
-# مدل Role (نقش کاربران)
 class Role(models.Model):
     ADMIN = 'admin'
     REPORTER = 'reporter'
@@ -233,7 +192,6 @@ class Role(models.Model):
     def __str__(self):
         return self.name
 
-# مدل User
 class User(AbstractUser):
     phone_number = models.CharField(max_length=15, unique=True)  # فیلد موبایل اضافه شده
     role = models.ForeignKey('Role', on_delete=models.SET_NULL, null=True)  # نقش کاربر
