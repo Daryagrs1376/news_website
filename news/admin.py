@@ -1,59 +1,63 @@
 from django.contrib import admin
 from .models import (
-    Newscategory, Category, Keyword, location, Feature,
-    News, SpecialFeature, SpecialCategory, NewsSpecialAttributes,
-    ReporterProfile, Role, User, Advertising, Setting, Dashboard,
-    Operation, UserProfile
+    Newscategory,
+    Category,
+    Keyword,
+    location,
+    Feature,
+    News,
+    SpecialFeature,
+    SpecialCategory,
+    NewsSpecialAttributes,
+    ReporterProfile,
+    Role,
+    User,
+    Advertising,
+    Setting,
+    Dashboard,
+    Operation,
+    UserProfile,
+    Subtitle,
+    Grouping,
+    PageView,
 )
-from .models import PageView
-from .models import Grouping
-from django.contrib import admin
-# from .models import CustomToken
 
 
 
-# تنظیمات مربوط به مدل Newscategory
 class NewscategoryAdmin(admin.ModelAdmin):
     list_display = ('category_name', 'title', 'parent_category', 'status')
     search_fields = ('category_name', 'title')
     list_filter = ('status',)
 
-# تنظیمات مربوط به مدل Category
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('title', 'name', 'description')
     
     search_fields = ('name',)
 
-# تنظیمات مربوط به مدل Keyword
 class KeywordAdmin(admin.ModelAdmin):
     list_display = ('word', 'category')
     search_fields = ('word',)
     list_filter = ('category',)
 
-# تنظیمات مربوط به مدل location
 class LocationAdmin(admin.ModelAdmin):
     list_display = ('title', 'news_text', 'content')
     search_fields = ('title',)
 
-# تنظیمات مربوط به مدل Feature
 class FeatureAdmin(admin.ModelAdmin):
     list_display = ('feature_name',)
     search_fields = ('feature_name',)
 
-# تنظیمات مربوط به مدل News
 class NewsAdmin(admin.ModelAdmin):
-    list_display = ('title', 'reporter', 'created_at', 'is_approved', 'status')
-    list_filter = ('is_approved', 'status', 'created_at')
+    list_display = ('title', 'reporter', 'created_at', 'is_approved')
+    list_filter = ('is_approved','created_at')
     search_fields = ('title', 'short_description')
-    list_editable = ('is_approved', 'status')
+    list_editable = ('is_approved',)
     ordering = ('-created_at',)
     
-# تنظیمات مربوط به مدل Role
 class RoleAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
 
-# تنظیمات مربوط به مدل User
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'email', 'phone_number', 'role', 'status')
     search_fields = ('username', 'email', 'phone_number')
@@ -84,23 +88,19 @@ class SettingAdmin(admin.ModelAdmin):
     search_fields = ('subcategory_name',)
     list_filter = ('status',)
 
-# تنظیمات مربوط به مدل Dashboard
 class DashboardAdmin(admin.ModelAdmin):
     list_display = ('news', 'admin_panel')
     search_fields = ('news__title',)
 
-# تنظیمات مربوط به مدل Operation
 class OperationAdmin(admin.ModelAdmin):
     list_display = ('news', 'operation_type', 'performed_at')
     search_fields = ('news__title', 'operation_type')
     list_filter = ('operation_type', 'performed_at')
 
-# تنظیمات مربوط به مدل UserProfile
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'phone_number')
     search_fields = ('user__username', 'phone_number')
 
-# تعریف نحوه نمایش مدل در پنل ادمین
 class PageViewAdmin(admin.ModelAdmin):
     list_display = ('date', 'total_visits', 'social_visits', 'bounce_rate')  # فیلدهایی که در لیست ادمین نمایش داده می‌شوند
     list_filter = ('date',)  # فیلتر کردن بر اساس تاریخ
@@ -127,3 +127,4 @@ admin.site.register(Dashboard)
 admin.site.register(Operation)
 admin.site.register(UserProfile)
 admin.site.register(PageView)
+admin.site.register(Subtitle)

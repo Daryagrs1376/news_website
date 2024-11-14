@@ -95,39 +95,34 @@ urlpatterns = [
     path('subtitles/<int:pk>/edit/', edit_subtitle, name='subtitle-edit'),
     path('subtitles/<int:pk>/delete/', delete_subtitle, name='subtitle-delete'),
 
-    # # مسیرهای مرتبط با پروفایل کاربر (UserProfile)
     path('userprofiles/<int:pk>/', UserProfileDetailView.as_view(), name='userprofile-detail'),
 
-    # مسیرهای مرتبط با آمار بازدید
     path('daily/', DailyStatsView.as_view(), name='daily-stats'),
     path('weekly/', WeeklyStatsView.as_view(), name='weekly-stats'),
 
-    # مسیرهای احراز هویت JWT
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('/token_create/', obtain_auth_token, name='token_create'),  # اصلاح شده برای استفاده از obtain_auth_token به صورت مستقیم
+    path('token_create/', obtain_auth_token, name='token_create'),  # اصلاح شده برای استفاده از obtain_auth_token به صورت مستقیم
 
-    # سایر مسیرها
     path('protected/', ProtectedView.as_view(), name='protected_view'),
 
-    path('/register/', UserRegistrationView.as_view(), name='user_registration'),
+    path('register/', UserRegistrationView.as_view(), name='user_registration'),
 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token_create/', obtain_auth_token, name='token_create'), 
     
-    path('/news/', NewsListView.as_view(), name='news_list'),
+    path('news/', NewsListView.as_view(), name='news_list'),
 
-    path('/admin/advertisements/', AdminAdvertisingListView.as_view(), name='admin_advertising_list'),
-    path('/advertisements/', PublicAdvertisingListView.as_view(), name='public_advertising_list'),
+    # path('admin/advertisements/', AdminAdvertisingListView.as_view(), name='admin_advertising_list'),
+    path('advertisements/', PublicAdvertisingListView.as_view(), name='public_advertising_list'),
     
     path('api/password-reset-request/', PasswordResetRequestView.as_view(), name='password_reset_request'),
     path('api/password-reset/<uidb64>/<token>/', PasswordResetView.as_view(), name='password_reset'),
     
-    path('/news/<int:pk>/', NewsDetailView.as_view(), name='news_detail'),
+    path('news/<int:pk>/', NewsDetailView.as_view(), name='news_detail'),
 
-    path('/news/create/', NewsCreateView.as_view(), name='create_news'),
+    path('news/create/', NewsCreateView.as_view(), name='create_news'),
 
-    # استفاده از روت‌های پیش‌فرض برای ویوست‌ها
     path('', include(router.urls)),
 ]

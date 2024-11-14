@@ -108,27 +108,28 @@ class ReporterProfileSerializer(serializers.ModelSerializer):
         fields = ['id', 'reporter', 'phone']
         
 class NewsSerializer(serializers.ModelSerializer):
-    categories = CategorySerializer(many=True, read_only=True)
-    keywords = KeywordSerializer(many=True, read_only=True)
-
+    categories = CategorySerializer()
+    keywords = serializers.CharField()
     class Meta:
         model = News
-        fields = [
-            'id',
-            'reporter',
-            'categories'
-            'title'
-            'content'
-            'short_description',
-            'news_text'
-            'created_at'
-            'updated_at'
-            'published_at',
-            'status'
-            'date'
-            'keywords'
-            'is_approved'
-        ]
+        # fields = [
+        fields = '__all__'
+            # 'id',
+            # 'reporter',
+            # 'categories'
+            # 'title'
+            # 'content'
+            # 'short_description',
+            # 'news_text'
+            # 'created_at'
+            # 'updated_at'
+            # 'published_at',
+            # 'status'
+            # 'date'
+            # 'keywords'
+            # 'is_approved',
+        # ]
+        
         read_only_fields = ['id', 'created_at', 'updated_at']
 
     def validate(self, data):

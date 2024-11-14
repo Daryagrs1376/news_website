@@ -11,18 +11,26 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE,  null=True)
-    phone_number = models.CharField(null=True)
-    
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
+
     def __str__(self):
         return self.user.username
 
-
 class Subtitle(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=255)
+    subtitle_title = models.CharField(max_length=85)
+    date = models.DateTimeField(default=timezone.now)
+    registration = models.DateTimeField(auto_now_add=True)
     description = models.TextField() 
+
+    def __str__(self):
+        return self.subtitle_title
+
+    class Meta:
+        verbose_name = 'Subtitle'
+        verbose_name_plural = 'Subtitles'
 
 class Newscategory(models.Model):
     news = models.ForeignKey('News', on_delete=models.CASCADE)
@@ -83,7 +91,8 @@ class News(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     published_at = models.DateTimeField(null=True, blank=True)
-    keywords = models.ManyToManyField('Keyword', blank=True)
+    # keywords = models.ManyToManyField('Keyword', blank=True)
+    keywords = models.CharField(max_length=255) 
     is_approved = models.BooleanField(default=False)
 
     def __str__(self):
@@ -154,20 +163,6 @@ class AddUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name']
-        
-class Subtitle(models.Model):
-    title = models.CharField(max_length=255)
-    subtitle_title = models.CharField(max_length=85)
-    date = models.DateTimeField(default=timezone.now)
-    registration = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.subtitle_title
-
-    class Meta:
-        verbose_name = 'Subtitle'
-        verbose_name_plural = 'Subtitles'
-
         
 class NewsKeywords(models.Model):
     news = models.ForeignKey('News', on_delete=models.CASCADE)
@@ -274,17 +269,6 @@ class Operation(models.Model):
     def __str__(self):
         return f"{self.get_operation_type_display()} on {self.news.title}"
     
-    
-# مدل UserProfile (پروفایل کاربر)
-class UserProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    phone_number = models.CharField(max_length=15, null=True, blank=True)
-
-    def __str__(self):
-        return self.user.username
-    
-    
-# مدل PageView (نمایش صفحه)
 class PageView(models.Model):
     date = models.DateField()
     total_visits = models.IntegerField()
