@@ -269,7 +269,7 @@ class UserUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 
 # ویرایش دسته‌بندی‌ها (فقط برای ادمین‌ها)
 def edit_category(request, pk):
-    if request.is_post():
+    if request.method == "POST":
         category = get_object_or_404(Category, pk=pk)
         form = AddCategoryForm(request.POST, instance=category)
         if form.is_valid():
