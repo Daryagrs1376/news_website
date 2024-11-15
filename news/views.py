@@ -101,7 +101,6 @@ class NewsCreate(APIView):
             return Response({"message": "خبر با موفقیت ایجاد شد"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# لیست اخبار (نمایش برای همه کاربران)
 class NewsListView(generics.ListAPIView):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
@@ -270,7 +269,7 @@ class UserUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 
 # ویرایش دسته‌بندی‌ها (فقط برای ادمین‌ها)
 def edit_category(request, pk):
-    if request.method == 'POST':
+    if request.is_post():
         category = get_object_or_404(Category, pk=pk)
         form = AddCategoryForm(request.POST, instance=category)
         if form.is_valid():
