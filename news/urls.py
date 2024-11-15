@@ -82,11 +82,11 @@ urlpatterns = [
     # # مسیرهای مرتبط با کاربران (User)
     path('users/', UserListView.as_view(), name='user-list'),
     path('users/add/', UserCreateView.as_view(), name='user-create'),
-    path('users/<int:pk>/edit/', UserUpdateDeleteView.as_view(), name='user-update-delete'),
+    path('user/<int:pk>/', UserUpdateDeleteView.as_view(), name='user-update-delete'),
 
     # # مسیرهای مرتبط با دسته‌بندی‌ها (Categories)
     path('categories/add/', AddCategory.as_view(), name='category-add'),
-    path('categories/<int:pk>/edit/', edit_category, name='category-edit'),
+    path('categories/edit/<int:pk>/', edit_category, name='edit-category'),
     path('categories/<int:pk>/delete/', delete_category, name='category-delete'),
     path('categories/', CategoryListView.as_view(), name='category-list'),
     path('categories/<int:id>/', CategoryDetailView.as_view(), name='category-detail'),

@@ -30,6 +30,9 @@ from .serializers import PasswordResetRequestSerializer, PasswordResetSerializer
 from .serializers import UserRegistrationSerializer
 from .serializers import NewsDetailSerializer
 from rest_framework.decorators import permission_classes  # باید دکوراتور را وارد کنید
+from rest_framework.permissions import IsAdminUser
+from django.shortcuts import get_object_or_404
+
 
 
 User = get_user_model()
