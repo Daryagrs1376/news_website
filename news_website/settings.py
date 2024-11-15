@@ -101,6 +101,7 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
+DEFAULT_SCHEMA_CLASS = "drf_yasg.inspectors.SwaggerAutoSchema"
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

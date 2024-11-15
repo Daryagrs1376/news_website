@@ -14,7 +14,7 @@ from .views import (
     DailyStatsView, WeeklyStatsView, ProtectedView
 )
 from rest_framework import permissions
-from drf_yasg.views import get_schema_view
+# from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -31,23 +31,35 @@ from .views import NewsCreateView
 from .views import NewsListView
 from rest_framework.authtoken.views import obtain_auth_token  # اضافه کردن این خط
 from .views import NewsListView
+from drf_yasg.inspectors import SwaggerAutoSchema
+
+
 
 
 # تنظیمات مستندات API
-schema_view = get_schema_view(
+# schema_view = get_schema_view(
+#     openapi.Info(
+#         title="News API",
+#         default_version="v1",
+#         description="Test description",
+#         terms_of_service="https://www.google.com/policies/terms/",
+#         contact=openapi.Contact(email="contact@news.local"),
+#         license=openapi.License(name="BSD License"),
+#     ),
+#     public=True,
+#     permission_classes=(AllowAny,),  # استفاده از tuple به جای list یا str
+# )
+
+schema_view = SwaggerAutoSchema(
     openapi.Info(
-        title="News API",
+        title="API Documentation",
         default_version="v1",
-        description="Test description",
-        terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="contact@news.local"),
-        license=openapi.License(name="BSD License"),
     ),
     public=True,
-    permission_classes=(AllowAny,),  # استفاده از tuple به جای list یا str
+    permission_classes=(AllowAny,),
 )
-
-
+    
+    
 # Router برای ویوست‌ها
 router = DefaultRouter()
 router.register(r'news', NewsViewSet, basename='news')
