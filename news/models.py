@@ -4,37 +4,61 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import User
 from django import forms
 from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.conf import settings
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth import get_user_model
 
 
+User = get_user_model()
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
+
+    def __str__(self):
+        return self.user.username
 
 class Subtitle(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=255)
+    subtitle_title = models.CharField(max_length=85)
+    date = models.DateTimeField(default=timezone.now)
+    registration = models.DateTimeField(auto_now_add=True)
     description = models.TextField() 
 
+    def __str__(self):
+        return self.subtitle_title
+
+    class Meta:
+        verbose_name = 'Subtitle'
+        verbose_name_plural = 'Subtitles'
+
 class Newscategory(models.Model):
-    category_name = models.CharField(max_length=255)
-    title = models.CharField(max_length=255) 
-    parent_category = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='subcategories')
+    news = models.ForeignKey('News', on_delete=models.CASCADE)
+    category = models.ForeignKey('Category', on_delete=models.CASCADE)  # استفاده از رشته به جای وارد کردن مستقیم
     status = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.category_name
+        return f"{self.news.title} - {self.category.title}"
 
 class Category(models.Model):
     title = models.CharField(max_length=200)
     name = models.CharField(max_length=100)
     description = models.TextField()
-    
+
     def __str__(self):
         return self.title
 
 class Keyword(models.Model):
     word = models.CharField(max_length=50)
-    category = models.ForeignKey('Category', on_delete=models.CASCADE)
+    category = models.ForeignKey('Category', on_delete=models.CASCADE)  # استفاده از رشته به جای وارد کردن مستقیم
 
     def __str__(self):
         return self.word
 
+    def add_keyword(self, keyword_name):
+        keyword, created = Keyword.objects.get_or_create(word=keyword_name)
+        self.keywords.add(keyword)
+        
 class location(models.Model):
     title = models.CharField(max_length=255)
     news_text = models.TextField()
@@ -59,22 +83,22 @@ class Grouping(models.Model):
     
     
 class News(models.Model):
-    reporter = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    category = models.ManyToManyField(Category)
+    reporter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    categories = models.ManyToManyField('Category', through='Newscategory', related_name='news_categories')
     title = models.CharField(max_length=255)
     content = models.TextField()
     short_description = models.TextField(null=True, blank=True)
-    news_text = models.TextField()
-    created_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    status = models.BooleanField(default=True)
-    date = models.DateTimeField(auto_now_add=True)
-    keywords = models.ManyToManyField(Keyword)
-    is_approved = models.BooleanField(default=False)  # Default to False, meaning not approved
+    published_at = models.DateTimeField(null=True, blank=True)
+    # keywords = models.ManyToManyField('Keyword', blank=True)
+    keywords = models.CharField(max_length=255) 
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
-     
+
+        
 class SpecialFeature(models.Model):
     feature_name = models.CharField(max_length=50)
 
@@ -89,22 +113,18 @@ class SpecialCategory(models.Model):
 
 
 class NewsSpecialAttributes(models.Model):
-    """
-    مدلی برای ذخیره ویژگی‌های خاص مرتبط با اخبار
-    """
     special_feature1 = models.ForeignKey(SpecialFeature, on_delete=models.SET_NULL, null=True, related_name='special_feature1')
     special_feature2 = models.ForeignKey(SpecialFeature, on_delete=models.SET_NULL, null=True, blank=True)
     featured = models.BooleanField(default=False)
-    special_category1 = models.ForeignKey(SpecialCategory, on_delete=models.SET_NULL, null=True, related_name='special_category1')
-    special_category2 = models.ForeignKey(SpecialCategory, on_delete=models.SET_NULL, null=True, related_name='special_category2')
+    special_category1 = models.ForeignKey('SpecialCategory', on_delete=models.SET_NULL, null=True, related_name='special_category1')
+    special_category2 = models.ForeignKey('SpecialCategory', on_delete=models.SET_NULL, null=True, related_name='special_category2')
 
     def __str__(self):
         return f"Attributes: {self.special_feature1}, {self.special_category1}"
 
-
 class News_reporter(models.Model):
-    reporter = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    reporter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=255)
     short_description = models.TextField(null=True, blank=True)
     news_text = models.TextField()
@@ -112,20 +132,18 @@ class News_reporter(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     status = models.BooleanField(default=True)
     date = models.DateTimeField(auto_now_add=True)
-    keywords = models.ManyToManyField(Keyword)
+    keywords = models.ManyToManyField('Keyword', related_name='reporter_keywords')
+    special_attributes = models.OneToOneField('NewsSpecialAttributes', on_delete=models.CASCADE, null=True, blank=True)
 
-    # TODO: اتصال به مدل ویژگی‌های خاص(انجام شد)
-    special_attributes = models.OneToOneField(NewsSpecialAttributes, on_delete=models.CASCADE, null=True, blank=True)
-    class Meta:
-        abstract = False 
-        
     def __str__(self):
         return self.title
 
 class ReporterProfile(models.Model):
-    reporter  = models.ForeignKey(User,  on_delete=models.CASCADE, null=True)
+    reporter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     phone = models.CharField(max_length=13, null=True)
-  
+
+    def __str__(self):
+        return f"Profile of {self.reporter.username}"
 class UserManager(BaseUserManager):
     def create_user(self, phone_number, password=None):
         if not phone_number:
@@ -146,19 +164,6 @@ class AddUserForm(forms.ModelForm):
         model = User
         fields = ['username', 'email', 'first_name', 'last_name']
         
-class Subtitle(models.Model):
-    title = models.CharField(max_length=255)  # عنوان زیرنویس
-    subtitle_title = models.CharField(max_length=85)  # متن زیرنویس، حداقل 85 حرف
-    date = models.DateTimeField(default=timezone.now)  # تاریخ ثبت
-    registration = models.DateTimeField(auto_now_add=True)
-    
-    def __str__(self):
-        return self.subtitle_title
-
-    class Meta:
-        verbose_name = 'Subtitle'
-        verbose_name_plural = 'Subtitles'
-        
 class NewsKeywords(models.Model):
     news = models.ForeignKey('News', on_delete=models.CASCADE)
     keyword = models.ForeignKey('Keyword', on_delete=models.CASCADE)
@@ -169,7 +174,6 @@ class NewsKeywords(models.Model):
 class AnotherModel(models.Model):
     news = models.ForeignKey('News', on_delete=models.CASCADE)
 
-# مدل نقش (Role)
 class Role(models.Model):
     ADMIN = 'admin'
     REPORTER = 'reporter'
@@ -184,11 +188,11 @@ class Role(models.Model):
         return self.name
 
 class User(AbstractUser):
-    mobile = models.CharField(max_length=15, unique=True)  # فیلد موبایل اضافه شده
+    phone_number = models.CharField(max_length=15, unique=True)  # فیلد موبایل اضافه شده
     role = models.ForeignKey('Role', on_delete=models.SET_NULL, null=True)  # نقش کاربر
     status = models.BooleanField(default=True)  # وضعیت فعال/غیرفعال بودن
     
-     # تغییر نام دسترسی معکوس (related_name) برای جلوگیری از تداخل با مدل پیش‌فرض auth.User
+    # تغییر نام دسترسی معکوس (related_name) برای جلوگیری از تداخل با مدل پیش‌فرض auth.User
     groups = models.ManyToManyField(
         Group,
         related_name='news_user_groups',  # اضافه کردن related_name منحصر به فرد
@@ -203,7 +207,11 @@ class User(AbstractUser):
         help_text='Specific permissions for this user.'
     )
     
-# مدل تبلیغات
+    def __str__(self):
+        return self.username
+
+    
+# مدل Advertising
 class Advertising(models.Model):
     LOCATION_CHOICES = [
         ('header', 'Header'),
@@ -211,27 +219,29 @@ class Advertising(models.Model):
         ('footer', 'Footer'),
     ]
 
-    onvan_tabligh = models.CharField(max_length=255)  # عنوان تبلیغ
-    link = models.URLField()  # لینک تبلیغ
-    banner = models.ImageField(upload_to='banners/')  # بنر تبلیغ
-    location = models.CharField(max_length=50, choices=LOCATION_CHOICES)  # موقعیت تبلیغ
-    start_date = models.DateField()  # تاریخ شروع
-    expiration_date = models.DateField()  # تاریخ انقضا
-    status = models.BooleanField(default=True)  # وضعیت فعال/غیرفعال بودن تبلیغ
+    onvan_tabligh = models.CharField(max_length=255)
+    link = models.URLField()
+    banner = models.ImageField(upload_to='banners/')
+    location = models.CharField(max_length=50, choices=LOCATION_CHOICES)
+    start_date = models.DateField()
+    expiration_date = models.DateField()
+    status = models.BooleanField(default=True)
 
     def __str__(self):
         return self.onvan_tabligh
     
-# مدل تنظیمات (Setting)
+    
+# مدل Setting
 class Setting(models.Model):
-    subcategory_name = models.CharField(max_length=255)  # نام زیرمجموعه
-    status = models.BooleanField(default=True)  # وضعیت فعال یا غیرفعال
-    logo = models.ImageField(upload_to='logos/')  # لوگو
-    contact_us = models.TextField()  # اطلاعات تماس
-    about_us = models.TextField()  # اطلاعات درباره ما
+    subcategory_name = models.CharField(max_length=255)
+    status = models.BooleanField(default=True)
+    logo = models.ImageField(upload_to='logos/')
+    contact_us = models.TextField()
+    about_us = models.TextField()
 
     def __str__(self):
         return self.subcategory_name
+    
     
 # مدل Dashboard
 class Dashboard(models.Model):
@@ -240,8 +250,10 @@ class Dashboard(models.Model):
 
     def __str__(self):
         return f"Dashboard for {self.news.title}"
+    
 
-# مدل برای Operation (ویرایش و حذف)
+
+# مدل Operation (ویرایش و حذف)
 class Operation(models.Model):
     EDIT = 'edit'
     DELETE = 'delete'
@@ -256,18 +268,10 @@ class Operation(models.Model):
 
     def __str__(self):
         return f"{self.get_operation_type_display()} on {self.news.title}"
-
-# مدل برای مدیریت پروفایل کاربرانUserProfile
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone_number = models.CharField(max_length=15, null=True, blank=True)
-
-    def __str__(self):
-        return self.user.username
     
 class PageView(models.Model):
     date = models.DateField()
     total_visits = models.IntegerField()
     social_visits = models.IntegerField()
     bounce_rate = models.FloatField()
-    page_views = models.JSONField()  # ذخیره جزئیات بازدید هر صفحه
+    page_views = models.JSONField()

@@ -1,7 +1,7 @@
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
-from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.models import token
 from django.contrib.auth.models import User
 from .models import News, Category, Subtitle
 
@@ -11,9 +11,9 @@ class NewsAPITest(APITestCase):
         # ایجاد یک کاربر برای تست
         self.user = User.objects.create_user(username='testuser', password='testpassword')
         # توکن احراز هویت برای کاربر
-        self.token = Token.objects.create(user=self.user)
+        self.token = token.objects.create(user=self.user)
         # اضافه کردن توکن به درخواست‌های تستی
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.client.credentials(HTTP_AUTHORIZATION='token ' + self.token.key)
         
         # ایجاد یک خبر برای تست و تنظیم مالک آن به عنوان self.user
         self.news = News.objects.create(
@@ -42,7 +42,7 @@ class NewsAPITest(APITestCase):
 
     def test_get_news_detail(self):
         # اضافه کردن توکن احراز هویت به درخواست
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.client.credentials(HTTP_AUTHORIZATION='token ' + self.token.key)
 
         url = reverse('news-detail', args=[self.news.id])
         response = self.client.get(url)
@@ -73,9 +73,9 @@ class CategoryAPITest(APITestCase):
         # ایجاد یک کاربر برای تست
         self.user = User.objects.create_user(username='testuser', password='password123')
         # توکن احراز هویت برای کاربر
-        self.token = Token.objects.create(user=self.user)
+        self.token = token.objects.create(user=self.user)
         # اضافه کردن توکن به درخواست‌های تستی
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.client.credentials(HTTP_AUTHORIZATION='token ' + self.token.key)
         
         # ایجاد یک دسته‌بندی برای تست
         self.category = Category.objects.create(name="Test Category", description="Test Description")
@@ -121,9 +121,9 @@ class SubtitleAPITest(APITestCase):
         # ایجاد یک کاربر برای تست
         self.user = User.objects.create_user(username='testuser', password='password123')
         # توکن احراز هویت برای کاربر
-        self.token = Token.objects.create(user=self.user)
+        self.token = token.objects.create(user=self.user)
         # اضافه کردن توکن به درخواست‌های تستی
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.client.credentials(HTTP_AUTHORIZATION='token ' + self.token.key)
         
         # ایجاد یک زیرنویس برای تست
         self.subtitle = Subtitle.objects.create(title="Test Subtitle")
