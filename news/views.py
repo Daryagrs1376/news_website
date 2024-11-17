@@ -36,12 +36,33 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .models import News
-
+from django.http import HttpResponseForbidden
+from .models import Post
+from .serializers import PostSerializer
 
 
 User = get_user_model()
 
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    authentication_classes = []  # در اینجا نوع احراز هویت را مشخص می‌کنیم
+    permission_classes = [IsAuthenticated]  # تنها کاربرانی که وارد شده‌اند اجازه دارند
 
+    # اضافه کردن اکشن اختصاصی برای ایجاد خبر
+    @action(detail=False, methods=['post'])
+    def create_post(self, request, *args, **kwargs):
+        # بررسی اینکه آیا کاربر عضو گروه "مولفین" است
+        if not request.user.groups.filter(name="مولفین").exists():
+            return HttpResponseForbidden("شما اجازه ایجاد خبر ندارید.")
+        
+        # ایجاد پست جدید
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(author=request.user)
+            return Response(serializer.data, status=201)  # پست ایجاد شده را برمی‌گرداند
+        return Response(serializer.errors, status=400)
+    
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])

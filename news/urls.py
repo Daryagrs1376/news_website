@@ -8,6 +8,8 @@ from rest_framework.authtoken.views import obtain_auth_token
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework.permissions import AllowAny
+from rest_framework.routers import DefaultRouter
+from .views import PostViewSet
 from .views import create_news
 from .views import (
     NewsViewSet, CategoryViewSet, UserProfileViewSet,
@@ -43,6 +45,7 @@ router.register(r'news', NewsViewSet, basename='news')
 router.register(r'categories', CategoryViewSet, basename='categories')
 router.register(r'userprofiles', UserProfileViewSet, basename='userprofiles')
 router.register(r'operations', OperationViewSet, basename='operations')
+router.register(r'posts', PostViewSet)
 
 # تعریف مسیرهای URL
 urlpatterns = [
@@ -65,6 +68,7 @@ urlpatterns = [
     path('advertising/add/', AdvertisingCreateView.as_view(), name='advertising-create'),
     path('advertising/<int:pk>/edit/', AdvertisingUpdateView.as_view(), name='advertising-update'),
     path('advertising/<int:id>/delete/', AdvertisingDeleteView.as_view(), name='delete-advertising'),
+    path('advertisements/', PublicAdvertisingListView.as_view(), name='public-advertising-list'),
 
     # مسیرهای مرتبط با کاربران (User)
     path('users/', UserListView.as_view(), name='user-list'),
@@ -105,7 +109,7 @@ urlpatterns = [
     path('api/password-reset/<uidb64>/<token>/', PasswordResetView.as_view(), name='password-reset'),
 
     # مسیرهای مرتبط با تبلیغات عمومی
-    path('advertisements/', PublicAdvertisingListView.as_view(), name='public-advertising-list'),
     path('', include(router.urls)),
+    path('api/', include(router.urls)), 
     path('create-news/', create_news, name='create_news'),
 ]

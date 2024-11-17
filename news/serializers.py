@@ -6,11 +6,16 @@ from .models import News
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.auth import get_user_model
 from .models import News, Keyword
+from .models import Post
 
 
 User = get_user_model()
 
-
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'author', 'created_at']
+        
 class KeywordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Keyword
