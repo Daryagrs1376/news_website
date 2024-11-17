@@ -32,11 +32,44 @@ from .serializers import NewsDetailSerializer
 from rest_framework.decorators import permission_classes  # باید دکوراتور را وارد کنید
 from rest_framework.permissions import IsAdminUser
 from django.shortcuts import get_object_or_404
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from .models import News
 
 
 
 User = get_user_model()
 
+
+@api_view(['POST'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def create_news(request):
+    title = request.data.get('title')
+    content = request.data.get('content')
+
+    if not title or not content:
+        return Response({'error': 'Title and content are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # ایجاد خبر
+    news = News.objects.create(title=title, content=content, author=request.user)
+    return Response({'message': 'News created successfully!', 'news_id': news.id}, status=status.HTTP_201_CREATED)
+
+class CreateNewsView(APIView):
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        title = request.data.get('title')
+        content = request.data.get('content')
+
+        if not title or not content:
+            return Response({'error': 'Title and content are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # ایجاد خبر (news creation)
+        news = News.objects.create(title=title, content=content, author=request.user)
+        return Response({'message': 'News created successfully!', 'news_id': news.id}, status=status.HTTP_201_CREATED)
 
 class NewsDetailView(generics.RetrieveAPIView):
     queryset = News.objects.all()

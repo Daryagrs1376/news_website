@@ -263,7 +263,7 @@ class Operation(models.Model):
     ]
 
     news = models.ForeignKey(News, on_delete=models.CASCADE)
-    operation_type = models.CharField(max_length=10, choices=OPERATION_CHOICES)
+    operation_type = models.CharField(max_length=10, choices=OPERATION_CHOICES, null=True, blank=True)
     performed_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
