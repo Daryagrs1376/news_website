@@ -15,24 +15,13 @@ import os
 from datetime import timedelta
 
 
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-vvds@pd)br9^ltipb+(6aol6!ks1fz8z*l1pgx0kamz-!y4&^l'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -46,7 +35,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_yasg',
     'django_extensions',
-    'news',  # Assuming you have a 'news' app
+    'news', 
 ]
 
 MIDDLEWARE = [
@@ -61,8 +50,9 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",  # Localhost for development
-    "https://yourdomain.com",  # Replace with your actual domain
+    "http://localhost:8080", 
+    "https://yourdomain.com",
+    "http://localhost:8080",
 ]
 
 
@@ -156,6 +146,16 @@ USE_I18N = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
 
 
 # # REST framework settings (AllowAny gives public access to API endpoints)

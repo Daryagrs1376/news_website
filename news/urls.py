@@ -8,6 +8,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework.permissions import AllowAny
+from .views import create_news
 from .views import (
     NewsViewSet, CategoryViewSet, UserProfileViewSet,
     OperationViewSet, NewsListView, NewsCreateView, NewsDetailView,
@@ -105,7 +106,6 @@ urlpatterns = [
 
     # مسیرهای مرتبط با تبلیغات عمومی
     path('advertisements/', PublicAdvertisingListView.as_view(), name='public-advertising-list'),
-
-    # اضافه کردن router
     path('', include(router.urls)),
+    path('create-news/', create_news, name='create_news'),
 ]
