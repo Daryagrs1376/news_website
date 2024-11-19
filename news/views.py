@@ -1,48 +1,107 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated, IsAdminUser
-from rest_framework.exceptions import PermissionDenied
-from rest_framework.generics import UpdateAPIView
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.decorators import api_view, permission_classes, action
-from rest_framework import status, viewsets, generics, filters, permissions
-from django.utils import timezone
-from django.shortcuts import get_object_or_404, redirect, render
-from django.http import HttpResponse, JsonResponse
-from django.views import View
-from django.contrib.auth.decorators import login_required
-from .serializers import CategorySerializer, ReporterProfileSerializer, AddUserSerializer, NewsSerializer, NewsEditSerializer, UserSerializer, UserCreateSerializer
-from .serializers import AdvertisingSerializer, AdvertisingCreateUpdateSerializer, NewsSerializer, SettingSerializer, SettingCreateUpdateSerializer, UserProfileSerializer, OperationSerializer, PageViewSerializer
-from datetime import datetime, timedelta
-from.models import News, Category, Subtitle, ReporterProfile, UserProfile, Operation, PageView, Advertising, Setting, User, Role
-from.forms import SubtitleForm, AddCategoryForm
-from .permissions import IsOwner
 from rest_framework.filters import SearchFilter
-from .serializers import AdminAdvertisingSerializer, PublicAdvertisingSerializer
-from rest_framework.generics import ListAPIView
-from .permissions import IsAdminUserOrReadOnly
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.generics import UpdateAPIView, ListAPIView
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from.forms import SubtitleForm, AddCategoryForm
+from datetime import datetime, timedelta
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from .serializers import PasswordResetRequestSerializer, PasswordResetSerializer
-from .serializers import UserRegistrationSerializer
-from .serializers import NewsDetailSerializer
-from rest_framework.decorators import permission_classes  # باید دکوراتور را وارد کنید
-from rest_framework.permissions import IsAdminUser
-from django.shortcuts import get_object_or_404
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from .models import News
 from django.http import HttpResponseForbidden
-from .models import Post
-from .serializers import PostSerializer
+from django.utils import timezone
+from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpResponse, JsonResponse
+from django.views import View
+from django.contrib.auth.decorators import login_required
+from .models import UserProfile
+from rest_framework.decorators import(
+api_view,
+permission_classes,
+authentication_classes,
+action,    
+)  
+from rest_framework import(
+status,
+viewsets,
+generics,
+filters,
+permissions,    
+)
+from rest_framework.permissions import(
+AllowAny, 
+IsAuthenticatedOrReadOnly,
+IsAuthenticated,
+IsAdminUser,
+IsAuthenticated, 
+IsAdminUser, 
+)
+from .serializers import(
+AdvertisingSerializer,
+AdvertisingCreateUpdateSerializer,
+NewsSerializer,
+SettingSerializer,
+SettingCreateUpdateSerializer,
+UserProfileSerializer,
+OperationSerializer,
+PageViewSerializer,
+CategorySerializer,
+ReporterProfileSerializer,
+AddUserSerializer,
+NewsSerializer,
+NewsEditSerializer,
+UserSerializer,
+UserCreateSerializer,
+AdminAdvertisingSerializer,
+PublicAdvertisingSerializer,
+NewsDetailSerializer,
+UserRegistrationSerializer,
+PasswordResetRequestSerializer,
+PasswordResetSerializer,
+RegisterSerializer,
+PostSerializer,
+)
+from.models import(
+News,
+Category,
+Subtitle,
+ReporterProfile,
+Operation,
+PageView,
+Advertising,
+Setting,
+User, 
+Role,
+Post,
+News,
+)          
+from .permissions import(
+IsOwner,
+IsAdminUserOrReadOnly,
+)
 
 
 User = get_user_model()
 
+class RegisterView(APIView):
+    def post(self, request):
+        # چک کردن لاگین بودن کاربر
+        if request.user.is_authenticated:
+            return Response(
+                {"detail": "شما قبلاً لاگین کرده‌اید و نمی‌توانید دوباره ثبت‌نام کنید."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"detail": "ثبت‌نام موفقیت‌آمیز بود."}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer

@@ -218,8 +218,6 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
-    
-# مدل Advertising
 class Advertising(models.Model):
     LOCATION_CHOICES = [
         ('header', 'Header'),

@@ -7,10 +7,35 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.auth import get_user_model
 from .models import News, Keyword
 from .models import Post
-
+from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, min_length=8)
+    confirm_password = serializers.CharField(write_only=True, min_length=8)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password', 'confirm_password']
+
+    def validate(self, data):
+        # بررسی مطابقت رمز عبور و تایید رمز عبور
+        if data['password'] != data['confirm_password']:
+            raise serializers.ValidationError("رمز عبور و تایید رمز عبور باید یکسان باشند.")
+        return data
+
+    def create(self, validated_data):
+        # حذف confirm_password قبل از ذخیره در دیتابیس
+        validated_data.pop('confirm_password')
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data['email'],
+            password=validated_data['password']
+        )
+        return user
+    
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post

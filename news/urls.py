@@ -11,6 +11,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.routers import DefaultRouter
 from .views import PostViewSet
 from .views import create_news
+from .views import RegisterView
 from .views import (
     NewsViewSet, CategoryViewSet, UserProfileViewSet,
     OperationViewSet, NewsListView, NewsCreateView, NewsDetailView,
@@ -104,6 +105,7 @@ urlpatterns = [
     path('protected/', ProtectedView.as_view(), name='protected-view'),
 
     # مسیرهای ثبت‌نام و بازنشانی رمز عبور
+    path('register/', RegisterView.as_view(), name='register'),
     path('register/', UserRegistrationView.as_view(), name='user-registration'),
     path('api/password-reset-request/', PasswordResetRequestView.as_view(), name='password-reset-request'),
     path('api/password-reset/<uidb64>/<token>/', PasswordResetView.as_view(), name='password-reset'),
