@@ -22,7 +22,8 @@ class Post(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=15, null=True, blank=True)
-
+    bio = models.TextField()
+     
     def __str__(self):
         return self.user.username
 
