@@ -140,7 +140,6 @@ class News_reporter(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     status = models.BooleanField(default=True)
     date = models.DateTimeField(auto_now_add=True)
-    keywords = models.ManyToManyField('Keyword', related_name='reporter_keywords')
     special_attributes = models.OneToOneField('NewsSpecialAttributes', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):

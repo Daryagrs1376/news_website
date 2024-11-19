@@ -6,19 +6,27 @@ from rest_framework.generics import UpdateAPIView, ListAPIView
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from.forms import SubtitleForm, AddCategoryForm
+from .models import UserProfile
 from datetime import datetime, timedelta
-from django.contrib.auth import get_user_model
-from django.core.mail import send_mail
+from django.views import View
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.http import HttpResponseForbidden
-from django.utils import timezone
-from django.shortcuts import get_object_or_404, redirect, render
-from django.http import HttpResponse, JsonResponse
-from django.views import View
+from django.core.mail import send_mail
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from .models import UserProfile
+from django.contrib.auth.tokens import (
+PasswordResetTokenGenerator)
+from django.utils import timezone
+from django.http import (
+HttpResponseForbidden,
+HttpResponse,
+JsonResponse,    
+)
+from django.shortcuts import (
+get_object_or_404, 
+redirect,
+render,   
+)
 from rest_framework.decorators import(
 api_view,
 permission_classes,
@@ -229,21 +237,13 @@ class NewsListView(generics.ListAPIView):
         serializer.save(reporter=self.request.user)
 
     def get_queryset(self):
-        """
-        این متد queryset را فیلتر می‌کند. می‌توانیم فیلترهای بیشتری اضافه کنیم.
-        """
         queryset = News.objects.all()
-        # اضافه کردن فیلترهای اضافی به درخواست
-        # به عنوان مثال، فیلتر وضعیت اخبار یا دسته‌بندی
         status = self.request.query_params.get('status', None)
         if status:
             queryset = queryset.filter(status=status)
-
-        # فیلتر براساس تاریخ ایجاد (می‌توانید فیلترهای دیگر هم اضافه کنید)
-        created_at = self.request.query_params.get('created_at', None)
-        if created_at:
+            created_at = self.request.query_params.get('created_at', None)
+        if created_at: 
             queryset = queryset.filter(created_at__date=created_at)
-
         return queryset
     
 # حذف تبلیغات (فقط برای ادمین‌ها)
@@ -671,26 +671,14 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
 class NewsUpdateView(UpdateAPIView):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]  # مشاهده عمومی، ویرایش نیازمند احراز هویت
+    permission_classes = [AllowAny]
 
-class NewsSearchView(APIView):
-    
-    @permission_classes([AllowAny])  # استفاده از دکوراتور به درستی
-
-    def get(self, request, *args, **kwargs):
-        query = request.GET.get("query")
-        # جستجو در اخبار بر اساس query
-        results = News.objects.filter(title__icontains=query)
-        serialized_results = ...  # سریالایز کردن خروجی
-        return Response({"message": "News search works!"})
-    
-    @api_view(['GET'])
-    @permission_classes([AllowAny])
-    def news_search(request):
-        query = request.GET.get("query")
-        results = News.objects.filter(title__icontains=query)
-        serialized_results = ...  # سریالایز کردن خروجی
-        return Response(serialized_results)
+    # def get(self, request, *args, **kwargs):
+    #     query = request.GET.get("query")
+    #     # جستجو در اخبار بر اساس query
+    #     results = News.objects.filter(title__icontains=query)
+    #     serialized_results = ...  # سریالایز کردن خروجی
+    #     return Response({"message": "News search works!"})
     
 class NewsCreateView(generics.CreateAPIView):
     queryset = News.objects.all()
