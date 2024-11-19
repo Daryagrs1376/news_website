@@ -100,8 +100,7 @@ class News(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     published_at = models.DateTimeField(null=True, blank=True)
-    # keywords = models.ManyToManyField('Keyword', blank=True)
-    keywords = models.CharField(max_length=255) 
+    keywords = models.ManyToManyField('Keyword', blank=True, related_name='news')
     is_approved = models.BooleanField(default=False)
 
     def __str__(self):
