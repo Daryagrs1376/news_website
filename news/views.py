@@ -390,6 +390,16 @@ class SettingCreateView(generics.CreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAdminUser]
 
+class AddNewsView(APIView):
+    def post(self, request, *args, **kwargs):
+        title = request.data.get('title')
+        content = request.data.get('content')
+        keyword_list = request.data.get('keywords', [])  # لیستی از کیوردها
+
+        news = News.objects.create(title=title, content=content)
+        news.add_keywords(keyword_list)
+
+        return Response({"message": "News created successfully!"}, status=status.HTTP_201_CREATED)
 
 class SettingUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Setting.objects.all()

@@ -1,6 +1,8 @@
 import uuid
+from django.apps import apps
 from django.db import models
 from django.utils import timezone
+from django.utils.timezone import now
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import User
 from django import forms
@@ -55,6 +57,15 @@ class Subtitle(models.Model):
         verbose_name = 'Subtitle'
         verbose_name_plural = 'Subtitles'
 
+    def add_keywords(self, keyword_list):
+        """
+        Add keywords to the news instance.
+        If a keyword does not exist, it will be created.
+        """
+        for word in keyword_list:
+            keyword, created = Keyword.objects.get_or_create(word=word)
+            self.keywords.add(keyword)
+            
 class Newscategory(models.Model):
     news = models.ForeignKey('News', on_delete=models.CASCADE)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)  # استفاده از رشته به جای وارد کردن مستقیم
@@ -138,7 +149,7 @@ class NewsSpecialAttributes(models.Model):
     def __str__(self):
         return f"Attributes: {self.special_feature1}, {self.special_category1}"
 
-class News_reporter(models.Model):
+class NewsReporter(models.Model):
     reporter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=255)
@@ -185,6 +196,14 @@ class NewsKeywords(models.Model):
 
     def __str__(self):
         return f"{self.news.title} - {self.keyword.word}"
+
+    def get_or_create_keywords(keyword_list):
+        keywords = []
+        for keyword in keyword_list:
+        # چک کردن اینکه آیا کیورد وجود دارد یا خیر
+            obj, created = Keyword.objects.get_or_create(name=keyword)
+            keywords.append(obj)
+        return keywords
 
 class AnotherModel(models.Model):
     news = models.ForeignKey('News', on_delete=models.CASCADE)
