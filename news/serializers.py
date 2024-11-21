@@ -236,7 +236,7 @@ class AdvertisingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advertising
         fields = [
-            'id', 'onvan_tabligh', 'link', 'banner', 'location',
+            'id', 'title', 'link', 'banner', 'location',
             'start_date', 'expiration_date', 'status'
         ]
         

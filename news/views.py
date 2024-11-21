@@ -401,7 +401,7 @@ class AdvertisingListView(generics.ListAPIView):
     queryset = Advertising.objects.all()
     serializer_class = AdvertisingSerializer
     filter_backends = [DjangoFilterBackend]
-    search_fields = ['onvan_tabligh', 'location']
+    search_fields = ['title', 'location']
     filterset_fields = ['location', 'status']
     permission_classes = [AllowAny] 
     

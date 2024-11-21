@@ -61,8 +61,8 @@ class RoleAdmin(admin.ModelAdmin):
 #     list_filter = ('role', 'status')
     
 class AdvertisingAdmin(admin.ModelAdmin):
-    list_display = ('onvan_tabligh', 'link', 'location', 'start_date', 'expiration_date', 'status')
-    search_fields = ('onvan_tabligh', 'location')
+    list_display = ('title', 'link', 'location', 'start_date', 'expiration_date', 'status')
+    search_fields = ('title', 'location')
     list_filter = ('location', 'status', 'start_date', 'expiration_date')
     
     def has_change_permission(self, request, obj=None):
