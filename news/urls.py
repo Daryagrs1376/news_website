@@ -123,6 +123,8 @@ urlpatterns = [
     path('api/password-reset-request/', PasswordResetRequestView.as_view(), name='password-reset-request'),
     path('api/password-reset/<uidb64>/<token>/', PasswordResetView.as_view(), name='password-reset'),
 
+    path('register/', RegisterView.as_view(), name='register'),
+
     path('', include(router.urls)),
     path('api/', include(router.urls)), 
     path('create-news/', create_news, name='create_news'),

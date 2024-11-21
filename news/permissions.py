@@ -3,8 +3,16 @@ from rest_framework.decorators import permission_classes
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.permissions import BasePermission
 
 
+
+class IsNotAuthenticated(BasePermission):
+    """
+    اجازه نمی‌دهد کاربرانی که لاگین کرده‌اند، به این ویو دسترسی داشته باشند.
+    """
+    def has_permission(self, request, view):
+        return not request.user.is_authenticated
 
 class NewsSearchView(APIView):
 

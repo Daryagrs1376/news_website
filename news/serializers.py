@@ -18,25 +18,23 @@ User = get_user_model()
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, min_length=8)
-    confirm_password = serializers.CharField(write_only=True, min_length=8)
+    password = serializers.CharField(write_only=True)
+    password_confirmation = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'confirm_password']
+        fields = ['username', 'email', 'password', 'password_confirmation']
 
     def validate(self, data):
-        if data['password'] != data['confirm_password']:
-            raise serializers.ValidationError("رمز عبور و تایید رمز عبور باید یکسان باشند.")
+        # بررسی تطبیق رمز عبور و تکرار آن
+        if data['password'] != data['password_confirmation']:
+            raise serializers.ValidationError("Passwords do not match.")
         return data
 
     def create(self, validated_data):
-        validated_data.pop('confirm_password')
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password']
-        )
+        # حذف password_confirmation از داده‌های نهایی
+        validated_data.pop('password_confirmation')
+        user = User.objects.create_user(**validated_data)
         return user
     
 class PostSerializer(serializers.ModelSerializer):

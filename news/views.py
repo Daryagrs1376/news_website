@@ -1,8 +1,8 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from .permissions import IsNotAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
-from rest_framework.generics import UpdateAPIView, ListAPIView
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from.forms import SubtitleForm, AddCategoryForm
@@ -17,12 +17,18 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 from django.contrib.auth.tokens import (
 PasswordResetTokenGenerator)
-from django.utils import timezone
+from rest_framework.generics import(
+CreateAPIView,
+UpdateAPIView,
+ListAPIView,
+)
 from .serializers import(
 PublicAdvertisingSerializer,
 AdminAdvertisingSerializer,
+RegisterSerializer,
 )
 from django.http import (
 HttpResponseForbidden,
@@ -106,6 +112,10 @@ IsAdminUserOrReadOnly,
 
 
 User = get_user_model()
+
+class RegisterView(CreateAPIView):
+    serializer_class = RegisterSerializer
+    permission_classes = [IsNotAuthenticated] 
 
 class PublicAdvertisingViewSet(viewsets.ReadOnlyModelViewSet):
     """
