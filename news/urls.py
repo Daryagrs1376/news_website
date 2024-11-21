@@ -13,17 +13,43 @@ from .views import PostViewSet
 from .views import create_news
 from .views import RegisterView
 from .views import (
-    NewsViewSet, CategoryViewSet, UserProfileViewSet,
-    OperationViewSet, NewsListView, NewsCreateView, NewsDetailView,
-    SettingListView, SettingCreateView, SettingUpdateView,
-    AdvertisingListView, AdvertisingCreateView,
-    AdvertisingUpdateView, AdvertisingDeleteView,
-    UserListView, UserCreateView, UserUpdateDeleteView,
-    AddCategory, edit_category, delete_category, CategoryListView, CategoryDetailView,
-    subtitle_list, add_subtitle, edit_subtitle, delete_subtitle,
-    UserProfileDetailView, DailyStatsView, WeeklyStatsView, ProtectedView,
-    AdminAdvertisingListView, PublicAdvertisingListView,
-    PasswordResetRequestView, PasswordResetView, UserRegistrationView
+NewsViewSet,
+CategoryViewSet,
+UserProfileViewSet,
+RequestPasswordResetAPIView,
+ResetPasswordAPIView,
+OperationViewSet,
+NewsListView,
+NewsCreateView,
+NewsDetailView,
+SettingListView,
+SettingCreateView,
+SettingUpdateView,
+AdvertisingListView,
+AdvertisingCreateView,
+AdvertisingUpdateView,
+AdvertisingDeleteView,
+UserListView,
+UserCreateView,
+UserUpdateDeleteView,
+AddCategory,
+edit_category,
+delete_category,
+CategoryListView,
+CategoryDetailView,
+subtitle_list,
+add_subtitle,
+edit_subtitle,
+delete_subtitle,
+UserProfileDetailView,
+DailyStatsView,
+WeeklyStatsView,
+ProtectedView,
+AdminAdvertisingListView,
+PublicAdvertisingListView,
+PasswordResetRequestView,
+PasswordResetView,
+UserRegistrationView
 )
 
 # تنظیمات مستندات API
@@ -114,4 +140,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('api/', include(router.urls)), 
     path('create-news/', create_news, name='create_news'),
+
+    path('password-reset/', RequestPasswordResetAPIView.as_view(), name='password-reset-request'),
+    path('password-reset/<str:token>/', ResetPasswordAPIView.as_view(), name='password-reset'),
 ]
