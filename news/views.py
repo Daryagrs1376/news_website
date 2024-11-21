@@ -6,7 +6,7 @@ from rest_framework.generics import UpdateAPIView, ListAPIView
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from.forms import SubtitleForm, AddCategoryForm
-from .models import UserProfile, Advertising
+from .models import Advertising
 from datetime import datetime, timedelta
 from django.utils.timezone import now
 from django.views import View
@@ -70,14 +70,11 @@ AdvertisingCreateUpdateSerializer,
 NewsSerializer,
 SettingSerializer,
 SettingCreateUpdateSerializer,
-UserProfileSerializer,
 PageViewSerializer,
 CategorySerializer,
 ReporterProfileSerializer,
-AddUserSerializer,
 NewsSerializer,
 NewsEditSerializer,
-UserSerializer,
 UserCreateSerializer,
 AdminAdvertisingSerializer,
 PublicAdvertisingSerializer,
@@ -435,7 +432,7 @@ class AdvertisingDeleteView(generics.DestroyAPIView):
 
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    # serializer_class = UserSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['username', 'phone_number', 'role__name']  
     permission_classes = [AllowAny]   
@@ -591,9 +588,9 @@ class UserListCreateView(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = ReporterProfileSerializer
 
-class UserProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = ReporterProfile.objects.all()
-    serializer_class = ReporterProfileSerializer
+# class UserProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = ReporterProfile.objects.all()
+#     serializer_class = ReporterProfileSerializer
 
 class NewsList(APIView):
     def get(self, request):
@@ -651,9 +648,9 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-class UserProfileViewSet(viewsets.ModelViewSet):
-    queryset = UserProfile.objects.all()
-    serializer_class = UserProfileSerializer
+# class UserProfileViewSet(viewsets.ModelViewSet):
+#     queryset = UserProfile.objects.all()
+#     serializer_class = UserProfileSerializer
 
     @action(detail=False, methods=['patch'])
     def change_phone(self, request, pk=None):

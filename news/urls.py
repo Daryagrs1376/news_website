@@ -17,7 +17,6 @@ PublicAdvertisingViewSet,
 PostViewSet,
 NewsViewSet,
 CategoryViewSet,
-UserProfileViewSet,
 NewsListView,
 NewsCreateView, 
 NewsDetailView,
@@ -34,7 +33,6 @@ UserUpdateDeleteView,
 AddCategory,
 CategoryListView,
 CategoryDetailView,
-UserProfileDetailView,
 DailyStatsView,
 WeeklyStatsView,
 ProtectedView,
@@ -71,7 +69,7 @@ schema_view = get_schema_view(
 router = DefaultRouter()
 router.register(r'news', NewsViewSet, basename='news')
 router.register(r'categories', CategoryViewSet, basename='categories')
-router.register(r'userprofiles', UserProfileViewSet, basename='userprofiles')
+# router.register(r'userprofiles', UserProfileViewSet, basename='userprofiles')
 # router.register(r'operations', OperationViewSet, basename='operations')
 router.register(r'posts', PostViewSet)
 router.register(r'admin/advertisements', AdminAdvertisingViewSet, basename='admin-advertisements')
@@ -111,7 +109,7 @@ urlpatterns = [
     path('subtitles/<int:pk>/edit/', edit_subtitle, name='subtitle-edit'),
     path('subtitles/<int:pk>/delete/', delete_subtitle, name='subtitle-delete'),
 
-    path('userprofiles/<int:pk>/', UserProfileDetailView.as_view(), name='userprofile-detail'),
+    # path('userprofiles/<int:pk>/', UserProfileDetailView.as_view(), name='userprofile-detail'),
 
     path('daily/', DailyStatsView.as_view(), name='daily-stats'),
     path('weekly/', WeeklyStatsView.as_view(), name='weekly-stats'),

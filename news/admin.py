@@ -15,7 +15,6 @@ from .models import (
     Advertising,
     Setting,
     Dashboard,
-    UserProfile,
     Subtitle,
     Grouping,
     PageView,
@@ -88,9 +87,9 @@ class DashboardAdmin(admin.ModelAdmin):
 #     search_fields = ('news__title', 'operation_type')
 #     list_filter = ('operation_type', 'performed_at')
 
-class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone_number')
-    search_fields = ('user__username', 'phone_number')
+# class UserProfileAdmin(admin.ModelAdmin):
+#     list_display = ('user', 'phone_number')
+#     search_fields = ('user__username', 'phone_number')
 
 class PageViewAdmin(admin.ModelAdmin):
     list_display = ('date', 'total_visits', 'social_visits', 'bounce_rate')  # فیلدهایی که در لیست ادمین نمایش داده می‌شوند
@@ -114,6 +113,6 @@ admin.site.register(Role, RoleAdmin)
 admin.site.register(Advertising, AdvertisingAdmin)
 admin.site.register(Setting, SettingAdmin)
 admin.site.register(Dashboard)
-admin.site.register(UserProfile)
+# admin.site.register(UserProfile)
 admin.site.register(PageView)
 admin.site.register(Subtitle)

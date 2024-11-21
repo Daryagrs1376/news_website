@@ -35,13 +35,14 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
-class UserProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    phone_number = models.CharField(max_length=15, null=True, blank=True)
-    bio = models.TextField()
+    
+# class UserProfile(models.Model):
+#     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+#     phone_number = models.CharField(max_length=15, null=True, blank=True)
+#     bio = models.TextField()
      
-    def __str__(self):
-        return self.user.username
+#     def __str__(self):
+#         return self.user.username
 
 class Subtitle(models.Model):
     title = models.CharField(max_length=255)
@@ -224,12 +225,10 @@ class Role(models.Model):
 class User(AbstractUser):
     phone_number = models.CharField(max_length=15, unique=True)  # فیلد موبایل اضافه شده
     role = models.ForeignKey('Role', on_delete=models.SET_NULL, null=True)  # نقش کاربر
-    status = models.BooleanField(default=True)  # وضعیت فعال/غیرفعال بودن
-    
-    # تغییر نام دسترسی معکوس (related_name) برای جلوگیری از تداخل با مدل پیش‌فرض auth.User
+    status = models.BooleanField(default=True) 
     groups = models.ManyToManyField(
         Group,
-        related_name='news_user_groups',  # اضافه کردن related_name منحصر به فرد
+        related_name='news_user_groups', 
         blank=True,
         help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.'
     )

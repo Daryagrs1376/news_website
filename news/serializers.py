@@ -8,7 +8,6 @@ Role,
 Post,
 Keyword,
 Category,
-UserProfile,
 ReporterProfile,
 Advertising,
 PageView,
@@ -172,28 +171,28 @@ class NewsEditSerializer(serializers.ModelSerializer):
         model = News
         fields = ['title', 'short_description', 'category', 'keywords', 'news_text']  # فیلدهای ویرایش خبر
         
-class AddUserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
-    confirm_password = serializers.CharField(write_only=True)
+# class AddUserSerializer(serializers.ModelSerializer):
+#     password = serializers.CharField(write_only=True)
+#     confirm_password = serializers.CharField(write_only=True)
 
-    class Meta:
-        model = User
-        fields = ['name', 'phone_number', 'password', 'confirm_password', 'role']
+#     class Meta:
+#         model = User
+#         fields = ['name', 'phone_number', 'password', 'confirm_password', 'role']
 
-    def validate(self, data):
-        if data['password'] != data['confirm_password']:
-            raise serializers.ValidationError("Passwords do not match")
-        return data
+#     def validate(self, data):
+#         if data['password'] != data['confirm_password']:
+#             raise serializers.ValidationError("Passwords do not match")
+#         return data
 
-    def create(self, validated_data):
-        user = User(
-            name=validated_data['name'],
-            phone_number=validated_data['phone_number'],
-            role=validated_data['role'],
-        )
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
+#     def create(self, validated_data):
+#         user = User(
+#             name=validated_data['name'],
+#             phone_number=validated_data['phone_number'],
+#             role=validated_data['role'],
+#         )
+#         user.set_password(validated_data['password'])
+#         user.save()
+#         return user
 
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -201,13 +200,13 @@ class RoleSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 
-class UserProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfile
-        fields = ['id', 'phone_number']
+# class UserProfileSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = UserProfile
+#         fields = ['id', 'phone_number']
 
-class UserSerializer(serializers.ModelSerializer):
-    profile = UserProfileSerializer()
+# class UserSerializer(serializers.ModelSerializer):
+#     profile = UserProfileSerializer()
     
     class Meta:
         model = User
