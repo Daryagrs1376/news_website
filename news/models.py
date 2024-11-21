@@ -62,7 +62,7 @@ class Newscategory(models.Model):
 
     def __str__(self):
         return f"{self.news.title} - {self.category.title}"
-
+    
 class Category(models.Model):
     title = models.CharField(max_length=200)
     name = models.CharField(max_length=100)
@@ -70,7 +70,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
-
 class Keyword(models.Model):
     word = models.CharField(max_length=50)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)  # استفاده از رشته به جای وارد کردن مستقیم
@@ -90,7 +89,6 @@ class location(models.Model):
     def __str__(self):
         return self.title
 
-
 class Feature(models.Model):
     feature_name = models.CharField(max_length=50)
     news = models.ForeignKey('News', on_delete=models.CASCADE)
@@ -103,7 +101,6 @@ class Grouping(models.Model):
 
     def __str__(self):
         return self.Grouping_name
-    
     
 class News(models.Model):
     reporter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
@@ -119,20 +116,17 @@ class News(models.Model):
 
     def __str__(self):
         return self.title
-
-        
+     
 class SpecialFeature(models.Model):
     feature_name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.feature_name
-
 class SpecialCategory(models.Model):
     category_name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.category_name
-
 
 class NewsSpecialAttributes(models.Model):
     special_feature1 = models.ForeignKey(SpecialFeature, on_delete=models.SET_NULL, null=True, related_name='special_feature1')
@@ -223,7 +217,7 @@ class User(AbstractUser):
 
     user_permissions = models.ManyToManyField(
         Permission,
-        related_name='news_user_permissions',  # اضافه کردن related_name منحصر به فرد
+        related_name='news_user_permissions',
         blank=True,
         help_text='Specific permissions for this user.'
     )
@@ -238,19 +232,22 @@ class Advertising(models.Model):
         ('footer', 'Footer'),
     ]
 
-    onvan_tabligh = models.CharField(max_length=255)
+    title  = models.CharField(max_length=255)
     link = models.URLField()
     banner = models.ImageField(upload_to='banners/')
     location = models.CharField(max_length=50, choices=LOCATION_CHOICES)
     start_date = models.DateField()
     expiration_date = models.DateField()
-    status = models.BooleanField(default=True)
+    status = models.BooleanField(default=True)  
 
     def __str__(self):
-        return self.onvan_tabligh
+        return self.title 
+
+    @property
+    def is_active(self):
+        """Check if the advertisement is active and not expired."""
+        return self.status and self.expiration_date >= now().date()
     
-    
-# مدل Setting
 class Setting(models.Model):
     subcategory_name = models.CharField(max_length=255)
     status = models.BooleanField(default=True)
@@ -262,7 +259,6 @@ class Setting(models.Model):
         return self.subcategory_name
     
     
-# مدل Dashboard
 class Dashboard(models.Model):
     admin_panel = models.BooleanField(default=False)
     news = models.ForeignKey(News, on_delete=models.CASCADE)
@@ -270,23 +266,20 @@ class Dashboard(models.Model):
     def __str__(self):
         return f"Dashboard for {self.news.title}"
     
+# class Operation(models.Model):
+#     EDIT = 'edit'
+#     DELETE = 'delete'
+#     OPERATION_CHOICES = [
+#         (EDIT, 'Edit'),
+#         (DELETE, 'Delete'),
+#     ]
 
+#     news = models.ForeignKey(News, on_delete=models.CASCADE)
+#     operation_type = models.CharField(max_length=10, choices=OPERATION_CHOICES, null=True, blank=True)
+#     performed_at = models.DateTimeField(auto_now_add=True)
 
-# مدل Operation (ویرایش و حذف)
-class Operation(models.Model):
-    EDIT = 'edit'
-    DELETE = 'delete'
-    OPERATION_CHOICES = [
-        (EDIT, 'Edit'),
-        (DELETE, 'Delete'),
-    ]
-
-    news = models.ForeignKey(News, on_delete=models.CASCADE)
-    operation_type = models.CharField(max_length=10, choices=OPERATION_CHOICES, null=True, blank=True)
-    performed_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.get_operation_type_display()} on {self.news.title}"
+#     def __str__(self):
+#         return f"{self.get_operation_type_display()} on {self.news.title}"
     
 class PageView(models.Model):
     date = models.DateField()
