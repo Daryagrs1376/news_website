@@ -238,7 +238,7 @@ class Advertising(models.Model):
     location = models.CharField(max_length=50, choices=LOCATION_CHOICES)
     start_date = models.DateField()
     expiration_date = models.DateField()
-    status = models.BooleanField(default=True)  
+    status = models.BooleanField(null=True, blank=True, default=None)
 
     def __str__(self):
         return self.title 
