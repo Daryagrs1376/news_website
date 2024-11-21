@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
@@ -7,10 +8,23 @@ from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
+from django.utils.timezone import now
 
 
 User = get_user_model()
 
+
+class PasswordResetToken(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="password_reset_tokens")
+    token = models.UUIDField(default=uuid.uuid4, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_used = models.BooleanField(default=False)
+
+    def is_valid(self):
+        # اعتبار توکن برای 24 ساعت
+        return not self.is_used and (now() - self.created_at).total_seconds() < 86400
+    
 class Post(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()

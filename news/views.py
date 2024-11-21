@@ -1,7 +1,12 @@
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.contrib.auth.hashers import make_password
 from rest_framework.filters import SearchFilter
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import (
+ValidationError,
+PermissionDenied,  
+)
 from rest_framework.generics import UpdateAPIView, ListAPIView
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -12,6 +17,7 @@ from django.views import View
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail
+from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import (
@@ -78,6 +84,7 @@ News,
 Category,
 Subtitle,
 ReporterProfile,
+PasswordResetToken,
 Operation,
 PageView,
 Advertising,
@@ -95,6 +102,55 @@ IsAdminUserOrReadOnly,
 
 User = get_user_model()
 
+class ResetPasswordAPIView(APIView):
+    def post(self, request, token):
+        try:
+            # پیدا کردن توکن
+            reset_token = PasswordResetToken.objects.get(token=token, is_used=False)
+            
+            # اعتبارسنجی توکن
+            if not reset_token.is_valid():
+                raise ValidationError("Token is invalid or expired.")
+            
+            # دریافت رمز عبور جدید
+            new_password = request.data.get('password')
+            if not new_password:
+                return Response({"error": "Password is required."}, status=status.HTTP_400_BAD_REQUEST)
+            
+            # تنظیم رمز عبور جدید برای کاربر
+            user = reset_token.user
+            user.password = make_password(new_password)
+            user.save()
+
+            # علامت‌گذاری توکن به عنوان استفاده شده
+            reset_token.is_used = True
+            reset_token.save()
+
+            return Response({"message": "Password reset successfully."}, status=status.HTTP_200_OK)
+        except PasswordResetToken.DoesNotExist:
+            return Response({"error": "Invalid token."}, status=status.HTTP_404_NOT_FOUND)
+        
+class RequestPasswordResetAPIView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        try:
+            # یافتن کاربر با ایمیل
+            user = User.objects.get(email=email)
+            
+            # ایجاد توکن جدید
+            token = PasswordResetToken.objects.create(user=user)
+            reset_url = f"http://yourdomain.com/reset-password/{token.token}/"
+            
+            # ارسال ایمیل بازنشانی رمز عبور
+            send_mail(
+                subject="Password Reset Request",
+                message=f"Click the link below to reset your password:\n{reset_url}",
+                from_email="no-reply@yourdomain.com",
+                recipient_list=[email],
+            )
+            return Response({"message": "Password reset link sent to your email."}, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({"error": "User with this email does not exist."}, status=status.HTTP_404_NOT_FOUND)
 class RegisterView(APIView):
     def post(self, request):
         # چک کردن لاگین بودن کاربر
