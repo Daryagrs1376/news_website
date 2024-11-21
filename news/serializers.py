@@ -1,13 +1,19 @@
 from rest_framework import serializers
-from .models import News, Setting, Role, Category, UserProfile, ReporterProfile, Operation, Advertising
-from .models import PageView
-from rest_framework import serializers
-from .models import News
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.auth import get_user_model
-from .models import News, Keyword
-from .models import Post
-from django.contrib.auth import get_user_model
+from .models import(
+News,
+Setting,
+Role,
+Post,
+Keyword,
+Category,
+UserProfile,
+ReporterProfile,
+Advertising,
+PageView,
+)
+
 
 User = get_user_model()
 
@@ -21,13 +27,11 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ['username', 'email', 'password', 'confirm_password']
 
     def validate(self, data):
-        # بررسی مطابقت رمز عبور و تایید رمز عبور
         if data['password'] != data['confirm_password']:
             raise serializers.ValidationError("رمز عبور و تایید رمز عبور باید یکسان باشند.")
         return data
 
     def create(self, validated_data):
-        # حذف confirm_password قبل از ذخیره در دیتابیس
         validated_data.pop('confirm_password')
         user = User.objects.create_user(
             username=validated_data['username'],
@@ -75,13 +79,11 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         fields = ['username', 'email', 'password', 'confirm_password']
 
     def validate(self, data):
-        # بررسی مطابقت رمز عبور و تایید رمز عبور
         if data['password'] != data['confirm_password']:
             raise serializers.ValidationError("رمز عبور و تایید رمز عبور باید یکسان باشند.")
         return data
 
     def create(self, validated_data):
-        # حذف confirm_password قبل از ذخیره در دیتابیس
         validated_data.pop('confirm_password')
         user = User.objects.create_user(**validated_data)
         return user
@@ -99,7 +101,6 @@ class PasswordResetSerializer(serializers.Serializer):
     new_password = serializers.CharField(min_length=8)
 
     def validate_token(self, value):
-        # اعتبارسنجی توکن برای اطمینان از اینکه معتبر است
         user = self.context.get('user')
         if not PasswordResetTokenGenerator().check_token(user, value):
             raise serializers.ValidationError("توکن معتبر نیست یا منقضی شده است.")
@@ -108,20 +109,16 @@ class SubtitleSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     text = serializers.CharField(max_length=200)
 
-
-# آمار بازدید
 class PageViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = PageView
         fields = '__all__'
         
-# سریالایزر برای نمایش تنظیمات
 class SettingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Setting
         fields = ['id', 'subcategory_name', 'status', 'logo', 'contact_us', 'about_us']
 
-# سریالایزر برای ایجاد یا ویرایش تنظیمات
 class SettingCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Setting
@@ -198,7 +195,6 @@ class AddUserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-# سریالایزر نقش (Role)
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
@@ -210,7 +206,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = ['id', 'phone_number']
 
-# سریالایزر کاربر (User)
 class UserSerializer(serializers.ModelSerializer):
     profile = UserProfileSerializer()
     
@@ -218,7 +213,6 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['email','id', 'username', 'profile']
 
-# سریالایزر اضافه کردن کاربر
 class UserCreateSerializer(serializers.Serializer):
     username = serializers.CharField(write_only=True)
     phone_number = serializers.CharField(write_only=True)
@@ -238,7 +232,6 @@ class UserCreateSerializer(serializers.Serializer):
         user.save()
         return user
     
-# سریالایزر برای نمایش تبلیغات (برای مشاهده توسط همه کاربران)
 class AdvertisingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advertising
@@ -247,28 +240,34 @@ class AdvertisingSerializer(serializers.ModelSerializer):
             'start_date', 'expiration_date', 'status'
         ]
         
-# سریالایزر برای ایجاد، ویرایش یا حذف تبلیغ (برای ادمین‌ها)
 class AdvertisingCreateUpdateSerializer(serializers.ModelSerializer):
+    status = serializers.SerializerMethodField()
     class Meta:
         model = Advertising
         fields = [
-            'onvan_tabligh', 'link', 'banner', 'location',
+            'title', 'link', 'banner', 'location',
             'start_date', 'expiration_date', 'status'
         ]
-
-# سریالایزر Operation برای عملیات ویرایش و حذف
-class OperationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Operation
-        fields = ['id', 'news', 'operation_type', 'performed_at']
         
-class AdminAdvertisingSerializer(serializers.ModelSerializer):
-    status = serializers.SerializerMethodField()
+    def get_status(self, obj):
+        return "approved" if obj.status else "rejected"
 
+# class OperationSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Operation
+#         fields = ['id', 'news', 'operation_type', 'performed_at']
+        
+# class AdminAdvertisingSerializer(serializers.ModelSerializer):
+#     status = serializers.SerializerMethodField()
+
+#     class Meta:
+#         model = Advertising
+#         fields = ['id', 'location', 'start_date', 'expiration_date', 'status']
+class AdminAdvertisingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advertising
         fields = ['id', 'location', 'start_date', 'expiration_date', 'status']
-
+        
     def get_status(self, obj):
         return "approved" if obj.status else "pending"
 
@@ -276,7 +275,7 @@ class PublicAdvertisingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advertising
         fields = ['id', 'link', 'banner', 'location']
-        
+
 class NewsSearchSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
