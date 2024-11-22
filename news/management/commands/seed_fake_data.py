@@ -1,78 +1,118 @@
-import random
 from faker import Faker
+import random
 from django.core.management.base import BaseCommand
-from news.models import User, News, Category, Keyword, Advertising, Post, Role
-from django.contrib.auth import get_user_model
+from news.models import (  # نام مدل‌ها را به اپلیکیشن خود تغییر دهید
+    Tokens, Groups, Users, Advertisings, Categories, Dashboards, Features,
+    Groupings, Keywords, Locations, NewsSpecialAttributes, Newscategorys,
+    News, PageViews, ReporterProfiles, Roles, Settings, SpecialCategories,
+    SpecialFeatures, Subtitles
+)
 
-
-fake = Faker()
+fake = Faker("fa_IR")  # تنظیم زبان فارسی
 
 class Command(BaseCommand):
-    help = 'Seed fake data into the database'
+    help = "تولید داده‌های جعلی فارسی برای سایت خبرگذاری"
 
-    def handle(self, *args, **options):
-        fake = Faker()
-        User = get_user_model()  # استفاده از get_user_model برای بارگذاری صحیح مدل User
-        categories = list(Category.objects.all())  # تبدیل QuerySet به لیست
+    def handle(self, *args, **kwargs):
+        self.stdout.write("در حال تولید داده‌های جعلی...")
 
-        
-        # ایجاد 5 کاربر
-        for _ in range(5):
-            user = User.objects.create_user(username=fake.user_name(), password=fake.password())
-            self.stdout.write(f"User {user.username} created")
-
-        # ایجاد 5 دسته‌بندی
-        for category_name in ['week', 'guy', 'trouble', 'design', 'decide']:
-            category = Category.objects.create(
-                title=category_name,
-                name=fake.word(),
-                description=fake.text()
-            )
-            self.stdout.write(f"Category {category.title} created")
-            
-       # ایجاد 10 خبر
+        # تولید داده برای مدل‌های مختلف
+        # Tokens
         for _ in range(10):
-            reporter = random.choice(User.objects.all())  # انتخاب یک کاربر به عنوان خبرنگار
-            if reporter:
-                news = News.objects.create(
-                    title=fake.sentence(),
-                    content=fake.text(),
-                    reporter=reporter,  # اختصاص کاربر به فیلد reporter
-                    is_approved=random.choice([True, False])
-                )
-                news.categories.set(random.sample(categories, 2))  # انتساب 2 دسته‌بندی به هر خبر
-                news.save()
-                self.stdout.write(f"News {news.title} created")
+            Tokens.objects.create(key=fake.uuid4(), user_id=random.randint(1, 100))
 
-                # اضافه کردن کیورد‌ها
-                for _ in range(3):  # 3 کیورد به هر خبر اضافه کنید
-                    keyword = Keyword.objects.create(word=fake.word(), category=random.choice(categories))
-                    news.keywords.add(keyword)
+        # Groups
+        for _ in range(5):
+            Groups.objects.create(name=fake.word())
 
-                self.stdout.write(f"Keywords added to News {news.title}")
-            else:
-                self.stdout.write(self.style.ERROR('No reporter found'))
-                
-        # ایجاد تبلیغات
-        for _ in range(3):  # ایجاد 3 تبلیغ
-            ad = Advertising.objects.create(
-                title=fake.word(),
-                link=fake.url(),
-                banner=fake.image_url(),
-                location=random.choice(['header', 'sidebar', 'footer']),
-                start_date=fake.date_this_year(),
-                expiration_date=fake.date_this_year(),
-                status=random.choice([True, False])
+        # Users
+        for _ in range(20):
+            Users.objects.create(
+                username=fake.user_name(),
+                email=fake.email(),
+                first_name=fake.first_name(),
+                last_name=fake.last_name(),
+                is_staff=fake.boolean(),
             )
-            self.stdout.write(f"Advertising {ad.title} created")
 
-        # ایجاد پست‌ها
-        for _ in range(5):  # ایجاد 5 پست
-            post = Post.objects.create(
-                title=fake.sentence(),
-                content=fake.text(),
-                author=random.choice(User.objects.all())
+        # Advertisings
+        for _ in range(10):
+            Advertisings.objects.create(
+                title=fake.sentence(nb_words=3),  # عنوان تبلیغ
+                content=fake.text(max_nb_chars=300),  # متن تبلیغ
             )
-            self.stdout.write(f"Post {post.title} created")
 
-        self.stdout.write(self.style.SUCCESS('Successfully seeded fake data!'))
+        # Categories
+        for _ in range(10):
+            Categories.objects.create(name=fake.word())
+
+        # Dashboards
+        for _ in range(5):
+            Dashboards.objects.create(name=fake.sentence(nb_words=2))
+
+        # Features
+        for _ in range(10):
+            Features.objects.create(feature_name=fake.word())
+
+        # Groupings
+        for _ in range(10):
+            Groupings.objects.create(name=fake.word())
+
+        # Keywords
+        for _ in range(10):
+            Keywords.objects.create(keyword=fake.word())
+
+        # Locations
+        for _ in range(10):
+            Locations.objects.create(city=fake.city(), country="ایران")
+
+        # News Special Attributes
+        for _ in range(10):
+            NewsSpecialAttributes.objects.create(attribute=fake.sentence(nb_words=4))
+
+        # Newscategorys
+        for _ in range(10):
+            Newscategorys.objects.create(name=fake.word())
+
+        # News
+        for _ in range(20):
+            News.objects.create(
+                headline=fake.sentence(nb_words=6),  # تیتر خبر
+                content=fake.text(max_nb_chars=500),  # محتوای خبر
+                author=fake.name(),  # نویسنده
+                published_date=fake.date_time_this_year(),  # تاریخ انتشار
+            )
+
+        # Page Views
+        for _ in range(10):
+            PageViews.objects.create(page_name=fake.word(), views=random.randint(0, 10000))
+
+        # Reporter Profiles
+        for _ in range(10):
+            ReporterProfiles.objects.create(
+                name=fake.name(),  # نام خبرنگار
+                email=fake.email(),  # ایمیل خبرنگار
+                profile_bio=fake.text(max_nb_chars=200),  # بیوگرافی
+            )
+
+        # Roles
+        for _ in range(5):
+            Roles.objects.create(role_name=fake.job())
+
+        # Settings
+        for _ in range(10):
+            Settings.objects.create(setting_key=fake.word(), setting_value=fake.word())
+
+        # Special Categories
+        for _ in range(10):
+            SpecialCategories.objects.create(name=fake.word())
+
+        # Special Features
+        for _ in range(5):
+            SpecialFeatures.objects.create(name=fake.sentence(nb_words=2))
+
+        # Subtitles
+        for _ in range(10):
+            Subtitles.objects.create(subtitle_text=fake.sentence(nb_words=5))
+
+        self.stdout.write(self.style.SUCCESS("تولید داده‌های جعلی فارسی با موفقیت انجام شد!"))
