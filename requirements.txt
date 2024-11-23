@@ -8,3 +8,6 @@ drf-yasg==1.21.8
 django-extensions==3.2.3
 djangorestframework-simplejwt==5.3.1
 pillow==11.0.0
+django_filters
+corsheaders
+rest_framework.authtoken
