@@ -71,9 +71,9 @@ router.register(r'news', NewsViewSet, basename='news')
 router.register(r'categories', CategoryViewSet, basename='categories')
 # router.register(r'userprofiles', UserProfileViewSet, basename='userprofiles')
 # router.register(r'operations', OperationViewSet, basename='operations')
-router.register(r'posts', PostViewSet)
-router.register(r'admin/advertisements', AdminAdvertisingViewSet, basename='admin-advertisements')
-router.register(r'advertisements', PublicAdvertisingViewSet, basename='public-advertisements')
+# router.register(r'posts', PostViewSet)
+# router.register(r'admin/advertisements', AdminAdvertisingViewSet, basename='admin-advertisements')
+# router.register(r'advertisements', PublicAdvertisingViewSet, basename='public-advertisements')
 
 
 urlpatterns = [
@@ -94,9 +94,9 @@ urlpatterns = [
     path('advertising/<int:id>/delete/', AdvertisingDeleteView.as_view(), name='delete-advertising'),
     path('advertisements/', PublicAdvertisingListView.as_view(), name='public-advertising-list'),
 
-    path('users/', UserListView.as_view(), name='user-list'),
-    path('users/add/', UserCreateView.as_view(), name='user-create'),
-    path('user/<int:pk>/', UserUpdateDeleteView.as_view(), name='user-update-delete'),
+    # path('users/', UserListView.as_view(), name='user-list'),
+    # path('users/add/', UserCreateView.as_view(), name='user-create'),
+    # path('user/<int:pk>/', UserUpdateDeleteView.as_view(), name='user-update-delete'),
 
     path('categories/add/', AddCategory.as_view(), name='category-add'),
     path('categories/edit/<int:pk>/', edit_category, name='edit-category'),
@@ -120,16 +120,16 @@ urlpatterns = [
     path('protected/', ProtectedView.as_view(), name='protected-view'),
 
     path('register/', UserRegistrationView.as_view(), name='user-registration'),
-    path('api/password-reset-request/', PasswordResetRequestView.as_view(), name='password-reset-request'),
-    path('api/password-reset/<uidb64>/<token>/', PasswordResetView.as_view(), name='password-reset'),
+    # path('api/password-reset-request/', PasswordResetRequestView.as_view(), name='password-reset-request'),
+    # path('api/password-reset/<uidb64>/<token>/', PasswordResetView.as_view(), name='password-reset'),
 
-    path('register/', RegisterView.as_view(), name='register'),
+    path('custom-register/', RegisterView.as_view(), name='custom-register'),
 
     path('', include(router.urls)),
     # path('api/', include(router.urls)), 
-    path('create-news/', create_news, name='create_news'),
-    path('password-reset/', RequestPasswordResetAPIView.as_view(), name='password-reset-request'),
-    path('password-reset/<str:token>/', ResetPasswordAPIView.as_view(), name='password-reset'),
+    # path('create-news/', create_news, name='create_news'),
+    path('password-reset-request/', RequestPasswordResetAPIView.as_view(), name='password-reset-request'),
+    path('password-reset/<uidb64>/<token>/', ResetPasswordAPIView.as_view(), name='password-reset'),
 ]
 
 
