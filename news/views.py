@@ -864,19 +864,7 @@ def send_sms(request):
             user.profile.save()
             return Response({'message': 'Waiting to receive verification code!'})
         return Response({'message': 'fill phone number'})
-    
-            # try:
-            #     client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-            #     message = client.messages.create(
-            #     body=f"Your verification code is {verification_code}",
-            #     from_=settings.TWILIO_PHONE_NUMBER,
-            #     to=phone
-            #     )
-            #     return Response({'message': f'User created and SMS verification sent to {phone}'})
-            # except Exception as e:
-            #     return Response({'message': f'Failed to send SMS: {str(e)}'}, status=500)
-        
-    
+
 @swagger_auto_schema(
     method='post', 
     request_body=openapi.Schema(
