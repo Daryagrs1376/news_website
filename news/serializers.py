@@ -12,10 +12,14 @@ ReporterProfile,
 Advertising,
 PageView,
 )
-
+from .models import UserProfile
 
 User = get_user_model()
 
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = '__all__'
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)

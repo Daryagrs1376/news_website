@@ -18,6 +18,7 @@ from .models import (
     Subtitle,
     Grouping,
     PageView,
+    UserProfile,
 )
 
 class NewscategoryAdmin(admin.ModelAdmin):
@@ -113,6 +114,6 @@ admin.site.register(Role, RoleAdmin)
 admin.site.register(Advertising, AdvertisingAdmin)
 admin.site.register(Setting, SettingAdmin)
 admin.site.register(Dashboard)
-# admin.site.register(UserProfile)
+admin.site.register(UserProfile)
 admin.site.register(PageView)
 admin.site.register(Subtitle)

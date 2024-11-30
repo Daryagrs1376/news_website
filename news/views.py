@@ -109,18 +109,41 @@ from .permissions import(
 IsOwner,
 IsAdminUserOrReadOnly,
 )
+from .models import UserProfile
+from rest_framework.generics import RetrieveAPIView
+from .serializers import UserProfileSerializer
+from random import randint
+from twilio.rest import Client  # برای ارسال پیامک از Twilio
+import os
+from django.conf import settings  # برای بارگیری تنظیمات پروژه
 
 
 User = get_user_model()
 
+class UserProfileDetailView(RetrieveAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+    
+class AdvertisingReadView(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request, pk):
+        advertisement = Advertising.objects.get(pk=pk)
+        return Response({'data': advertisement})
+class AdvertisementsListView(APIView):
+    authentication_classes = []  
+    permission_classes = []  
+
+    def get(self, request):
+        advertisements = Advertising.objects.all()
+        return Response({'data': advertisements})
+    
 class RegisterView(CreateAPIView):
     serializer_class = RegisterSerializer
     permission_classes = [IsNotAuthenticated] 
 
 class PublicAdvertisingViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    Public API to list active advertisements for end-users.
-    """
     serializer_class = PublicAdvertisingSerializer
     permission_classes = [permissions.AllowAny]  
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
@@ -128,18 +151,12 @@ class PublicAdvertisingViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ['location']   
 
     def get_queryset(self):
-        """
-        Filter active advertisements with approved status and valid expiration date.
-        """
         return Advertising.objects.filter(
             status=True,
             expiration_date__gte=now().date()
         )
         
 class AdminAdvertisingViewSet(viewsets.ModelViewSet):
-    """
-    Viewset for admin to manage advertisements.
-    """
     queryset = Advertising.objects.all()
     serializer_class = AdminAdvertisingSerializer
     permission_classes = [permissions.IsAdminUser] 
@@ -795,4 +812,91 @@ class PublicAdvertisingListView(ListAPIView):
             status=True,
             expiration_date__gte=timezone.now()
         )
+    
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from .models import UserProfile
+from django.db.utils import IntegrityError
+
+@swagger_auto_schema(
+    method='post', 
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'phone': openapi.Schema(type=openapi.TYPE_STRING, description='Phone number'),
+        },
+        required=['phone'],
+    ),
+    responses={200: openapi.Response('Successful Response', openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'message': openapi.Schema(type=openapi.TYPE_STRING, description='Response message'),
+        },
+    ))}
+)
+@api_view(['POST'])
+def send_sms(request):
+    phone = request.data.get('phone')
+    if phone and request.user.is_anonymous:
+        verification_code_number = randint(1000, 9999)
+        verification_code = str(verification_code_number)
+        user = None 
+        try:
+            user = User.objects.create_user(username=phone)
+            UserProfile.objects.create(user=user,phone_number=phone,verification_code=verification_code)
+    
+            try:
+                client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+                message = client.messages.create(
+                    body=f"Your verification code is {verification_code}",
+                    from_=settings.TWILIO_PHONE_NUMBER,
+                    to=phone
+                )
+                return Response({'message': f'User created and SMS verification sent to {phone}'})
+            except Exception as e:
+                return Response({'message': f'Failed to send SMS: {str(e)}'}, status=500)
+           
+        except IntegrityError:
+            user = User.objects.get(username=phone)
+            user.profile.verification_code = verification_code
+            user.profile.save()
+            return Response({'message': 'Waiting to receive verification code!'})
+        return Response({'message': 'fill phone number'})
+    
+            # try:
+            #     client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+            #     message = client.messages.create(
+            #     body=f"Your verification code is {verification_code}",
+            #     from_=settings.TWILIO_PHONE_NUMBER,
+            #     to=phone
+            #     )
+            #     return Response({'message': f'User created and SMS verification sent to {phone}'})
+            # except Exception as e:
+            #     return Response({'message': f'Failed to send SMS: {str(e)}'}, status=500)
         
+    
+@swagger_auto_schema(
+    method='post', 
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'phone': openapi.Schema(type=openapi.TYPE_STRING, description='Phone number'),
+            'code': openapi.Schema(type=openapi.TYPE_STRING, description='Verification code'),
+        },
+        required=['phone', 'code'],
+    ),
+    responses={200: openapi.Response('Successful Response', openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'phone': openapi.Schema(type=openapi.TYPE_STRING, description='Phone number'),
+            'code': openapi.Schema(type=openapi.TYPE_STRING, description='Verification code'),
+        },
+    ))}
+)
+@api_view(['POST'])
+def verify_code(request):
+    phone = request.data.get('phone')
+    code = request.data.get('code')
+    return Response({'phone': phone, 'code': code})

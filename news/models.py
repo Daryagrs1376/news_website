@@ -36,13 +36,14 @@ class Post(models.Model):
     def __str__(self):
         return self.title
     
-# class UserProfile(models.Model):
-#     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-#     phone_number = models.CharField(max_length=15, null=True, blank=True)
-#     bio = models.TextField()
-     
-#     def __str__(self):
-#         return self.user.username
+class UserProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
+    bio = models.TextField()
+    verification_code = models.CharField(default='2345', max_length=4)
+    
+    def __str__(self):
+        return self.user.username
 
 class Subtitle(models.Model):
     title = models.CharField(max_length=255)
@@ -53,16 +54,11 @@ class Subtitle(models.Model):
 
     def __str__(self):
         return self.subtitle_title
-
     class Meta:
         verbose_name = 'Subtitle'
         verbose_name_plural = 'Subtitles'
 
     def add_keywords(self, keyword_list):
-        """
-        Add keywords to the news instance.
-        If a keyword does not exist, it will be created.
-        """
         for word in keyword_list:
             keyword, created = Keyword.objects.get_or_create(word=word)
             self.keywords.add(keyword)
@@ -201,7 +197,6 @@ class NewsKeywords(models.Model):
     def get_or_create_keywords(keyword_list):
         keywords = []
         for keyword in keyword_list:
-        # چک کردن اینکه آیا کیورد وجود دارد یا خیر
             obj, created = Keyword.objects.get_or_create(name=keyword)
             keywords.append(obj)
         return keywords

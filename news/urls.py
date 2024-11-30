@@ -1,3 +1,4 @@
+from . import views
 from django.contrib import admin
 from django.urls import path, include
 from drf_yasg.views import get_schema_view
@@ -44,6 +45,7 @@ UserRegistrationView,
 RegisterView,
 RequestPasswordResetAPIView,
 ResetPasswordAPIView,
+# UserProfileDetailView,
 subtitle_list,
 add_subtitle,
 edit_subtitle,
@@ -52,6 +54,7 @@ edit_category,
 delete_category,
 create_news,
 )
+from .views import UserProfileDetailView 
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -77,6 +80,9 @@ router.register(r'categories', CategoryViewSet, basename='categories')
 
 
 urlpatterns = [
+    path('send-sms/',views.send_sms),
+    path('verify_code/',views.verify_code),
+    
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
@@ -109,7 +115,7 @@ urlpatterns = [
     path('subtitles/<int:pk>/edit/', edit_subtitle, name='subtitle-edit'),
     path('subtitles/<int:pk>/delete/', delete_subtitle, name='subtitle-delete'),
 
-    # path('userprofiles/<int:pk>/', UserProfileDetailView.as_view(), name='userprofile-detail'),
+    path('userprofiles/<int:pk>/', UserProfileDetailView.as_view(), name='userprofile-detail'),
 
     path('daily/', DailyStatsView.as_view(), name='daily-stats'),
     path('weekly/', WeeklyStatsView.as_view(), name='weekly-stats'),
