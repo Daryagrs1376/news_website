@@ -1,3 +1,4 @@
+from news import views
 from . import views
 from django.contrib import admin
 from django.urls import path, include
@@ -8,6 +9,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import AllowAny
 from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
+from django.utils.translation import gettext_lazy as _
 from rest_framework_simplejwt.views import(
 TokenObtainPairView,
 TokenRefreshView,
@@ -80,12 +82,20 @@ router.register(r'categories', CategoryViewSet, basename='categories')
 
 
 urlpatterns = [
-    path('send-sms/',views.send_sms),
-    path('verify_code/',views.verify_code),
+    path('archive/', views.NewsArchiveView.as_view(), name='news-archive'),
+    path('create/', views.NewsCreateView.as_view(), name='news-create'),
+
+    path('', views.NewsListView.as_view(), name='news-list'),
+    path('like/<int:pk>/', views.like_news, name='like-news'),
+    
+    path('i18n/', include('django.conf.urls.i18n')),
+    path("send-otp/", views.send_otp, name="send_otp"),
+    path("verify-otp/", views.verify_otp, name="verify_otp"),
     
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
+    path('news/like/<int:pk>/', views.like_news, name='like_news'),    path('news/', NewsListView.as_view(), name='news-list'),
     path('news/', NewsListView.as_view(), name='news-list'),
     path('news/create/', NewsCreateView.as_view(), name='news-create'),
     path('news/<int:pk>/', NewsDetailView.as_view(), name='news-detail'),

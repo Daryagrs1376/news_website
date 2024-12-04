@@ -1,22 +1,58 @@
 import uuid
-from django.apps import apps
+import random
+from haystack import indexes
+from django import forms
 from django.db import models
+from django.apps import apps
+from django.conf import settings
 from django.utils import timezone
 from django.utils.timezone import now
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.contrib.auth.models import User
-from django import forms
-from django.contrib.auth.models import AbstractUser, Group, Permission
-from django.conf import settings
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
-from django.utils.timezone import now
+from django.contrib.auth.models import (
+User,
+AbstractBaseUser,
+BaseUserManager,
+PermissionsMixin,
+AbstractUser,
+Group,
+Permission )
 
 
 User = get_user_model()
 
+class Article(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_published = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return self.title
+    
+class media(models.Model):
+    file = models.FileField(upload_to='uploads/')
+    article = models.ForeignKey(Article, related_name='media', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.file.name}" 
+
+
+class NewsIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+
+    def get_model(self):
+        return News
+class OTP(models.Model):
+    phone = models.CharField(max_length=15, unique=True)
+    code = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.code:
+            self.code = str(random.randint(100000, 999999))
+        super().save(*args, **kwargs)
 class PasswordResetToken(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="password_reset_tokens")
     token = models.UUIDField(default=uuid.uuid4, unique=True)
@@ -24,7 +60,6 @@ class PasswordResetToken(models.Model):
     is_used = models.BooleanField(default=False)
 
     def is_valid(self):
-        # اعتبار توکن برای 24 ساعت
         return not self.is_used and (now() - self.created_at).total_seconds() < 86400
     
 class Post(models.Model):
@@ -65,7 +100,7 @@ class Subtitle(models.Model):
             
 class Newscategory(models.Model):
     news = models.ForeignKey('News', on_delete=models.CASCADE)
-    category = models.ForeignKey('Category', on_delete=models.CASCADE)  # استفاده از رشته به جای وارد کردن مستقیم
+    category = models.ForeignKey('Category', on_delete=models.CASCADE)  
     status = models.BooleanField(default=True)
 
     def __str__(self):
@@ -80,7 +115,7 @@ class Category(models.Model):
         return self.title
 class Keyword(models.Model):
     word = models.CharField(max_length=50)
-    category = models.ForeignKey('Category', on_delete=models.CASCADE)  # استفاده از رشته به جای وارد کردن مستقیم
+    category = models.ForeignKey('Category', on_delete=models.CASCADE)  
 
     def __str__(self):
         return self.word
@@ -115,6 +150,7 @@ class News(models.Model):
     categories = models.ManyToManyField('Category', through='Newscategory', related_name='news_categories')
     title = models.CharField(max_length=255)
     content = models.TextField()
+    likes = models.IntegerField(default=0)
     short_description = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -218,8 +254,8 @@ class Role(models.Model):
         return self.name
 
 class User(AbstractUser):
-    phone_number = models.CharField(max_length=15, unique=True)  # فیلد موبایل اضافه شده
-    role = models.ForeignKey('Role', on_delete=models.SET_NULL, null=True)  # نقش کاربر
+    phone_number = models.CharField(max_length=15, unique=True) 
+    role = models.ForeignKey('Role', on_delete=models.SET_NULL, null=True) 
     status = models.BooleanField(default=True) 
     groups = models.ManyToManyField(
         Group,
@@ -278,7 +314,22 @@ class Dashboard(models.Model):
 
     def __str__(self):
         return f"Dashboard for {self.news.title}"
+class PageView(models.Model):
+    date = models.DateField()
+    total_visits = models.IntegerField()
+    social_visits = models.IntegerField()
+    bounce_rate = models.FloatField()
+    page_views = models.JSONField()  
     
+class Comment(models.Model):
+    news = models.ForeignKey(News, related_name='comments', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    likes = models.IntegerField(default=0)
+    dislikes = models.IntegerField(default=0)
+ 
+     
 # class Operation(models.Model):
 #     EDIT = 'edit'
 #     DELETE = 'delete'
@@ -293,10 +344,3 @@ class Dashboard(models.Model):
 
 #     def __str__(self):
 #         return f"{self.get_operation_type_display()} on {self.news.title}"
-    
-class PageView(models.Model):
-    date = models.DateField()
-    total_visits = models.IntegerField()
-    social_visits = models.IntegerField()
-    bounce_rate = models.FloatField()
-    page_views = models.JSONField()

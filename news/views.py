@@ -1,31 +1,45 @@
-from django_filters.rest_framework import DjangoFilterBackend
+from .utils import send_sms
+from .models import News
+from .serializers import CommentSerializer
+from .serializers import PostSerializer
+from rest_framework import generics
 from .permissions import IsNotAuthenticated
+from.forms import SubtitleForm, AddCategoryForm
+from django.utils import timezone
+from datetime import datetime, timedelta
+from django.utils.timezone import now, timedelta
+from django.views.generic.dates import ArchiveIndexView
+from django.views import View
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.exceptions import NotFound
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.filters import SearchFilter
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from.forms import SubtitleForm, AddCategoryForm
-from .models import Advertising
-from datetime import datetime, timedelta
-from django.utils.timezone import now
-from django.views import View
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
-from django.utils import timezone
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.authentication import(
+SessionAuthentication,
+TokenAuthentication )
+from django.utils.http import (
+urlsafe_base64_encode,
+urlsafe_base64_decode)
 from django.contrib.auth.tokens import (
 PasswordResetTokenGenerator)
 from rest_framework.generics import(
+RetrieveAPIView,
 CreateAPIView,
 UpdateAPIView,
 ListAPIView,
 )
 from .serializers import(
+UserProfileSerializer,
 PublicAdvertisingSerializer,
 AdminAdvertisingSerializer,
 RegisterSerializer,
@@ -43,11 +57,6 @@ render,
 from rest_framework.exceptions import (
 ValidationError,
 PermissionDenied,  
-)
-from rest_framework import(
-status,
-viewsets,
-permissions,
 )
 from rest_framework.decorators import(
 api_view,
@@ -92,15 +101,18 @@ RegisterSerializer,
 PostSerializer,
 )
 from.models import(
-News,
+Comment,
+Advertising,
 Category,
 Subtitle,
 ReporterProfile,
+UserProfile,
 PasswordResetToken,
 PageView,
 Advertising,
 Setting,
-User, 
+User,
+OTP, 
 Role,
 Post,
 News,
@@ -109,17 +121,64 @@ from .permissions import(
 IsOwner,
 IsAdminUserOrReadOnly,
 )
-from .models import UserProfile
-from rest_framework.generics import RetrieveAPIView
-from .serializers import UserProfileSerializer
-from random import randint
-from twilio.rest import Client  # برای ارسال پیامک از Twilio
-import os
-from django.conf import settings  # برای بارگیری تنظیمات پروژه
-
 
 User = get_user_model()
 
+@api_view(['POST'])
+def like_news(request, pk):
+    """
+    این تابع تعداد لایک‌های یک خبر مشخص را افزایش می‌دهد.
+    """
+    try:
+        news_item = News.objects.get(pk=pk)  # خبر را از دیتابیس پیدا کنید
+        news_item.likes += 1  # فرض کنید فیلد likes در مدل شما وجود دارد
+        news_item.save()
+        return Response({'message': 'News liked successfully!'})
+    except News.DoesNotExist:
+        return Response({'error': 'News item not found'}, status=404)
+    
+    def like_news(request, pk):
+        return HttpResponse(f"News {pk} liked!")
+
+def send_otp(request):
+    if request.method == "POST":
+        phone = request.POST.get("phone")
+        if not phone:
+            return JsonResponse({"success": False, "message": "شماره تلفن وارد نشده است"})
+
+        otp_record = OTP.objects.filter(phone=phone).last()
+        if otp_record and otp_record.created_at > now() - timedelta(minutes=2):
+            return JsonResponse({"success": False, "message": "کد تأیید قبلاً ارسال شده است."})
+
+        otp, created = OTP.objects.update_or_create(phone=phone, defaults={"created_at": now()})
+
+        message = f"کد تأیید شما: {otp.code}"
+        send_sms(phone, message)
+
+        return JsonResponse({"success": True, "message": "کد تأیید ارسال شد."})
+    return JsonResponse({"success": False, "message": "فقط درخواست POST مجاز است"})
+
+def verify_otp(request):
+    if request.method == "POST":
+        phone = request.POST.get("phone")
+        code = request.POST.get("code")
+        if not phone or not code:
+            return JsonResponse({"success": False, "message": "شماره تلفن یا کد وارد نشده است."})
+
+        otp_record = OTP.objects.filter(phone=phone, code=code).last()
+        if not otp_record:
+            return JsonResponse({"success": False, "message": "کد تأیید اشتباه است."})
+
+        if otp_record.created_at < now() - timedelta(minutes=5):
+            return JsonResponse({"success": False, "message": "کد تأیید منقضی شده است."})
+        return JsonResponse({"success": True, "message": "ورود موفقیت‌آمیز بود!"})
+    return JsonResponse({"success": False, "message": "فقط درخواست POST مجاز است"})
+
+class NewsArchiveView(ArchiveIndexView):
+    model = News  # مدل مرتبط با اخبار
+    date_field = "published_date"  # فرض کنید تاریخ انتشار این فیلد است
+    template_name = "news_archive.html"  # نام فایل قالب HTML
+    
 class UserProfileDetailView(RetrieveAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
@@ -155,7 +214,7 @@ class PublicAdvertisingViewSet(viewsets.ReadOnlyModelViewSet):
             status=True,
             expiration_date__gte=now().date()
         )
-        
+
 class AdminAdvertisingViewSet(viewsets.ModelViewSet):
     queryset = Advertising.objects.all()
     serializer_class = AdminAdvertisingSerializer
@@ -329,7 +388,9 @@ class NewsCreate(APIView):
 class NewsListView(generics.ListAPIView):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
-    filter_backends = (SearchFilter,)
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['category', 'published_date']
+    ordering_fields = ['published_date']
     search_fields = ['title', 'content', 'short_description']
     pagination_class = None  
     permission_classes = [AllowAny]
@@ -418,7 +479,7 @@ class AddNewsView(APIView):
     def post(self, request, *args, **kwargs):
         title = request.data.get('title')
         content = request.data.get('content')
-        keyword_list = request.data.get('keywords', [])  # لیستی از کیوردها
+        keyword_list = request.data.get('keywords', []) 
 
         news = News.objects.create(title=title, content=content)
         news.add_keywords(keyword_list)
@@ -670,7 +731,6 @@ class NewsViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         return Response({"message": "No search query provided."})
 
-
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -785,7 +845,7 @@ class NewsCreateView(generics.CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def post(self, request):
-        serializer = NewsSerializer(data=request.data, context={'request': request})  # ارسال context با request
+        serializer = NewsSerializer(data=request.data, context={'request': request}) 
         if serializer.is_valid():
             serializer.save()  
             news = serializer.save()
@@ -812,79 +872,83 @@ class PublicAdvertisingListView(ListAPIView):
             status=True,
             expiration_date__gte=timezone.now()
         )
+class CommentCreateView(generics.CreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+ 
     
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
-from .models import UserProfile
-from django.db.utils import IntegrityError
+# from rest_framework.decorators import api_view
+# from rest_framework.response import Response
+# from drf_yasg.utils import swagger_auto_schema
+# from drf_yasg import openapi
+# from .models import UserProfile
+# from django.db.utils import IntegrityError
 
-@swagger_auto_schema(
-    method='post', 
-    request_body=openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        properties={
-            'phone': openapi.Schema(type=openapi.TYPE_STRING, description='Phone number'),
-        },
-        required=['phone'],
-    ),
-    responses={200: openapi.Response('Successful Response', openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        properties={
-            'message': openapi.Schema(type=openapi.TYPE_STRING, description='Response message'),
-        },
-    ))}
-)
-@api_view(['POST'])
-def send_sms(request):
-    phone = request.data.get('phone')
-    if phone and request.user.is_anonymous:
-        verification_code_number = randint(1000, 9999)
-        verification_code = str(verification_code_number)
-        user = None 
-        try:
-            user = User.objects.create_user(username=phone)
-            UserProfile.objects.create(user=user,phone_number=phone,verification_code=verification_code)
+# @swagger_auto_schema(
+#     method='post', 
+#     request_body=openapi.Schema(
+#         type=openapi.TYPE_OBJECT,
+#         properties={
+#             'phone': openapi.Schema(type=openapi.TYPE_STRING, description='Phone number'),
+#         },
+#         required=['phone'],
+#     ),
+#     responses={200: openapi.Response('Successful Response', openapi.Schema(
+#         type=openapi.TYPE_OBJECT,
+#         properties={
+#             'message': openapi.Schema(type=openapi.TYPE_STRING, description='Response message'),
+#         },
+#     ))}
+# )
+# @api_view(['POST'])
+# def send_sms(request):
+#     phone = request.data.get('phone')
+#     if phone and request.user.is_anonymous:
+#         verification_code_number = randint(1000, 9999)
+#         verification_code = str(verification_code_number)
+#         user = None 
+#         try:
+#             user = User.objects.create_user(username=phone)
+#             UserProfile.objects.create(user=user,phone_number=phone,verification_code=verification_code)
     
-            try:
-                client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-                message = client.messages.create(
-                    body=f"Your verification code is {verification_code}",
-                    from_=settings.TWILIO_PHONE_NUMBER,
-                    to=phone
-                )
-                return Response({'message': f'User created and SMS verification sent to {phone}'})
-            except Exception as e:
-                return Response({'message': f'Failed to send SMS: {str(e)}'}, status=500)
+#             try:
+#                 client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+#                 message = client.messages.create(
+#                     body=f"Your verification code is {verification_code}",
+#                     from_=settings.TWILIO_PHONE_NUMBER,
+#                     to=phone
+#                 )
+#                 return Response({'message': f'User created and SMS verification sent to {phone}'})
+#             except Exception as e:
+#                 return Response({'message': f'Failed to send SMS: {str(e)}'}, status=500)
            
-        except IntegrityError:
-            user = User.objects.get(username=phone)
-            user.profile.verification_code = verification_code
-            user.profile.save()
-            return Response({'message': 'Waiting to receive verification code!'})
-        return Response({'message': 'fill phone number'})
+#         except IntegrityError:
+#             user = User.objects.get(username=phone)
+#             user.profile.verification_code = verification_code
+#             user.profile.save()
+#             return Response({'message': 'Waiting to receive verification code!'})
+#         return Response({'message': 'fill phone number'})
 
-@swagger_auto_schema(
-    method='post', 
-    request_body=openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        properties={
-            'phone': openapi.Schema(type=openapi.TYPE_STRING, description='Phone number'),
-            'code': openapi.Schema(type=openapi.TYPE_STRING, description='Verification code'),
-        },
-        required=['phone', 'code'],
-    ),
-    responses={200: openapi.Response('Successful Response', openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        properties={
-            'phone': openapi.Schema(type=openapi.TYPE_STRING, description='Phone number'),
-            'code': openapi.Schema(type=openapi.TYPE_STRING, description='Verification code'),
-        },
-    ))}
-)
-@api_view(['POST'])
-def verify_code(request):
-    phone = request.data.get('phone')
-    code = request.data.get('code')
-    return Response({'phone': phone, 'code': code})
+# @swagger_auto_schema(
+#     method='post', 
+#     request_body=openapi.Schema(
+#         type=openapi.TYPE_OBJECT,
+#         properties={
+#             'phone': openapi.Schema(type=openapi.TYPE_STRING, description='Phone number'),
+#             'code': openapi.Schema(type=openapi.TYPE_STRING, description='Verification code'),
+#         },
+#         required=['phone', 'code'],
+#     ),
+#     responses={200: openapi.Response('Successful Response', openapi.Schema(
+#         type=openapi.TYPE_OBJECT,
+#         properties={
+#             'phone': openapi.Schema(type=openapi.TYPE_STRING, description='Phone number'),
+#             'code': openapi.Schema(type=openapi.TYPE_STRING, description='Verification code'),
+#         },
+#     ))}
+# )
+# @api_view(['POST'])
+# def verify_code(request):
+#     phone = request.data.get('phone')
+#     code = request.data.get('code')
+#     return Response({'phone': phone, 'code': code})

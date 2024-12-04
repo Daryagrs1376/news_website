@@ -9,13 +9,19 @@ Post,
 Keyword,
 Category,
 ReporterProfile,
+UserProfile,
 Advertising,
+Comment,
 PageView,
 )
-from .models import UserProfile
 
 User = get_user_model()
 
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['id', 'user', 'text', 'created_at']
+        
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile

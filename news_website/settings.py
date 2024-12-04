@@ -10,9 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
 from datetime import timedelta
+from celery.schedules import crontab
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -104,7 +105,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'news_website.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -115,10 +115,8 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -147,27 +145,20 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'static/'
-
-# مسیرهای اضافی برای جستجو در فایل‌های استاتیک
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Ensure 'static' folder exists
-
-# مسیری که فایل‌های استاتیک بعد از اجرای collectstatic در آن جمع‌آوری می‌شوند
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Media files settings for user-uploaded content
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Time zone settings
 TIME_ZONE = 'UTC'
 USE_TZ = True
 LANGUAGE_CODE = 'en-us'
@@ -197,7 +188,6 @@ REST_FRAMEWORK = {
 #     ],
 # }
 
-
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60), 
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7), 
@@ -217,5 +207,37 @@ SWAGGER_SETTINGS = {
             'in': 'header',
             'description': "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
         }
+    },
+}
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    },
+}
+
+LANGUAGE_CODE = 'en'
+TIME_ZONE = 'UTC'
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
+LANGUAGES = [
+    ('en', 'English'),
+    ('fa', 'فارسی'),
+]
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # برای استفاده از Redis به عنوان broker
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+CELERY_BEAT_SCHEDULE = {
+    'publish_scheduled_articles': {
+        'task': 'news.tasks.publish_scheduled_articles',
+        'schedule': crontab(minute=0, hour=0),  # اجرای روزانه در نیمه‌شب
     },
 }
