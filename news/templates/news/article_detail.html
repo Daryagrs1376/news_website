@@ -1,0 +1,24 @@
+<h1>{{ article.title }}</h1>
+<p>{{ article.content }}</p>
+
+<!-- دکمه لایک -->
+<button onclick="location.href='{% url 'like_article' article.id %}'">
+    لایک ({{ article.like_set.count }})
+</button>
+
+<h3>نظرات کاربران</h3>
+{% for comment in comments %}
+    <div class="comment">
+        <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
+        <p><em>{{ comment.created_at }}</em></p>
+    </div>
+{% empty %}
+    <p>هنوز هیچ نظری وجود ندارد.</p>
+{% endfor %}
+
+<h4>نظر خود را بنویسید:</h4>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">ارسال نظر</button>
+</form>

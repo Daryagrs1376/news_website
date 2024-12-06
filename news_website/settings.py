@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -104,7 +105,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'news_website.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -147,33 +147,27 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'static/'
 
-# مسیرهای اضافی برای جستجو در فایل‌های استاتیک
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Ensure 'static' folder exists
 
-# مسیری که فایل‌های استاتیک بعد از اجرای collectstatic در آن جمع‌آوری می‌شوند
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Media files settings for user-uploaded content
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Time zone settings
 TIME_ZONE = 'UTC'
 USE_TZ = True
 LANGUAGE_CODE = 'en-us'
 USE_I18N = True
 
-# Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 REST_FRAMEWORK = {
@@ -186,7 +180,6 @@ REST_FRAMEWORK = {
     ],
 }
 
-
 # # REST framework settings (AllowAny gives public access to API endpoints)
 # REST_FRAMEWORK = {
 #     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -196,7 +189,6 @@ REST_FRAMEWORK = {
 #         'rest_framework.permissions.AllowAny',  # Public access for all users
 #     ],
 # }
-
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60), 
@@ -219,3 +211,10 @@ SWAGGER_SETTINGS = {
         }
     },
 }
+
+LANGUAGE_CODE = 'en' 
+
+LANGUAGES = [
+    ('en', 'English'),
+    ('fa', 'Persian'),
+]

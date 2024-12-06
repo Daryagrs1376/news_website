@@ -1,7 +1,7 @@
 from django import forms
 from .models import User
 from .models import Subtitle
-from .models import ReporterProfile
+from .models import ReporterProfile, Comment
 
 
 
@@ -50,3 +50,9 @@ class SubtitleForm(forms.ModelForm):
         if len(subtitle) < 85:
             raise forms.ValidationError('زیرنویس باید حداقل 85 حرف باشد.')
         return subtitle
+    
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content'] 
+        

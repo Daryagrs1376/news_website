@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from .models import(
 News,
 Setting,
+Comment,
 Role,
 Post,
 Keyword,
@@ -16,6 +17,11 @@ from .models import UserProfile
 
 User = get_user_model()
 
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['id', 'user', 'news_article', 'content', 'created_at']
+        
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
@@ -69,8 +75,7 @@ class NewsDetailSerializer(serializers.ModelSerializer):
             'status', 
             'keywords'
         ]
-
-
+        
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
     confirm_password = serializers.CharField(write_only=True, min_length=8)

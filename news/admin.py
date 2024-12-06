@@ -1,6 +1,5 @@
 from django.contrib import admin
 from .models import (
-    Newscategory,
     Category,
     Keyword,
     location,
@@ -18,9 +17,22 @@ from .models import (
     Subtitle,
     Grouping,
     PageView,
+    NewsArticle,
+    NewsCategory,
     UserProfile,
+    Comment,
 )
 
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['user', 'news_article', 'approved', 'created_at']
+    actions = ['approve_comments', 'delete_comments']
+
+    def approve_comments(self, request, queryset):
+        queryset.update(approved=True)
+
+    def delete_comments(self, request, queryset):
+        queryset.delete()
+        
 class NewscategoryAdmin(admin.ModelAdmin):
     list_display = ('category_name', 'title', 'parent_category', 'status')
     search_fields = ('category_name', 'title')
@@ -97,8 +109,8 @@ class PageViewAdmin(admin.ModelAdmin):
     list_filter = ('date',)
     search_fields = ('date',)  
 
-
-admin.site.register(Newscategory)
+admin.site.register(Comment)
+admin.site.register(NewsCategory)
 admin.site.register(Category)
 admin.site.register(Keyword)
 admin.site.register(location)

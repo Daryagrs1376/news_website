@@ -83,6 +83,12 @@ urlpatterns = [
     path('send-sms/',views.send_sms),
     path('verify_code/',views.verify_code),
     
+    path('comment/report/<int:comment_id>/', views.report_comment, name='report_comment'),
+    path('article/<int:article_id>/', views.article_detail, name='article_detail'),
+
+    # path('article/<int:article_id>/comment/', views.comment_create, name='comment_create'),
+    # path('article/<int:article_id>/', views.article_detail, name='article_detail'),
+    
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 

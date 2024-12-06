@@ -3,15 +3,19 @@ from django.apps import apps
 from django.db import models
 from django.utils import timezone
 from django.utils.timezone import now
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django import forms
-from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.conf import settings
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
-from django.utils.timezone import now
+from django.contrib.auth.models import(
+AbstractBaseUser,
+BaseUserManager,
+AbstractUser,
+User,
+Group,
+Permission,
+PermissionsMixin,
+)
 
 
 User = get_user_model()
@@ -24,7 +28,6 @@ class PasswordResetToken(models.Model):
     is_used = models.BooleanField(default=False)
 
     def is_valid(self):
-        # اعتبار توکن برای 24 ساعت
         return not self.is_used and (now() - self.created_at).total_seconds() < 86400
     
 class Post(models.Model):
@@ -63,14 +66,15 @@ class Subtitle(models.Model):
             keyword, created = Keyword.objects.get_or_create(word=word)
             self.keywords.add(keyword)
             
-class Newscategory(models.Model):
+class NewsCategory(models.Model):
     news = models.ForeignKey('News', on_delete=models.CASCADE)
-    category = models.ForeignKey('Category', on_delete=models.CASCADE)  # استفاده از رشته به جای وارد کردن مستقیم
+    category = models.ForeignKey('Category', on_delete=models.CASCADE)  # using string for Category
     status = models.BooleanField(default=True)
+    articles = models.ManyToManyField('NewsArticle')  # using string for NewsArticle
 
     def __str__(self):
         return f"{self.news.title} - {self.category.title}"
-    
+
 class Category(models.Model):
     title = models.CharField(max_length=200)
     name = models.CharField(max_length=100)
@@ -80,8 +84,8 @@ class Category(models.Model):
         return self.title
 class Keyword(models.Model):
     word = models.CharField(max_length=50)
-    category = models.ForeignKey('Category', on_delete=models.CASCADE)  # استفاده از رشته به جای وارد کردن مستقیم
-
+    category = models.ForeignKey('Category', on_delete=models.CASCADE) 
+    
     def __str__(self):
         return self.word
 
@@ -300,3 +304,35 @@ class PageView(models.Model):
     social_visits = models.IntegerField()
     bounce_rate = models.FloatField()
     page_views = models.JSONField()
+
+class Comment(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)  # کاربری که نظر داده
+    news_article = models.ForeignKey('NewsArticle', on_delete=models.CASCADE)  # مقاله‌ای که نظر روی آن است
+    content = models.TextField()  # محتوای نظر
+    created_at = models.DateTimeField(auto_now_add=True)  # زمان ایجاد نظر
+    approved = models.BooleanField(default=False)  # تایید شده بودن نظر
+
+    def __str__(self):
+        return f"Comment by {self.user.username} on {self.news_article.title}"
+
+class Report(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)  # ارجاع به مدل Comment
+    reason = models.TextField()  
+    created_at = models.DateTimeField(auto_now_add=True)  
+
+    def __str__(self):
+        return f"Report by {self.user.username} on comment {self.comment.id}"
+
+class Like(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # کاربری که لایک کرده
+    news_article = models.ForeignKey('NewsArticle', on_delete=models.CASCADE)  # اخبار مربوطه
+    created_at = models.DateTimeField(auto_now_add=True)  # زمان لایک
+
+    def __str__(self):
+        return f"Like by {self.user.username} on {self.news_article.title}"
+
+class NewsArticle(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    

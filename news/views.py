@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from.forms import SubtitleForm, AddCategoryForm
+from.forms import SubtitleForm, AddCategoryForm, CommentForm
 from .models import Advertising
 from datetime import datetime, timedelta
 from django.utils.timezone import now
@@ -17,10 +17,16 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from news.models import NewsCategory, NewsArticle, Category, News
 from django.utils import timezone
+from random import randint
+from twilio.rest import Client
+import os
+from django.conf import settings 
 from django.contrib.auth.tokens import (
 PasswordResetTokenGenerator)
 from rest_framework.generics import(
+RetrieveAPIView,
 CreateAPIView,
 UpdateAPIView,
 ListAPIView,
@@ -86,39 +92,86 @@ AdminAdvertisingSerializer,
 PublicAdvertisingSerializer,
 NewsDetailSerializer,
 UserRegistrationSerializer,
+UserProfileSerializer,
 PasswordResetRequestSerializer,
 PasswordResetSerializer,
 RegisterSerializer,
 PostSerializer,
 )
-from.models import(
+from .models import(
 News,
-Category,
+# Category,
 Subtitle,
 ReporterProfile,
 PasswordResetToken,
 PageView,
 Advertising,
+Comment,
+UserProfile,
 Setting,
+Report,
 User, 
+Like,
 Role,
 Post,
-News,
+# News,
 )          
 from .permissions import(
 IsOwner,
 IsAdminUserOrReadOnly,
 )
-from .models import UserProfile
-from rest_framework.generics import RetrieveAPIView
-from .serializers import UserProfileSerializer
-from random import randint
-from twilio.rest import Client  # برای ارسال پیامک از Twilio
-import os
-from django.conf import settings  # برای بارگیری تنظیمات پروژه
-
 
 User = get_user_model()
+
+
+def article_detail(request, article_id):
+    # دریافت مقاله یا ارور 404
+    article = get_object_or_404(NewsArticle, pk=article_id)
+    comments = article.comment_set.filter(approved=True)  # فقط نظرات تایید شده
+
+    # بررسی درخواست POST برای ارسال نظر
+    if request.method == 'POST':
+        if not request.user.is_authenticated:  # احراز هویت کاربر
+            return redirect('login')  # اگر وارد نشده، به صفحه ورود هدایت شود
+
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user  # افزودن کاربر ارسال‌کننده
+            comment.news_article = article  # تنظیم مقاله
+            comment.save()  # ذخیره نظر
+            return redirect('article_detail', article_id=article.id)  # بازگشت به صفحه مقاله
+    else:
+        form = CommentForm()  # فرم خالی
+
+    # رندر صفحه با داده‌ها
+    return render(request, 'news/article_detail.html', {
+        'article': article,
+        'comments': comments,
+        'form': form,
+    })
+    
+def like_article(request, article_id):
+    article = get_object_or_404(NewsArticle, pk=article_id)
+    
+    if not Like.objects.filter(user=request.user, news_article=article).exists():
+        Like.objects.create(user=request.user, news_article=article)
+    
+    return redirect('article_detail', article_id=article.id)
+
+@login_required  # این ویو باید فقط برای کاربران وارد شده در دسترس باشد
+def report_comment(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+
+    if request.method == 'POST':
+        # دریافت دلیل گزارش از درخواست
+        reason = request.POST.get('reason')
+        if reason:  # بررسی وجود دلیل گزارش
+            Report.objects.create(user=request.user, comment=comment, reason=reason)  # ایجاد گزارش
+            return redirect('article_detail', article_id=comment.news_article.id)  # بازگشت به مقاله
+
+    # رندر فرم گزارش
+    return render(request, 'report_comment.html', {'comment': comment})
 
 class UserProfileDetailView(RetrieveAPIView):
     queryset = UserProfile.objects.all()
