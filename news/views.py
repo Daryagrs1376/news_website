@@ -120,16 +120,10 @@ PasswordResetSerializer,
 RegisterSerializer,
 PostSerializer,
 )
-<<<<<<< HEAD
-from .models import(
-News,
-# Category,
-=======
 from.models import(
 Comment,
 Advertising,
 Category,
->>>>>>> Notifiction
 Subtitle,
 ReporterProfile,
 UserProfile,
@@ -139,14 +133,11 @@ Advertising,
 Comment,
 UserProfile,
 Setting,
-<<<<<<< HEAD
 Report,
 User, 
 Like,
-=======
 User,
 OTP, 
->>>>>>> Notifiction
 Role,
 Post,
 # News,
@@ -158,29 +149,24 @@ IsAdminUserOrReadOnly,
 
 User = get_user_model()
 
-<<<<<<< HEAD
-
 def article_detail(request, article_id):
-    # دریافت مقاله یا ارور 404
     article = get_object_or_404(NewsArticle, pk=article_id)
-    comments = article.comment_set.filter(approved=True)  # فقط نظرات تایید شده
+    comments = article.comment_set.filter(approved=True)  
 
-    # بررسی درخواست POST برای ارسال نظر
     if request.method == 'POST':
-        if not request.user.is_authenticated:  # احراز هویت کاربر
-            return redirect('login')  # اگر وارد نشده، به صفحه ورود هدایت شود
+        if not request.user.is_authenticated:
+            return redirect('login') 
 
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.user = request.user  # افزودن کاربر ارسال‌کننده
-            comment.news_article = article  # تنظیم مقاله
-            comment.save()  # ذخیره نظر
-            return redirect('article_detail', article_id=article.id)  # بازگشت به صفحه مقاله
+            comment.user = request.user
+            comment.news_article = article
+            comment.save() 
+            return redirect('article_detail', article_id=article.id)  
     else:
-        form = CommentForm()  # فرم خالی
+        form = CommentForm() 
 
-    # رندر صفحه با داده‌ها
     return render(request, 'news/article_detail.html', {
         'article': article,
         'comments': comments,
@@ -195,21 +181,17 @@ def like_article(request, article_id):
     
     return redirect('article_detail', article_id=article.id)
 
-@login_required  # این ویو باید فقط برای کاربران وارد شده در دسترس باشد
+@login_required  
 def report_comment(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
 
     if request.method == 'POST':
-        # دریافت دلیل گزارش از درخواست
         reason = request.POST.get('reason')
-        if reason:  # بررسی وجود دلیل گزارش
-            Report.objects.create(user=request.user, comment=comment, reason=reason)  # ایجاد گزارش
-            return redirect('article_detail', article_id=comment.news_article.id)  # بازگشت به مقاله
-
-    # رندر فرم گزارش
+        if reason: 
+            Report.objects.create(user=request.user, comment=comment, reason=reason)
+            return redirect('article_detail', article_id=comment.news_article.id)
     return render(request, 'report_comment.html', {'comment': comment})
 
-=======
 @api_view(['POST'])
 def like_news(request, pk):
     """
@@ -265,7 +247,6 @@ class NewsArchiveView(ArchiveIndexView):
     date_field = "published_date"  # فرض کنید تاریخ انتشار این فیلد است
     template_name = "news_archive.html"  # نام فایل قالب HTML
     
->>>>>>> Notifiction
 class UserProfileDetailView(RetrieveAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
