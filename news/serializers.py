@@ -21,12 +21,9 @@ User = get_user_model()
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-<<<<<<< HEAD
-        fields = ['id', 'user', 'news_article', 'content', 'created_at']
-=======
-        fields = ['id', 'user', 'text', 'created_at']
->>>>>>> Notifiction
-        
+
+        fields = ['id', 'user', 'news_article', 'text','content', 'created_at']
+
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
@@ -41,13 +38,11 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ['username', 'email', 'password', 'password_confirmation']
 
     def validate(self, data):
-        # بررسی تطبیق رمز عبور و تکرار آن
         if data['password'] != data['password_confirmation']:
             raise serializers.ValidationError("Passwords do not match.")
         return data
 
     def create(self, validated_data):
-        # حذف password_confirmation از داده‌های نهایی
         validated_data.pop('password_confirmation')
         user = User.objects.create_user(**validated_data)
         return user
@@ -181,45 +176,13 @@ class NewsSerializer(serializers.ModelSerializer):
 class NewsEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
-        fields = ['title', 'short_description', 'category', 'keywords', 'news_text']  # فیلدهای ویرایش خبر
-        
-# class AddUserSerializer(serializers.ModelSerializer):
-#     password = serializers.CharField(write_only=True)
-#     confirm_password = serializers.CharField(write_only=True)
-
-#     class Meta:
-#         model = User
-#         fields = ['name', 'phone_number', 'password', 'confirm_password', 'role']
-
-#     def validate(self, data):
-#         if data['password'] != data['confirm_password']:
-#             raise serializers.ValidationError("Passwords do not match")
-#         return data
-
-#     def create(self, validated_data):
-#         user = User(
-#             name=validated_data['name'],
-#             phone_number=validated_data['phone_number'],
-#             role=validated_data['role'],
-#         )
-#         user.set_password(validated_data['password'])
-#         user.save()
-#         return user
+        fields = ['title', 'short_description', 'category', 'keywords', 'news_text'] 
 
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
         fields = ['id', 'name']
 
-
-# class UserProfileSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = UserProfile
-#         fields = ['id', 'phone_number']
-
-# class UserSerializer(serializers.ModelSerializer):
-#     profile = UserProfileSerializer()
-    
     class Meta:
         model = User
         fields = ['email','id', 'username', 'profile']
@@ -249,8 +212,7 @@ class AdvertisingSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'title', 'link', 'banner', 'location',
             'start_date', 'expiration_date', 'status'
-        ]
-        
+        ]    
 class AdvertisingCreateUpdateSerializer(serializers.ModelSerializer):
     status = serializers.SerializerMethodField()
     class Meta:
@@ -263,17 +225,6 @@ class AdvertisingCreateUpdateSerializer(serializers.ModelSerializer):
     def get_status(self, obj):
         return "approved" if obj.status else "rejected"
 
-# class OperationSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Operation
-#         fields = ['id', 'news', 'operation_type', 'performed_at']
-        
-# class AdminAdvertisingSerializer(serializers.ModelSerializer):
-#     status = serializers.SerializerMethodField()
-
-#     class Meta:
-#         model = Advertising
-#         fields = ['id', 'location', 'start_date', 'expiration_date', 'status']
 class AdminAdvertisingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advertising
@@ -292,3 +243,46 @@ class NewsSearchSerializer(serializers.ModelSerializer):
         model = News
         fields = ['id', 'title', 'subtitle', 'content', 'created_at', 'author']
 
+
+# class OperationSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Operation
+#         fields = ['id', 'news', 'operation_type', 'performed_at']
+        
+# class AdminAdvertisingSerializer(serializers.ModelSerializer):
+#     status = serializers.SerializerMethodField()
+
+#     class Meta:
+#         model = Advertising
+#         fields = ['id', 'location', 'start_date', 'expiration_date', 'status']
+
+# class UserProfileSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = UserProfile
+#         fields = ['id', 'phone_number']
+
+# class UserSerializer(serializers.ModelSerializer):
+#     profile = UserProfileSerializer()
+    
+# class AddUserSerializer(serializers.ModelSerializer):
+#     password = serializers.CharField(write_only=True)
+#     confirm_password = serializers.CharField(write_only=True)
+
+#     class Meta:
+#         model = User
+#         fields = ['name', 'phone_number', 'password', 'confirm_password', 'role']
+
+#     def validate(self, data):
+#         if data['password'] != data['confirm_password']:
+#             raise serializers.ValidationError("Passwords do not match")
+#         return data
+
+#     def create(self, validated_data):
+#         user = User(
+#             name=validated_data['name'],
+#             phone_number=validated_data['phone_number'],
+#             role=validated_data['role'],
+#         )
+#         user.set_password(validated_data['password'])
+#         user.save()
+#         return user
