@@ -1,13 +1,12 @@
 import uuid
 import random
-from haystack import indexes
+from haystack import indexes # type: ignore
 from django import forms
 from django.db import models
 from django.apps import apps
 from django.conf import settings
 from django.utils import timezone
 from django.utils.timezone import now
-<<<<<<< HEAD
 # from django.contrib.auth.models import User
 from django import forms
 from django.conf import settings
@@ -21,7 +20,6 @@ Group,
 Permission,
 PermissionsMixin,
 )
-=======
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import (
 User,
@@ -31,7 +29,6 @@ PermissionsMixin,
 AbstractUser,
 Group,
 Permission )
->>>>>>> Notifiction
 
 
 User = get_user_model()
@@ -116,13 +113,10 @@ class Subtitle(models.Model):
             
 class NewsCategory(models.Model):
     news = models.ForeignKey('News', on_delete=models.CASCADE)
-<<<<<<< HEAD
-    category = models.ForeignKey('Category', on_delete=models.CASCADE)  # using string for Category
-=======
+    category = models.ForeignKey('Category', on_delete=models.CASCADE) 
     category = models.ForeignKey('Category', on_delete=models.CASCADE)  
->>>>>>> Notifiction
     status = models.BooleanField(default=True)
-    articles = models.ManyToManyField('NewsArticle')  # using string for NewsArticle
+    articles = models.ManyToManyField('NewsArticle') 
 
     def __str__(self):
         return f"{self.news.title} - {self.category.title}"
@@ -136,13 +130,8 @@ class Category(models.Model):
         return self.title
 class Keyword(models.Model):
     word = models.CharField(max_length=50)
-<<<<<<< HEAD
     category = models.ForeignKey('Category', on_delete=models.CASCADE) 
     
-=======
-    category = models.ForeignKey('Category', on_delete=models.CASCADE)  
-
->>>>>>> Notifiction
     def __str__(self):
         return self.word
 
