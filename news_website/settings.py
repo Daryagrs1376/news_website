@@ -151,13 +151,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'static/'
-<<<<<<< HEAD
-
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Ensure 'static' folder exists
-
-=======
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] 
->>>>>>> Notifiction
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
