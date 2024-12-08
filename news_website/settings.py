@@ -211,10 +211,3 @@ SWAGGER_SETTINGS = {
         }
     },
 }
-
-LANGUAGE_CODE = 'en' 
-
-LANGUAGES = [
-    ('en', 'English'),
-    ('fa', 'Persian'),
-]

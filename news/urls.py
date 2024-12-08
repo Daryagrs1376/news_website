@@ -80,6 +80,9 @@ router.register(r'categories', CategoryViewSet, basename='categories')
 
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
+    # path('news/', include('news.urls')),
+    
     path('send-sms/',views.send_sms),
     path('verify_code/',views.verify_code),
     
@@ -92,7 +95,7 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
-    path('news/', NewsListView.as_view(), name='news-list'),
+    # path('news/', NewsListView.as_view(), name='news-list'),
     path('news/create/', NewsCreateView.as_view(), name='news-create'),
     path('news/<int:pk>/', NewsDetailView.as_view(), name='news-detail'),
 
