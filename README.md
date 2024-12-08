@@ -44,20 +44,21 @@ API REST: Django REST Framework 3.15.2
 
 ۱.کلون کردن مخزن:
 
-git clone https://github.com/Daryagrs1376/news_website.git
-cd news_website
+_ git clone https://github.com/Daryagrs1376/news_website.git
+
+_ cd news_website
 
 2.ایجاد محیط مجازی:
 
 python -m venv venv
 
-# فعال سازی محیط مجازی در لینوکس
+3.فعال سازی محیط مجازی در لینوکس
 source venv/bin/activate  
 
-# فعال سازی محیط مجازی در ویندوز
+4.فعال سازی محیط مجازی در ویندوز
 venv\Scripts\activate
 
-# با اجرای دستور زیر تمام پکیج های روی پروژه را نصب کن
+5.با اجرای دستور زیر تمام پکیج های روی پروژه را نصب کن
 - pip install -r requirements.txt
 
 # لیست پکیج‌ها و دستورات نصب
