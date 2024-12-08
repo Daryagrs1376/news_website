@@ -10,17 +10,22 @@ Post,
 Keyword,
 Category,
 ReporterProfile,
+UserProfile,
 Advertising,
+Comment,
 PageView,
 )
-from .models import UserProfile
 
 User = get_user_model()
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
+<<<<<<< HEAD
         fields = ['id', 'user', 'news_article', 'content', 'created_at']
+=======
+        fields = ['id', 'user', 'text', 'created_at']
+>>>>>>> Notifiction
         
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,0 +1,1767 @@
+[33mcommit 0ae92beae660359e59003c0507089c737778001e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mNotification[m[33m)[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Dec 4 15:15:04 2024 +0330
+
+    Remove sensitive file
+
+ 1234 | 7 [31m-------[m
+ 1 file changed, 7 deletions(-)
+
+[33mcommit da2c8d4817115de772b09f30360bdd14aceeded6[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Dec 4 14:07:24 2024 +0330
+
+    Add requirements.txt
+
+ 1234             |  7 [32m+++++++[m
+ 1234.pub         |  1 [32m+[m
+ requirements.txt | 11 [32m++++++++++[m[31m-[m
+ 3 files changed, 18 insertions(+), 1 deletion(-)
+
+[33mcommit 31bdf48b24be6cba0535922e50ce9573bceae4ad[m[33m ([m[1;31morigin/Notification[m[33m)[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Dec 4 09:47:41 2024 +0330
+
+    Add Notification and filter and Language Internationalization
+
+ news/admin.py                    |  36 [32m+++[m[31m--[m
+ news/models.py                   |  86 [32m+++++++++[m[31m---[m
+ news/serializers.py              |   8 [32m+[m[31m-[m
+ news/tasks.py                    |  10 [32m++[m
+ news/templates/news_archive.html |  15 [32m+++[m
+ news/urls.py                     |  14 [32m+[m[31m-[m
+ news/utils.py                    |  27 [32m++++[m
+ news/views.py                    | 274 [32m++++++++++++++++++++++++[m[31m---------------[m
+ news_website/__init__.py         |   7 [32m+[m
+ news_website/celery.py           |  17 [32m+++[m
+ news_website/settings.py         |  48 [32m+++++[m[31m--[m
+ news_website/urls.py             |   7 [32m+[m
+ 12 files changed, 394 insertions(+), 155 deletions(-)
+
+[33mcommit 37b485970c6119bd7276fa33988e715a2d5f336e[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m
+Merge: 6107299 6d1e974
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 30 14:17:54 2024 +0330
+
+    Merge branch 'master' of https://github.com/Daryagrs1376/news_website
+
+[33mcommit 6107299afe479462be243eda616f8e09c454ca49[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 30 14:17:43 2024 +0330
+
+    remove twilio
+
+ news/views.py            | 14 [32m+[m[31m-------------[m
+ news_website/settings.py |  4 [31m----[m
+ 2 files changed, 1 insertion(+), 17 deletions(-)
+
+[33mcommit 6d1e97431ee9c4f6d778e4004cd9dd173403462e[m
+Author: mmreza <1tapciran@gmail.com>
+Date:   Sat Nov 30 13:48:21 2024 +0330
+
+    temporary commit
+
+ README.md | 1 [31m-[m
+ 1 file changed, 1 deletion(-)
+
+[33mcommit 223db7237fcab01b83e916c3b58915a2f0bfeed6[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 30 13:29:02 2024 +0330
+
+    add panel sms
+
+ news/admin.py                                      |   3 [32m+[m[31m-[m
+ news/migrations/0005_alter_subtitle_options.py     |  17 [32m+++[m
+ .../0006_alter_subtitle_options_userprofile.py     |  30 [32m+++++[m
+ news/models.py                                     |  21 [32m++[m[31m--[m
+ news/serializers.py                                |   6 [32m+[m[31m-[m
+ news/urls.py                                       |   8 [32m+[m[31m-[m
+ news/views.py                                      | 122 [32m+++++++++++++++++++[m[31m--[m
+ news_website/settings.py                           |  11 [32m+[m[31m-[m
+ 8 files changed, 188 insertions(+), 30 deletions(-)
+
+[33mcommit 30157870fc83a9dedb43bf7b602a1020771bebce[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sun Nov 24 15:55:53 2024 +0330
+
+    Add_edit_for_redoc
+
+ news/urls.py | 24 [32m++++++++++++[m[31m------------[m
+ schema.yaml  |  0
+ 2 files changed, 12 insertions(+), 12 deletions(-)
+
+[33mcommit 328faf33e47e982311ebd0161391e0e963707780[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 23 14:24:26 2024 +0330
+
+    ADD
+
+ news/management/commands/generate_fake_data.py | 9 [31m---------[m
+ 1 file changed, 9 deletions(-)
+
+[33mcommit a8c3b2304c2b1ccbba2c44bdd24155e26e098a3d[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 23 14:03:54 2024 +0330
+
+    Add_pakeygin
+
+ requirements.txt | 5 [32m++++[m[31m-[m
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+[33mcommit 9996ee9f8c9ba6501a3ff5233825337ebc123b00[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Fri Nov 22 14:56:59 2024 +0330
+
+    add_edit
+
+ news/urls.py | 2 [32m+[m[31m-[m
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+[33mcommit 500c8686fa8f8e66d190bc148718d2d68d3947f1[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Fri Nov 22 14:48:21 2024 +0330
+
+    Add_fake_data
+
+ news/management/commands/generate_fake_data.py |   9 [32m++[m
+ news/management/commands/seed_fake_data.py     | 170 [32m+++++++++++++++[m[31m----------[m
+ 2 files changed, 114 insertions(+), 65 deletions(-)
+
+[33mcommit 7f17ade96c0e7b96720936a374fa9602a18164a3[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Fri Nov 22 01:38:34 2024 +0330
+
+    Add_faker
+
+ news/management/commands/seed_fake_data.py | 78 [32m++++++++++++++++++++++++++++++[m
+ 1 file changed, 78 insertions(+)
+
+[33mcommit 0da3650f6897c3446c57e1fa5ba416aea059bcf7[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Fri Nov 22 01:17:23 2024 +0330
+
+    add_edit
+
+ news/permissions.py |  8 [32m++++++++[m
+ news/serializers.py | 20 [32m+++++++++[m[31m-----------[m
+ news/urls.py        |  2 [32m++[m
+ news/views.py       | 14 [32m++++++++++++[m[31m--[m
+ 4 files changed, 31 insertions(+), 13 deletions(-)
+
+[33mcommit 3d7dd79288aa318487860cedf1e34d904b781dd7[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Fri Nov 22 00:35:02 2024 +0330
+
+    Add_Editing
+
+ news/admin.py                              |  9 [32m+++[m[31m--[m
+ news/migrations/0004_delete_userprofile.py | 16 [32m+++++++++[m
+ news/models.py                             | 19 [32m+++++[m[31m------[m
+ news/serializers.py                        | 55 [32m+++++++++++++++[m[31m---------------[m
+ news/urls.py                               |  6 [32m++[m[31m--[m
+ news/views.py                              | 19 [32m+++++[m[31m------[m
+ 6 files changed, 66 insertions(+), 58 deletions(-)
+
+[33mcommit a49e38da4580760e2a3792c1901bd8f7fb9f2252[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Fri Nov 22 00:03:06 2024 +0330
+
+    Add_ToDo_Rename_Newsreporter
+
+ .../0003_rename_news_reporter_newsreporter.py       | 19 [32m+++++++++++++++++++[m
+ news/models.py                                      | 21 [32m++++++++++++++++++++[m[31m-[m
+ news/views.py                                       | 10 [32m++++++++++[m
+ 3 files changed, 49 insertions(+), 1 deletion(-)
+
+[33mcommit 2197ea7e18d34200bba3c53560033700074a5355[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Thu Nov 21 23:11:22 2024 +0330
+
+    Add_edit_for_NullBooleanField
+
+ news/migrations/0001_initial.py                    | 774 [32m+++++[m[31m----------------[m
+ news/migrations/0002_alter_advertising_status.py   |  18 [32m+[m
+ .../0003_passwordresettoken_delete_operation.py    |  30 [31m-[m
+ .../0004_rename_onvan_tabligh_advertising_title.py |  18 [31m-[m
+ news/models.py                                     |   2 [32m+[m[31m-[m
+ 5 files changed, 182 insertions(+), 660 deletions(-)
+
+[33mcommit 13f17e34315e113811d1644795dc27fa5e09e83b[m
+Merge: cc03ec8 58cc9d5
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Thu Nov 21 22:56:07 2024 +0330
+
+    Merge branch 'master' of https://github.com/Daryagrs1376/news_website
+
+[33mcommit cc03ec883eef90d5a0736711034236eddcc1fe4a[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Thu Nov 21 22:55:57 2024 +0330
+
+    Add_edit_rename
+
+ news/admin.py                                          |  4 [32m++[m[31m--[m
+ .../0004_rename_onvan_tabligh_advertising_title.py     | 18 [32m++++++++++++++++++[m
+ news/serializers.py                                    |  2 [32m+[m[31m-[m
+ news/views.py                                          |  2 [32m+[m[31m-[m
+ 4 files changed, 22 insertions(+), 4 deletions(-)
+
+[33mcommit 58cc9d55cd61ce8a0dd56f528cf4ebf1241c1978[m
+Merge: 2a40353 13dbde0
+Author: Your Name <your.email@example.com>
+Date:   Thu Nov 21 19:19:43 2024 +0000
+
+    Conclude merge: resolved conflicts and updated files
+
+[33mcommit 13dbde081d154f22f07b2db70e935685d1a4809e[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Thu Nov 21 22:04:14 2024 +0330
+
+    Edit_for_ToDo's
+
+ news/admin.py                                      |  33 [32m++[m[31m--[m
+ .../0003_passwordresettoken_delete_operation.py    |  30 [32m+++[m
+ news/models.py                                     |  57 [32m+++[m[31m---[m
+ news/serializers.py                                |  61 [32m+++[m[31m---[m
+ news/urls.py                                       | 218 [32m+++++++++++++++++[m[31m----[m
+ news/views.py                                      | 158 [32m+++++++[m[31m--------[m
+ news_website/settings.py                           |   2 [32m+[m
+ 7 files changed, 348 insertions(+), 211 deletions(-)
+
+[33mcommit 2a403536f4684886fd27dfb955fa4c4defd17a3b[m
+Merge: 7b1957a d6f8d1c
+Author: Your Name <your.email@example.com>
+Date:   Thu Nov 21 15:02:33 2024 +0000
+
+    Resolved merge conflicts
+
+[33mcommit 7b1957a719f2f4d7a824bf7ae0f447271d54d6b9[m
+Author: Your Name <your.email@example.com>
+Date:   Thu Nov 21 14:55:36 2024 +0000
+
+    Save local changes in 0001_initial.py
+
+ news/migrations/0001_initial.py | 57 [32m+++++++++++++++++++++++++[m[31m----------------[m
+ 1 file changed, 35 insertions(+), 22 deletions(-)
+
+[33mcommit d6f8d1cc6e33d26dc32d13b2700a090f24e0671b[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Thu Nov 21 18:17:15 2024 +0330
+
+    Add_api_forget_password
+
+ ...orter_keywords_remove_news_keywords_and_more.py | 26 [32m++++++++++[m
+ news/models.py                                     | 14 [32m++++++[m
+ news/urls.py                                       | 53 [32m+++++++++++++++[m[31m-----[m
+ news/views.py                                      | 58 [32m+++++++++++++++++++++[m[31m-[m
+ news_website/settings.py                           |  2 [32m+[m
+ 5 files changed, 140 insertions(+), 13 deletions(-)
+
+[33mcommit cec7750f0b5d5af8edfb0b05ae0aafc955c69ef5[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Tue Nov 19 23:34:11 2024 +0330
+
+    Deleted_keywords_of_table_New_reporter
+
+ news/models.py |  1 [31m-[m
+ news/views.py  | 64 [32m++++++++++++++++++++++++[m[31m----------------------------------[m
+ 2 files changed, 26 insertions(+), 39 deletions(-)
+
+[33mcommit e0eb06c2193d898064d30d28a1f89dba7f23abca[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Tue Nov 19 23:03:43 2024 +0330
+
+    Edit_model_keywords_m&m
+
+ news/models.py | 3 [32m+[m[31m--[m
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+[33mcommit e75e63d7fde76ce2abdcb655606929b0186d483c[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Tue Nov 19 21:08:08 2024 +0330
+
+    Fixing_domain
+
+ news_website/settings.py | 25 [32m+++++++++++++++++++++++++[m
+ 1 file changed, 25 insertions(+)
+
+[33mcommit a7704b2494578496179c363e248d82004f88cc37[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Tue Nov 19 20:57:19 2024 +0330
+
+    add
+
+ news/migrations/0001_initial.py | 724 [32m++++++++++[m[31m------------------------------[m
+ news/migrations/0002_post.py    |  26 [31m--[m
+ news/models.py                  |   3 [32m+[m[31m-[m
+ 3 files changed, 171 insertions(+), 582 deletions(-)
+
+[33mcommit 0a58477e2e807446cddba7e1a601f6e4b535b4bf[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Tue Nov 19 19:21:55 2024 +0330
+
+    Add_ToDo's
+
+ news/models.py      |   2 [31m-[m
+ news/serializers.py |  27 [32m+++++++++++[m[31m-[m
+ news/urls.py        |   2 [32m+[m
+ news/views.py       | 119 [32m+++++++++++++++++++++++++++++++++++++++[m[31m-------------[m
+ 4 files changed, 117 insertions(+), 33 deletions(-)
+
+[33mcommit 151caba14f88ce20359bc4cf33c54716c6184da7[m
+Merge: 3fa45c5 f59bfb8
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sun Nov 17 23:11:54 2024 +0330
+
+    Merge branch 'master' of https://github.com/Daryagrs1376/news_website
+
+[33mcommit 3fa45c5ac15951226032b36abb8992e9da8262a1[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sun Nov 17 23:11:45 2024 +0330
+
+    add_mahdodiat_ijad_user
+
+ news/migrations/0002_post.py | 26 [32m++++++++++++++++++++++++++[m
+ news/models.py               |  8 [32m++++++++[m
+ news/serializers.py          |  7 [32m++++++[m[31m-[m
+ news/urls.py                 |  6 [32m+++++[m[31m-[m
+ news/views.py                | 25 [32m+++++++++++++++++++++++[m[31m--[m
+ 5 files changed, 68 insertions(+), 4 deletions(-)
+
+[33mcommit f59bfb8479af5a8328a2c9783a107d91ddc944aa[m
+Merge: 0fbeeca 01f9ec6
+Author: Your Name <your.email@example.com>
+Date:   Sun Nov 17 18:59:40 2024 +0000
+
+    Resolved merge conflict in 0001_initial.py using 'ours' strategy
+
+[33mcommit 01f9ec6bdad5c7af58716da2c4cbaa5ad4d0845a[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sun Nov 17 22:21:33 2024 +0330
+
+    Greate_group_moalefin
+
+ news/migrations/0001_initial.py | 72 [32m+++++++++++++++++++++++++++++++++++++++[m[31m--[m
+ news/models.py                  |  2 [32m+[m[31m-[m
+ news/urls.py                    |  4 [32m+[m[31m--[m
+ news/views.py                   | 33 [32m+++++++++++++++++++[m
+ news_website/settings.py        | 28 [32m++++++++[m[31m--------[m
+ 5 files changed, 119 insertions(+), 20 deletions(-)
+
+[33mcommit 0fbeeca548f961d61f34ab30a9548359d1a1673c[m
+Merge: 07c05dc d416d25
+Author: Your Name <your.email@example.com>
+Date:   Sat Nov 16 10:25:12 2024 +0000
+
+    Resolve merge conflict in 0001_initial.py
+
+[33mcommit 07c05dc0b96c0e112db987527b93a58ef5a7c3a1[m
+Author: Your Name <your.email@example.com>
+Date:   Sat Nov 16 10:16:58 2024 +0000
+
+    Add untracked static files
+
+ .../django_extensions/css/jquery.autocomplete.css  |   38 [32m+[m
+ staticfiles/django_extensions/img/indicator.gif    |  Bin [31m0[m -> [32m1553[m bytes
+ .../django_extensions/js/jquery.ajaxQueue.js       |  116 [32m++[m
+ .../django_extensions/js/jquery.autocomplete.js    | 1152 [32m++++++++++++++++++++[m
+ .../django_extensions/js/jquery.bgiframe.js        |   39 [32m+[m
+ 5 files changed, 1345 insertions(+)
+
+[33mcommit eaf5f3b88e2d32a5470ad64922197904fdb1e7a0[m
+Author: Your Name <your.email@example.com>
+Date:   Sat Nov 16 10:14:26 2024 +0000
+
+    Save local changes before pull
+
+ news/migrations/0001_initial.py | 710 [32m+++++++++++++++++++++++++++++++[m[31m---------[m
+ 1 file changed, 553 insertions(+), 157 deletions(-)
+
+[33mcommit d416d25c809e947affea24f2a03cd5ca62fc780b[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Fri Nov 15 22:34:25 2024 +0330
+
+    git add
+
+ news/migrations/0001_initial.py | 68 [32m+[m[31m----------------------------------------[m
+ 1 file changed, 1 insertion(+), 67 deletions(-)
+
+[33mcommit f9b041081c9f35a7f51bda838a74a33280c8aea7[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Fri Nov 15 22:23:40 2024 +0330
+
+    add
+
+ news/urls.py | 91 [32m++++++++++++++++++++++++[m[31m------------------------------------[m
+ 1 file changed, 36 insertions(+), 55 deletions(-)
+
+[33mcommit 14875b261e06d3c67364bf4a2c236833b44f76f6[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Fri Nov 15 22:12:49 2024 +0330
+
+    add
+
+ news/urls.py  | 4 [32m++[m[31m--[m
+ news/views.py | 3 [32m+++[m
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+[33mcommit 88ebe3576e6511ee4123d915261b3af2c715d2ab[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Fri Nov 15 22:03:48 2024 +0330
+
+    Add edit for redoc
+
+ news/urls.py             | 6 [32m+++[m[31m---[m
+ news_website/settings.py | 7 [31m-------[m
+ 2 files changed, 3 insertions(+), 10 deletions(-)
+
+[33mcommit 5097c4ead939c603a8c5558c6b2dad163a2dbfda[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Fri Nov 15 17:50:20 2024 +0330
+
+    add edit
+
+ news/urls.py             | 38 [32m++++++++++++++[m[31m------------------------[m
+ news_website/settings.py |  6 [32m++++++[m
+ 2 files changed, 20 insertions(+), 24 deletions(-)
+
+[33mcommit 9bfed1a7e886a1a6b1c3b901d42d47645f2101a4[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Fri Nov 15 17:44:30 2024 +0330
+
+    add redoc
+
+ news/urls.py             | 32 [32m++++++++++++++++++++++[m[31m----------[m
+ news_website/settings.py |  1 [32m+[m
+ 2 files changed, 23 insertions(+), 10 deletions(-)
+
+[33mcommit 6a2df26c5c4a9e8090a34f897f67a7f7db8cea3f[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Fri Nov 15 17:24:00 2024 +0330
+
+    add
+
+ news/views.py | 2 [32m+[m[31m-[m
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+[33mcommit 718b4f5e0f7c19a9c5ca89d16228a82a28fbffc1[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Fri Nov 15 14:58:46 2024 +0330
+
+    rename - method - post
+
+ news/views.py | 3 [32m+[m[31m--[m
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+[33mcommit 0fed663fa949c6a836b44b03c5613fc0240bdcaa[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Thu Nov 14 23:20:05 2024 +0330
+
+    add change for local
+
+ news/admin.py                   | 49 [32m+++++++++++++++++++++[m[31m--------------------[m
+ news/migrations/0001_initial.py | 10 [32m++++[m[31m-----[m
+ news/models.py                  | 48 [32m++++++++++++++[m[31m--------------------------[m
+ news/serializers.py             | 39 [32m++++++++++++++++[m[31m----------------[m
+ news/urls.py                    | 19 [32m++++++[m[31m----------[m
+ 5 files changed, 73 insertions(+), 92 deletions(-)
+
+[33mcommit 3e65988b492859df1f23fc85eaa15ba71a5cc412[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Thu Nov 14 20:50:08 2024 +0330
+
+    Doing_ToDo's
+
+ news/models.py      | 50 [32m++++[m[31m----------------------------------------------[m
+ news/serializers.py | 18 [32m+++++++++++++++[m[31m---[m
+ news/urls.py        | 16 [32m++++++++[m[31m--------[m
+ 3 files changed, 27 insertions(+), 57 deletions(-)
+
+[33mcommit 4ef2fff09a9435af07dfa0f4d29ca316ea588aed[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Nov 13 11:38:43 2024 +0330
+
+    edit permission
+
+ news/urls.py | 2 [32m+[m[31m-[m
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+[33mcommit f6c778754e3b7150976e0213cf984d078de164da[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Nov 13 11:30:21 2024 +0330
+
+    edit redoc
+
+ news/urls.py | 6 [32m+++[m[31m---[m
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+[33mcommit 37cb6e3e95e45247f22ab0b0bc901faef297a505[m
+Merge: 318e604 4b0a6ed
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Nov 13 11:25:26 2024 +0330
+
+    add edit ostad
+
+[33mcommit 318e6042ebdd1cbe8aa071cf0223b7da64d4fda8[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Nov 13 11:13:58 2024 +0330
+
+    add pull
+
+ news/migrations/0001_initial.py | 2 [32m+[m[31m-[m
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+[33mcommit cd216a4e1e544934a2566825620e7db73bfad23f[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Nov 13 11:09:41 2024 +0330
+
+    add edit redoc
+
+ news/migrations/0001_initial.py | 2 [32m+[m[31m-[m
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+[33mcommit 4b0a6ed40481bc3180a4ac6e0dc62037e30cf32d[m
+Merge: 5851188 b4fd871
+Author: mmreza <1tapciran@gmail.com>
+Date:   Wed Nov 13 11:06:35 2024 +0330
+
+    Merge branch 'hotfix/custom-user'
+
+[33mcommit b4fd871007ad0cba4afd4303041df2207669e940[m[33m ([m[1;31morigin/hotfix/custom-user[m[33m)[m
+Author: mmreza <1tapciran@gmail.com>
+Date:   Wed Nov 13 11:04:58 2024 +0330
+
+    Add user edit url
+
+ news/urls.py | 2 [32m+[m[31m-[m
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+[33mcommit 0bd5e8c75de52a60196349868127a235a265b449[m
+Author: mmreza <1tapciran@gmail.com>
+Date:   Wed Nov 13 11:04:21 2024 +0330
+
+    Fix user creation api
+
+ news/serializers.py | 8 [32m+++[m[31m-----[m
+ news/urls.py        | 2 [32m+[m[31m-[m
+ 2 files changed, 4 insertions(+), 6 deletions(-)
+
+[33mcommit a8770eca01052acf937a264eae4ba134b309189c[m
+Author: mmreza <1tapciran@gmail.com>
+Date:   Wed Nov 13 11:00:21 2024 +0330
+
+    Add UserProfile
+
+ news/models.py      | 12 [32m++++++++++++[m
+ news/serializers.py | 16 [32m+++++++++[m[31m-------[m
+ news/views.py       |  4 [32m++[m[31m--[m
+ 3 files changed, 23 insertions(+), 9 deletions(-)
+
+[33mcommit 4c963d997ab9054f73862145893378f2e78597c4[m
+Author: mmreza <1tapciran@gmail.com>
+Date:   Wed Nov 13 10:45:23 2024 +0330
+
+    Remove CustomUser model
+
+ news/migrations/0001_initial.py | 21 [31m---------------------[m
+ news/models.py                  | 37 [31m-------------------------------------[m
+ news/serializers.py             |  1 [31m-[m
+ news_website/settings.py        |  2 [31m--[m
+ 4 files changed, 61 deletions(-)
+
+[33mcommit 3541df3b15ee977badec3ecfa8ff9b1eb4e98c40[m
+Author: mmreza <1tapciran@gmail.com>
+Date:   Wed Nov 13 10:39:03 2024 +0330
+
+    Rename mobile field to phone_number in CustomUserModel
+
+ news/admin.py                                                         | 4 [32m++[m[31m--[m
+ news/migrations/0001_initial.py                                       | 2 [32m+[m[31m-[m
+ news/models.py                                                        | 2 [32m+[m[31m-[m
+ news/serializers.py                                                   | 4 [32m++[m[31m--[m
+ news/views.py                                                         | 2 [32m+[m[31m-[m
+ staticfiles/admin/css/responsive.css                                  | 2 [32m+[m[31m-[m
+ staticfiles/admin/css/responsive_rtl.css                              | 2 [32m+[m[31m-[m
+ staticfiles/drf-yasg/redoc-old/redoc.min.js                           | 2 [32m+[m[31m-[m
+ staticfiles/drf-yasg/redoc/redoc.standalone.js.map                    | 2 [32m+[m[31m-[m
+ staticfiles/drf-yasg/swagger-ui-dist/swagger-ui-bundle.js             | 2 [32m+[m[31m-[m
+ staticfiles/drf-yasg/swagger-ui-dist/swagger-ui-bundle.js.map         | 2 [32m+[m[31m-[m
+ staticfiles/drf-yasg/swagger-ui-dist/swagger-ui-es-bundle-core.js     | 2 [32m+[m[31m-[m
+ staticfiles/drf-yasg/swagger-ui-dist/swagger-ui-es-bundle-core.js.map | 2 [32m+[m[31m-[m
+ staticfiles/drf-yasg/swagger-ui-dist/swagger-ui-es-bundle.js          | 2 [32m+[m[31m-[m
+ staticfiles/drf-yasg/swagger-ui-dist/swagger-ui-es-bundle.js.map      | 2 [32m+[m[31m-[m
+ staticfiles/drf-yasg/swagger-ui-dist/swagger-ui.css.map               | 2 [32m+[m[31m-[m
+ staticfiles/drf-yasg/swagger-ui-dist/swagger-ui.js.map                | 2 [32m+[m[31m-[m
+ staticfiles/rest_framework/css/bootstrap.min.css.map                  | 2 [32m+[m[31m-[m
+ staticfiles/rest_framework/css/font-awesome-4.0.3.css                 | 4 [32m++[m[31m--[m
+ staticfiles/rest_framework/docs/js/highlight.pack.js                  | 2 [32m+[m[31m-[m
+ 20 files changed, 23 insertions(+), 23 deletions(-)
+
+[33mcommit 43ee42f074268d730b2ef08383999698c93da06c[m
+Author: mmreza <1tapciran@gmail.com>
+Date:   Wed Nov 13 10:37:01 2024 +0330
+
+    Fix user serializer
+
+ news/serializers.py      |  4 [32m+++[m[31m-[m
+ news/urls.py             | 23 [32m+++++++++++[m[31m------------[m
+ news/views.py            |  1 [32m+[m
+ news_website/settings.py | 18 [32m+++++++++[m[31m---------[m
+ 4 files changed, 24 insertions(+), 22 deletions(-)
+
+[33mcommit 585118819392204381e6f7c4aa1a7110d3b6aa82[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Nov 13 09:55:20 2024 +0330
+
+    Edit redoc
+
+ news/urls.py | 8 [32m++++[m[31m----[m
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+[33mcommit 6fd7dc6759456320928358eeadfeb65535849d2b[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Nov 13 09:29:17 2024 +0330
+
+    edit bug redoc
+
+ news/urls.py | 2 [32m+[m[31m-[m
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+[33mcommit e63f2e8eb33406f736e8b1b3d9b279834245cbc5[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Nov 13 09:16:42 2024 +0330
+
+    edit redoc
+
+ news/migrations/0001_initial.py |  44 [32m+++++++[m[31m---[m
+ news/models.py                  | 188 [32m+++++++++++++++++++++++++++++[m[31m-----------[m
+ news/serializers.py             |  46 [32m+++++[m[31m-----[m
+ news/urls.py                    |  18 [32m++[m[31m--[m
+ news/views.py                   |  12 [32m++[m[31m-[m
+ news_website/settings.py        |  14 [32m+[m[31m--[m
+ 6 files changed, 217 insertions(+), 105 deletions(-)
+
+[33mcommit 7c8f7752be7a0941379ecfe437257a7438f298b0[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Fri Nov 8 02:04:19 2024 +0330
+
+    permision
+
+ news/views.py            | 10 [32m+++++++++[m[31m-[m
+ news_website/settings.py |  4 [32m+++[m[31m-[m
+ 2 files changed, 12 insertions(+), 2 deletions(-)
+
+[33mcommit 8068ac5df91cadadef37691bd9490c0aa08ded2c[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Fri Nov 8 01:52:24 2024 +0330
+
+    add
+
+ news/urls.py | 4 [32m+++[m[31m-[m
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+[33mcommit 9e2f860c24647457452af9e41384a6b4e3a50c19[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Fri Nov 8 01:45:47 2024 +0330
+
+    rename token
+
+ news/migrations/0001_initial.py | 284 [32m++++++++++++++++++++++++++++++++++++++++[m
+ news/urls.py                    |   5 [32m+[m[31m-[m
+ 2 files changed, 287 insertions(+), 2 deletions(-)
+
+[33mcommit 654f92418e702b3c81d5fe45755027d80d6a8f6a[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Fri Nov 8 01:31:30 2024 +0330
+
+    add permision
+
+ news/migrations/0001_initial.py | 284 [31m----------------------------------------[m
+ news/views.py                   |   4 [32m+[m[31m-[m
+ 2 files changed, 3 insertions(+), 285 deletions(-)
+
+[33mcommit 119a7bf033adac6ac377394ab9c0a3311309568f[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Fri Nov 8 01:22:38 2024 +0330
+
+    add edit
+
+ news/permissions.py | 12 [32m++++++++++++[m
+ news/views.py       |  2 [32m+[m[31m-[m
+ 2 files changed, 13 insertions(+), 1 deletion(-)
+
+[33mcommit 2abadf3befffd513953b3bb89a42caeec9e41ab4[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Fri Nov 8 01:10:27 2024 +0330
+
+    Edit for trello
+
+ news/admin.py       |   3 [32m+[m[31m-[m
+ news/models.py      |  10 [32m+++[m[31m-[m
+ news/permissions.py |   8 [32m+++[m
+ news/serializers.py |  90 [32m++++++++++++++++++++++++++++++[m[31m-[m
+ news/urls.py        |  20 [32m+++++++[m
+ news/views.py       | 151 [32m++++++++++++++++++++++++++++++++++++++++++++++++++++[m
+ 6 files changed, 278 insertions(+), 4 deletions(-)
+
+[33mcommit 8d25818aa89e7fe842930645a481ef21a721022e[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Thu Nov 7 23:07:53 2024 +0330
+
+    token
+
+ news/migrations/0001_initial.py | 2 [32m+[m[31m-[m
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+[33mcommit 00c62f263045d900348cd756b114712b10f3b8f6[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Thu Nov 7 22:58:21 2024 +0330
+
+    Token jwt
+
+ news/admin.py                   |  36 [32m+++[m[31m--[m
+ news/migrations/0001_initial.py | 284 [32m++++++++++++++++++++++++++++++++++++++++[m
+ news/serializers.py             |   6 [32m+[m[31m-[m
+ news/urls.py                    |   2 [32m+[m[31m-[m
+ news/views.py                   |  17 [32m++[m[31m-[m
+ news_website/settings.py        |  42 [32m++++[m[31m--[m
+ 6 files changed, 354 insertions(+), 33 deletions(-)
+
+[33mcommit 959626f3eb40d3d517fb7003471b58e556ffec3e[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Thu Nov 7 19:53:52 2024 +0330
+
+    redoc
+
+ news/migrations/0001_initial.py | 284 [31m----------------------------------------[m
+ news_website/settings.py        |   3 [32m+[m[31m-[m
+ 2 files changed, 2 insertions(+), 285 deletions(-)
+
+[33mcommit 5e40f6251d7f5db3ce48485efff1adf2e21325fc[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Thu Nov 7 19:49:48 2024 +0330
+
+    redoc
+
+ news/urls.py | 5 [32m+++[m[31m--[m
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+[33mcommit 4fb60776b62c7d1915db0645dc057e850e106c3b[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Thu Nov 7 19:42:01 2024 +0330
+
+    Redoc
+
+ news/urls.py | 30 [32m++++++++++++[m[31m------------------[m
+ 1 file changed, 12 insertions(+), 18 deletions(-)
+
+[33mcommit 2dfc3ea74cc58723c384e86a2786d1457f49519c[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Thu Nov 7 19:30:13 2024 +0330
+
+    TOKEN
+
+ news/migrations/0001_initial.py | 2 [32m+[m[31m-[m
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+[33mcommit 8595d875f20b00977241c99eea426c106e47350c[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Thu Nov 7 19:09:25 2024 +0330
+
+    TOKEN
+
+ news/urls.py                                       |    3 [32m+[m
+ news_website/settings.py                           |   10 [32m+[m[31m-[m
+ .../django_extensions/css/jquery.autocomplete.css  |   38 [32m+[m
+ staticfiles/django_extensions/img/indicator.gif    |  Bin [31m0[m -> [32m1553[m bytes
+ .../django_extensions/js/jquery.ajaxQueue.js       |  116 [32m++[m
+ .../django_extensions/js/jquery.autocomplete.js    | 1152 [32m++++++++++++++++++++[m
+ .../django_extensions/js/jquery.bgiframe.js        |   39 [32m+[m
+ 7 files changed, 1354 insertions(+), 4 deletions(-)
+
+[33mcommit 35135e87c9a5395e9d07a5ebe062e671e039d9b0[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Thu Nov 7 18:57:30 2024 +0330
+
+    Token
+
+ news/urls.py             | 2 [32m+[m[31m-[m
+ news_website/settings.py | 1 [32m+[m
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+[33mcommit 48349fecc9953c64fa02bc509145630cf868dbae[m
+Merge: 64fb138 cbbc52e
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Thu Nov 7 18:21:22 2024 +0330
+
+    Merge branch 'master' of https://github.com/Daryagrs1376/news_website
+
+[33mcommit 64fb13879b664f9e19ac137088f430a8476b98f6[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Thu Nov 7 18:21:14 2024 +0330
+
+    token
+
+ news/admin.py            |  2 [32m+[m[31m-[m
+ news/urls.py             | 18 [32m++++++++[m[31m----------[m
+ news_website/settings.py | 15 [32m+++++++++[m[31m------[m
+ 3 files changed, 18 insertions(+), 17 deletions(-)
+
+[33mcommit cbbc52e4c4da2d2b5383a64ba7d3dc775339243c[m
+Author: mmreza <1tapciran@gmail.com>
+Date:   Wed Nov 6 10:00:30 2024 +0330
+
+    Update requirements.txt
+
+ requirements.txt | 5 [32m+++++[m
+ 1 file changed, 5 insertions(+)
+
+[33mcommit 5b2b3536ded73145145287f76668ce0f8d44cd0d[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sun Nov 3 15:54:41 2024 +0330
+
+    add token
+
+ news/views.py | 122 [32m+++++++++++++++++++++++++++++++[m[31m---------------------------[m
+ 1 file changed, 65 insertions(+), 57 deletions(-)
+
+[33mcommit 59af6d83fa0bba03ded2abcfea4b057bf0995d34[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sun Nov 3 15:09:42 2024 +0330
+
+    not login
+
+ news/views.py | 3 [32m+++[m
+ 1 file changed, 3 insertions(+)
+
+[33mcommit b45f87965682d53537946aa6de76f1a33d79868c[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sun Nov 3 13:28:28 2024 +0330
+
+    edit
+
+ news/views.py | 27 [32m+++++++++++++[m[31m--------------[m
+ 1 file changed, 13 insertions(+), 14 deletions(-)
+
+[33mcommit 48a0ec66c8953081b0bc4407e54234f832773730[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sun Nov 3 13:08:23 2024 +0330
+
+    news
+
+ news/views.py | 79 [32m+++++++++++++++++[m[31m------------------------------------------[m
+ 1 file changed, 22 insertions(+), 57 deletions(-)
+
+[33mcommit a1a29b96063e49d51110a06604aaf8fc36838204[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sun Nov 3 12:45:31 2024 +0330
+
+    news_create
+
+ news/views.py | 5 [32m+++++[m
+ 1 file changed, 5 insertions(+)
+
+[33mcommit e1d0fb23700776b94c202a7812d4093e100cb794[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sun Nov 3 12:33:03 2024 +0330
+
+    newsallowonly
+
+ news/urls.py             |  6 [32m++++++[m
+ news/views.py            |  1 [32m+[m
+ news_website/settings.py | 13 [32m++++[m[31m---------[m
+ 3 files changed, 11 insertions(+), 9 deletions(-)
+
+[33mcommit 8e2500e51d0da6af4fc65b59f372e3881f959176[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 2 15:53:44 2024 +0330
+
+    add news read login
+
+ news/migrations/0001_initial.py | 284 [32m++++++++++++++++++++++++++++++++++++++++[m
+ news/views.py                   |  13 [32m++[m
+ 2 files changed, 297 insertions(+)
+
+[33mcommit 99bb6dbdf8ad4c6ec244f9919c4770db54adc3e7[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 2 15:45:48 2024 +0330
+
+    not_login_news_detail
+
+ news/views.py | 10 [32m++++++++++[m
+ 1 file changed, 10 insertions(+)
+
+[33mcommit 9e8ca8c68957a3e85e3972243fe9b539e17a02c7[m
+Merge: 07e3382 a812d02
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 2 15:32:38 2024 +0330
+
+    Merge branch 'master' of https://github.com/Daryagrs1376/news_website
+
+[33mcommit 07e3382ae25ccf9f10f1cba68ec91af3bbcb9a2c[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 2 15:32:31 2024 +0330
+
+    add
+
+ news/views.py            |  6 [32m+++[m[31m---[m
+ news_website/settings.py | 12 [32m++++++[m[31m------[m
+ 2 files changed, 9 insertions(+), 9 deletions(-)
+
+[33mcommit a812d022f55dbf49ee14831d7444e4f77d8032cf[m
+Merge: e3701f6 96708cc
+Author: Daryagrs1376 <dryagaroosi@gmail.com>
+Date:   Sat Nov 2 11:31:32 2024 +0000
+
+    Removed 0001_initial.py migration file
+
+[33mcommit 96708ccd24c1c8605af68451e65d0d48df2fdd5d[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 2 14:33:17 2024 +0330
+
+    News_list
+
+ news/models.py |  7 [31m-------[m
+ news/views.py  | 11 [32m+++++++++++[m
+ 2 files changed, 11 insertions(+), 7 deletions(-)
+
+[33mcommit ebb394dd96562db9c87c6edf5c42386e8d73e306[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 2 12:06:24 2024 +0330
+
+    jh
+
+ news/migrations/0001_initial.py | 284 [32m++++++++++++++++++++++++++++++++++++++++[m
+ 1 file changed, 284 insertions(+)
+
+[33mcommit ea90139dd7c57557295b8c2e5a68f55f5de9ebe8[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 2 12:05:27 2024 +0330
+
+    bg
+
+ news/admin.py | 4 [32m++[m[31m--[m
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+[33mcommit 0b55afe2f90c22a585b21cb2d4ff0cf6bd7843df[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 2 12:04:31 2024 +0330
+
+    fsb
+
+ news/migrations/0001_initial.py | 296 [31m----------------------------------------[m
+ 1 file changed, 296 deletions(-)
+
+[33mcommit b817adba68d09c585fe78a7729c0b1a196153402[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 2 12:03:36 2024 +0330
+
+    sd
+
+ news/models.py | 12 [32m++++++[m[31m------[m
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+[33mcommit b8fcf35db51f43690225b24c0013489425541bc3[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 2 10:51:16 2024 +0330
+
+    zx
+
+ news/migrations/0001_initial.py     | 14 [32m+++++++++++++[m[31m-[m
+ news/migrations/0002_customtoken.py | 26 [31m--------------------------[m
+ 2 files changed, 13 insertions(+), 27 deletions(-)
+
+[33mcommit fbf6d757eb4275a1bc51c8e231626ddc59bdeba8[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 2 10:17:55 2024 +0330
+
+    asl
+
+ news/admin.py                       |  3 [32m+++[m
+ news/migrations/0002_customtoken.py | 26 [32m++++++++++++++++++++++++++[m
+ news/models.py                      |  6 [32m++++++[m
+ 3 files changed, 35 insertions(+)
+
+[33mcommit e3701f6167023b7d093433a5b313489696d3bbec[m
+Author: Daryagrs1376 <dryagaroosi@gmail.com>
+Date:   Sat Nov 2 06:30:47 2024 +0000
+
+    ظط
+
+ news/migrations/0001_initial.py | 710 [32m+++++++++++++++++++++++++++++++[m[31m---------[m
+ 1 file changed, 553 insertions(+), 157 deletions(-)
+
+[33mcommit 4d9f78a93424b3d1d1ad8f27f21369b31eb35f49[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 2 09:58:33 2024 +0330
+
+    ظط
+
+ news/migrations/0001_initial.py | 284 [32m++++++++++++++++++++++++++++++++++++++++[m
+ 1 file changed, 284 insertions(+)
+
+[33mcommit 98bae0cd78e5fc06265da08bf3bd06f30e6c346e[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 2 09:52:31 2024 +0330
+
+    asd
+
+ news/migrations/0001_initial.py | 284 [31m----------------------------------------[m
+ 1 file changed, 284 deletions(-)
+
+[33mcommit f41d6face37815e3dbdb6a0c247b5ba078c77313[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 2 09:24:30 2024 +0330
+
+    tokene
+
+ news/forms.py                   | 19 [32m++[m[31m-----------------[m
+ news/migrations/0001_initial.py |  2 [32m+[m[31m-[m
+ news/models.py                  |  8 [32m+[m[31m-------[m
+ 3 files changed, 4 insertions(+), 25 deletions(-)
+
+[33mcommit cf603ce49c65f20f68feb445f495f7a8d41d5415[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 2 09:12:19 2024 +0330
+
+    Namw-token
+
+ news/urls.py         | 4 [32m++[m[31m--[m
+ news_website/urls.py | 1 [31m-[m
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+[33mcommit 7038870cbc2100da5578982e7ba720a1bfce3043[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 2 09:00:46 2024 +0330
+
+    tooken
+
+ news/urls.py | 133 [32m+[m[31m----------------------------------------------------------[m
+ 1 file changed, 1 insertion(+), 132 deletions(-)
+
+[33mcommit 1d2e99fd977226e89f5c028f21cfee779f9910a7[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Nov 2 08:49:32 2024 +0330
+
+    token
+
+ news/tests.py | 16 [32m++++++++[m[31m--------[m
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+[33mcommit 1f3c9ebec8a1593d42bbd4e167026e79cf0690c6[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Oct 30 11:01:19 2024 +0330
+
+    Addd
+
+ news/migrations/0001_initial.py | 2 [32m+[m[31m-[m
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+[33mcommit 56e6fb33fe7cd8fd5a7058eb61a2379df08576c2[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Oct 30 10:47:35 2024 +0330
+
+    m
+
+ news_website/urls.py | 2 [32m+[m[31m-[m
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+[33mcommit 6898c00f3c8dc422d683b56d5180813f8b07f60b[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Oct 30 10:45:40 2024 +0330
+
+    Add
+
+ news_website/urls.py | 1 [32m+[m
+ 1 file changed, 1 insertion(+)
+
+[33mcommit 08de461f8e91bd66aa352f219f79184cd153b94b[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Oct 30 10:06:20 2024 +0330
+
+    Add news
+
+ news/admin.py                   |   3 [32m+[m[31m-[m
+ news/migrations/0001_initial.py | 284 [32m++++++++++++++++++++++++++++++++++++++++[m
+ 2 files changed, 286 insertions(+), 1 deletion(-)
+
+[33mcommit 3f5accba205903e9488c69885f216ebb3a3fc74e[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Oct 30 09:53:56 2024 +0330
+
+    Add delete
+
+ news/migrations/0001_initial.py | 284 [31m----------------------------------------[m
+ 1 file changed, 284 deletions(-)
+
+[33mcommit b41eeb51c7974ba66b9c314a2d7f1b7b07111d4c[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Oct 30 09:47:33 2024 +0330
+
+    Add News
+
+ README.md            |  2 [32m+[m[31m-[m
+ news/admin.py        | 11 [32m++++++[m[31m-----[m
+ news/serializers.py  |  9 [32m+++++++[m[31m--[m
+ news/urls.py         |  2 [32m++[m
+ news/views.py        | 14 [32m++++++++++++[m[31m--[m
+ news_website/urls.py |  2 [32m+[m[31m-[m
+ 6 files changed, 29 insertions(+), 11 deletions(-)
+
+[33mcommit 3fe41103da55bb6761d7c1cf3f6d5fcdac885ef5[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Tue Oct 29 15:59:51 2024 +0330
+
+    Add
+
+ news/models.py | 2 [31m--[m
+ 1 file changed, 2 deletions(-)
+
+[33mcommit 5e1537a2300bcdea653f340f0deb7d4ea29868fb[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Tue Oct 29 15:44:53 2024 +0330
+
+    00
+
+ news/migrations/0001_initial.py | 3 [32m++[m[31m-[m
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+[33mcommit 0763945c7936b8563c64939707644cad30f9a4fa[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Tue Oct 29 15:40:02 2024 +0330
+
+    Add clid News-namayesh-be-karbar
+
+ news/models.py | 10 [32m++++[m[31m------[m
+ news/views.py  |  5 [32m+[m[31m----[m
+ 2 files changed, 5 insertions(+), 10 deletions(-)
+
+[33mcommit 073a9d9ec095e3933225b4c019ebb82e6bd9f125[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Tue Oct 29 12:17:45 2024 +0330
+
+    Add README.md
+
+ README.md                       |  84 [32m++++++++++++[m
+ news/migrations/0001_initial.py | 283 [32m++++++++++++++++++++++++++++++++++++++++[m
+ 2 files changed, 367 insertions(+)
+
+[33mcommit f5b0315079c02444c1fdfaded64fa2debea29ed8[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Tue Oct 29 09:13:18 2024 +0330
+
+    Add data
+
+ news/migrations/0001_initial.py    | 283 [31m-------------------------------------[m
+ news/scripts/populate_fake_data.py |  54 [31m-------[m
+ 2 files changed, 337 deletions(-)
+
+[33mcommit 14842fdc16a26be73df9a4d69d4a9ff11f0a897c[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Mon Oct 28 22:21:22 2024 +0330
+
+    add feyker
+
+ management/commands/populate_data.py | 29 [31m----------------[m
+ news/migrations/0001_initial.py      |  2 [32m+[m[31m-[m
+ news/models.py                       |  1 [31m-[m
+ news/scripts/populate_fake_data.py   | 54 [32m+++++++++++++++++++++++++++++[m
+ news_website/settings.py             |  1 [32m+[m
+ scripts/populate.py                  | 66 [31m------------------------------------[m
+ 6 files changed, 56 insertions(+), 97 deletions(-)
+
+[33mcommit b9cc38aeef3f6d3fc0ce11170573d115138769e7[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Mon Oct 28 21:26:38 2024 +0330
+
+    Feyk data
+
+ news/migrations/0001_initial.py | 2 [32m+[m[31m-[m
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+[33mcommit d67f4b5f3a766b32ba03f717fe5a39740849359d[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Mon Oct 28 19:43:14 2024 +0330
+
+    Faker
+
+ management/commands/populate_data.py | 29 [32m++++++++++++++++[m
+ news/migrations/0001_initial.py      |  2 [32m+[m[31m-[m
+ news/models.py                       |  3 [32m+[m[31m-[m
+ news_website/settings.py             |  2 [32m+[m[31m-[m
+ scripts/populate.py                  | 66 [32m++++++++++++++++++++++++++++++++++++[m
+ 5 files changed, 99 insertions(+), 3 deletions(-)
+
+[33mcommit 2d75790e0db72104cf8a25680eabdf99f557c067[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sun Oct 27 16:08:26 2024 +0330
+
+    .env
+
+ .gitignore               |  2 [31m--[m
+ README.md                | 44 [31m--------------------------------------------[m
+ news_website/settings.py | 23 [32m+[m[31m----------------------[m
+ 3 files changed, 1 insertion(+), 68 deletions(-)
+
+[33mcommit 3b0f23cdcde12dc397c90d66df0f8dedcf8cb4c0[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sun Oct 27 16:06:01 2024 +0330
+
+    .env
+
+ .gitignore               |  4 [32m+++[m[31m-[m
+ news_website/settings.py | 18 [32m++++++++++++++++++[m
+ 2 files changed, 21 insertions(+), 1 deletion(-)
+
+[33mcommit 9575762eced5857b2260f4a740cdcc8ff2e615aa[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sun Oct 27 15:58:36 2024 +0330
+
+    Read me
+
+ README.md                                        |  44 [32m+++++++++++++++++++++++[m
+ banners/Screenshot_2024-09-02_194356_k75JfyD.png | Bin [31m0[m -> [32m13899[m bytes
+ banners/Screenshot_2024-10-09_091853.png         | Bin [31m0[m -> [32m79221[m bytes
+ banners/Screenshot_2024-10-09_091912.png         | Bin [31m0[m -> [32m41687[m bytes
+ logos/Screenshot_2024-10-09_091744.png           | Bin [31m0[m -> [32m79851[m bytes
+ logos/Screenshot_2024-10-20_092023.png           | Bin [31m0[m -> [32m28115[m bytes
+ news/admin.py                                    |   5 [32m+[m[31m--[m
+ news/migrations/0001_initial.py                  |   6 [32m++[m[31m--[m
+ news/models.py                                   |   6 [32m++[m[31m--[m
+ news_website/settings.py                         |   5 [32m++[m[31m-[m
+ 10 files changed, 57 insertions(+), 9 deletions(-)
+
+[33mcommit a6bb5acfede28b131ad025d246ed64a8d8bd0a74[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Oct 26 15:05:11 2024 +0330
+
+    Add new category title
+
+ news/admin.py                   | 2 [32m+[m[31m-[m
+ news/migrations/0001_initial.py | 2 [32m+[m[31m-[m
+ news/models.py                  | 1 [31m-[m
+ news_website/settings.py        | 2 [32m+[m[31m-[m
+ 4 files changed, 3 insertions(+), 4 deletions(-)
+
+[33mcommit 58d8ba9ba7d267341d96c988361aee13efd4c00c[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Oct 26 14:26:05 2024 +0330
+
+    Add urls.py
+
+ news/urls.py | 2 [32m+[m[31m-[m
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+[33mcommit b4e4bc8b7497ec4e8fcd00731bcc56a2410647d8[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Oct 26 13:21:33 2024 +0330
+
+    Add new token
+
+ news/urls.py | 7 [32m++++[m[31m---[m
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+[33mcommit fc394e934301ddbf70be271692b12f0cec4684ba[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Oct 26 13:15:19 2024 +0330
+
+    add urls token
+
+ news/urls.py | 191 [32m+++++++++++++++++++++++++++++++++++++++++++++[m[31m--------------[m
+ 1 file changed, 147 insertions(+), 44 deletions(-)
+
+[33mcommit f3af63a8854fe2d6c557919a79042707a0227b26[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Oct 26 13:08:44 2024 +0330
+
+    Add Token
+
+ news/migrations/0001_initial.py |  2 [32m+[m[31m-[m
+ news/urls.py                    | 18 [32m++++++++++++++++++[m
+ news_website/settings.py        | 17 [32m+++++++++++[m[31m------[m
+ 3 files changed, 30 insertions(+), 7 deletions(-)
+
+[33mcommit 009a6273d63a9efa4421368e44f4596a68d5ba11[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Oct 26 09:57:34 2024 +0330
+
+    bearer
+
+ news_website/settings.py | 2 [32m++[m
+ news_website/urls.py     | 2 [32m+[m[31m-[m
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+[33mcommit ff00676be2ad4fc3440eb9349f3276520d6b5d12[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Oct 26 09:19:08 2024 +0330
+
+    Basic
+
+ news/migrations/0001_initial.py |  5 [32m+++[m[31m--[m
+ news/models.py                  | 11 [32m+++[m[31m--------[m
+ news/urls.py                    | 10 [32m+++++++++[m[31m-[m
+ news/views.py                   | 38 [32m++++++++++++++++++++++++++++++++++++++[m
+ news_website/settings.py        | 26 [32m++++++++++++++++++++++++++[m
+ 5 files changed, 79 insertions(+), 11 deletions(-)
+
+[33mcommit 5c2ebdaae68199de666170545b75b93f51f43ab1[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Oct 23 09:35:35 2024 +0330
+
+    adit
+
+ news_website/settings.py | 3 [31m---[m
+ 1 file changed, 3 deletions(-)
+
+[33mcommit 930bf284c673c55d82c254ca58fbc7f707a2e2e3[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Oct 23 09:22:47 2024 +0330
+
+    add app for them
+
+ news_website/settings.py | 1 [32m+[m
+ 1 file changed, 1 insertion(+)
+
+[33mcommit 6b1f32facec956682023ec5e6b3095ea44da16b8[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Oct 23 09:21:16 2024 +0330
+
+    add them django for site pythonanywhere
+
+ news_website/settings.py | 2 [32m++[m
+ 1 file changed, 2 insertions(+)
+
+[33mcommit 194b3b6c759a37d78bf3393f78c8319739510baa[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Tue Oct 22 23:27:36 2024 +0330
+
+    change static
+
+ news_website/settings.py | 13 [32m++++++[m[31m-------[m
+ 1 file changed, 6 insertions(+), 7 deletions(-)
+
+[33mcommit 7c8ddb7b79cf51f0085e8f0320c9f0f03e13467e[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Tue Oct 22 23:17:58 2024 +0330
+
+    change static
+
+ news_website/settings.py | 15 [32m++++++++[m[31m-------[m
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+[33mcommit 700135af5b2d4003abd93e1e3530c1028329a528[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Tue Oct 22 23:09:50 2024 +0330
+
+    remove static_root
+
+ news_website/settings.py | 2 [32m+[m[31m-[m
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+[33mcommit 53fb96f2bbfa45eade36fcba710b93a762604b42[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Tue Oct 22 22:45:08 2024 +0330
+
+    add static root
+
+ news_website/settings.py | 1 [32m+[m
+ 1 file changed, 1 insertion(+)
+
+[33mcommit b52eb13f0d36e30c8f1147eb1b7ac75e8783fa88[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Tue Oct 22 12:38:17 2024 +0330
+
+    test
+
+ news/templates/subtitle_list.html | 5 [31m-----[m
+ 1 file changed, 5 deletions(-)
+
+[33mcommit 3b088f926ff26914f96f2b1a5921af849a29d414[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Tue Oct 22 12:35:33 2024 +0330
+
+    python test
+
+ banners/Screenshot_2024-09-02_194356.png           |   Bin [31m0[m -> [32m13899[m bytes
+ banners/Screenshot_2024-09-04_020730.png           |   Bin [31m0[m -> [32m3590[m bytes
+ news/admin.py                                      |     3 [32m+[m[31m-[m
+ news/migrations/0001_initial.py                    |    16 [32m+[m[31m-[m
+ news/migrations/0002_pageview.py                   |    24 [31m-[m
+ news/models.py                                     |    17 [32m+[m[31m-[m
+ news/serializers.py                                |     9 [32m+[m[31m-[m
+ news/templates/subtitle_list.html                  |     5 [32m+[m
+ news/tests.py                                      |   165 [32m+[m[31m-[m
+ news/urls.py                                       |    28 [32m+[m[31m-[m
+ news/views.py                                      |    39 [32m+[m[31m-[m
+ news_website/settings.py                           |    24 [32m+[m[31m-[m
+ staticfiles/admin/css/autocomplete.css             |   279 [32m+[m
+ staticfiles/admin/css/base.css                     |  1179 [32m++[m
+ staticfiles/admin/css/changelists.css              |   343 [32m+[m
+ staticfiles/admin/css/dark_mode.css                |   130 [32m+[m
+ staticfiles/admin/css/dashboard.css                |    29 [32m+[m
+ staticfiles/admin/css/forms.css                    |   512 [32m+[m
+ staticfiles/admin/css/login.css                    |    61 [32m+[m
+ staticfiles/admin/css/nav_sidebar.css              |   150 [32m+[m
+ staticfiles/admin/css/responsive.css               |   967 [32m++[m
+ staticfiles/admin/css/responsive_rtl.css           |   111 [32m+[m
+ staticfiles/admin/css/rtl.css                      |   291 [32m+[m
+ staticfiles/admin/css/unusable_password_field.css  |    19 [32m+[m
+ .../admin/css/vendor/select2/LICENSE-SELECT2.md    |    21 [32m+[m
+ staticfiles/admin/css/vendor/select2/select2.css   |   481 [32m+[m
+ .../admin/css/vendor/select2/select2.min.css       |     1 [32m+[m
+ staticfiles/admin/css/widgets.css                  |   593 [32m+[m
+ staticfiles/admin/img/LICENSE                      |    20 [32m+[m
+ staticfiles/admin/img/README.txt                   |     7 [32m+[m
+ staticfiles/admin/img/calendar-icons.svg           |    63 [32m+[m
+ staticfiles/admin/img/gis/move_vertex_off.svg      |     1 [32m+[m
+ staticfiles/admin/img/gis/move_vertex_on.svg       |     1 [32m+[m
+ staticfiles/admin/img/icon-addlink.svg             |     3 [32m+[m
+ staticfiles/admin/img/icon-alert.svg               |     3 [32m+[m
+ staticfiles/admin/img/icon-calendar.svg            |     9 [32m+[m
+ staticfiles/admin/img/icon-changelink.svg          |     3 [32m+[m
+ staticfiles/admin/img/icon-clock.svg               |     9 [32m+[m
+ staticfiles/admin/img/icon-deletelink.svg          |     3 [32m+[m
+ staticfiles/admin/img/icon-hidelink.svg            |     3 [32m+[m
+ staticfiles/admin/img/icon-no.svg                  |     3 [32m+[m
+ staticfiles/admin/img/icon-unknown-alt.svg         |     3 [32m+[m
+ staticfiles/admin/img/icon-unknown.svg             |     3 [32m+[m
+ staticfiles/admin/img/icon-viewlink.svg            |     3 [32m+[m
+ staticfiles/admin/img/icon-yes.svg                 |     3 [32m+[m
+ staticfiles/admin/img/inline-delete.svg            |     3 [32m+[m
+ staticfiles/admin/img/search.svg                   |     3 [32m+[m
+ staticfiles/admin/img/selector-icons.svg           |    34 [32m+[m
+ staticfiles/admin/img/sorting-icons.svg            |    19 [32m+[m
+ staticfiles/admin/img/tooltag-add.svg              |     3 [32m+[m
+ staticfiles/admin/img/tooltag-arrowright.svg       |     3 [32m+[m
+ staticfiles/admin/js/SelectBox.js                  |   116 [32m+[m
+ staticfiles/admin/js/SelectFilter2.js              |   286 [32m+[m
+ staticfiles/admin/js/actions.js                    |   204 [32m+[m
+ staticfiles/admin/js/admin/DateTimeShortcuts.js    |   408 [32m+[m
+ staticfiles/admin/js/admin/RelatedObjectLookups.js |   240 [32m+[m
+ staticfiles/admin/js/autocomplete.js               |    33 [32m+[m
+ staticfiles/admin/js/calendar.js                   |   239 [32m+[m
+ staticfiles/admin/js/cancel.js                     |    29 [32m+[m
+ staticfiles/admin/js/change_form.js                |    16 [32m+[m
+ staticfiles/admin/js/core.js                       |   184 [32m+[m
+ staticfiles/admin/js/filters.js                    |    30 [32m+[m
+ staticfiles/admin/js/inlines.js                    |   359 [32m+[m
+ staticfiles/admin/js/jquery.init.js                |     8 [32m+[m
+ staticfiles/admin/js/nav_sidebar.js                |    79 [32m+[m
+ staticfiles/admin/js/popup_response.js             |    15 [32m+[m
+ staticfiles/admin/js/prepopulate.js                |    43 [32m+[m
+ staticfiles/admin/js/prepopulate_init.js           |    15 [32m+[m
+ staticfiles/admin/js/theme.js                      |    51 [32m+[m
+ staticfiles/admin/js/unusable_password_field.js    |    29 [32m+[m
+ staticfiles/admin/js/urlify.js                     |   169 [32m+[m
+ staticfiles/admin/js/vendor/jquery/LICENSE.txt     |    20 [32m+[m
+ staticfiles/admin/js/vendor/jquery/jquery.js       | 10716 [32m+++++++++++++++++++[m
+ staticfiles/admin/js/vendor/jquery/jquery.min.js   |     2 [32m+[m
+ staticfiles/admin/js/vendor/select2/LICENSE.md     |    21 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/af.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/ar.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/az.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/bg.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/bn.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/bs.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/ca.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/cs.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/da.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/de.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/dsb.js    |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/el.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/en.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/es.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/et.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/eu.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/fa.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/fi.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/fr.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/gl.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/he.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/hi.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/hr.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/hsb.js    |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/hu.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/hy.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/id.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/is.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/it.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/ja.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/ka.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/km.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/ko.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/lt.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/lv.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/mk.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/ms.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/nb.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/ne.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/nl.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/pl.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/ps.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/pt-BR.js  |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/pt.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/ro.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/ru.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/sk.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/sl.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/sq.js     |     3 [32m+[m
+ .../admin/js/vendor/select2/i18n/sr-Cyrl.js        |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/sr.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/sv.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/th.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/tk.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/tr.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/uk.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/vi.js     |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/zh-CN.js  |     3 [32m+[m
+ staticfiles/admin/js/vendor/select2/i18n/zh-TW.js  |     3 [32m+[m
+ .../admin/js/vendor/select2/select2.full.js        |  6820 [32m++++++++++++[m
+ .../admin/js/vendor/select2/select2.full.min.js    |     2 [32m+[m
+ staticfiles/admin/js/vendor/xregexp/LICENSE.txt    |    21 [32m+[m
+ staticfiles/admin/js/vendor/xregexp/xregexp.js     |  6126 [32m+++++++++++[m
+ staticfiles/admin/js/vendor/xregexp/xregexp.min.js |    17 [32m+[m
+ staticfiles/drf-yasg/README                        |    18 [32m+[m
+ staticfiles/drf-yasg/immutable.js                  |  4977 [32m+++++++++[m
+ staticfiles/drf-yasg/immutable.min.js              |    34 [32m+[m
+ staticfiles/drf-yasg/insQ.js                       |   163 [32m+[m
+ staticfiles/drf-yasg/insQ.min.js                   |     4 [32m+[m
+ staticfiles/drf-yasg/redoc-init.js                 |    73 [32m+[m
+ staticfiles/drf-yasg/redoc-old/LICENSE             |    22 [32m+[m
+ staticfiles/drf-yasg/redoc-old/redoc.min.js        |     8 [32m+[m
+ staticfiles/drf-yasg/redoc-old/redoc.min.js.map    |    23 [32m+[m
+ staticfiles/drf-yasg/redoc/LICENSE                 |    22 [32m+[m
+ staticfiles/drf-yasg/redoc/redoc-logo.png          |   Bin [31m0[m -> [32m4969[m bytes
+ staticfiles/drf-yasg/redoc/redoc.min.js            |  1806 [32m++++[m
+ staticfiles/drf-yasg/redoc/redoc.standalone.js.map |     1 [32m+[m
+ staticfiles/drf-yasg/style.css                     |    73 [32m+[m
+ staticfiles/drf-yasg/swagger-ui-dist/LICENSE       |   202 [32m+[m
+ staticfiles/drf-yasg/swagger-ui-dist/NOTICE        |     2 [32m+[m
+ .../drf-yasg/swagger-ui-dist/absolute-path.js      |    14 [32m+[m
+ .../drf-yasg/swagger-ui-dist/favicon-32x32.png     |   Bin [31m0[m -> [32m628[m bytes
+ staticfiles/drf-yasg/swagger-ui-dist/index.css     |    16 [32m+[m
+ staticfiles/drf-yasg/swagger-ui-dist/index.js      |    17 [32m+[m
+ .../drf-yasg/swagger-ui-dist/oauth2-redirect.html  |    79 [32m+[m
+ .../swagger-ui-dist/swagger-initializer.js         |    20 [32m+[m
+ .../drf-yasg/swagger-ui-dist/swagger-ui-bundle.js  |     3 [32m+[m
+ .../swagger-ui-dist/swagger-ui-bundle.js.map       |     1 [32m+[m
+ .../swagger-ui-dist/swagger-ui-es-bundle-core.js   |     3 [32m+[m
+ .../swagger-ui-es-bundle-core.js.map               |     1 [32m+[m
+ .../swagger-ui-dist/swagger-ui-es-bundle.js        |     3 [32m+[m
+ .../swagger-ui-dist/swagger-ui-es-bundle.js.map    |     1 [32m+[m
+ .../swagger-ui-standalone-preset.js                |     3 [32m+[m
+ .../swagger-ui-standalone-preset.js.map            |     1 [32m+[m
+ .../drf-yasg/swagger-ui-dist/swagger-ui.css        |     3 [32m+[m
+ .../drf-yasg/swagger-ui-dist/swagger-ui.css.map    |     1 [32m+[m
+ .../drf-yasg/swagger-ui-dist/swagger-ui.js.map     |     1 [32m+[m
+ staticfiles/drf-yasg/swagger-ui-init.js            |   406 [32m+[m
+ .../rest_framework/css/bootstrap-theme.min.css     |     6 [32m+[m
+ .../rest_framework/css/bootstrap-theme.min.css.map |     1 [32m+[m
+ .../rest_framework/css/bootstrap-tweaks.css        |   237 [32m+[m
+ staticfiles/rest_framework/css/bootstrap.min.css   |     6 [32m+[m
+ .../rest_framework/css/bootstrap.min.css.map       |     1 [32m+[m
+ staticfiles/rest_framework/css/default.css         |    82 [32m+[m
+ .../rest_framework/css/font-awesome-4.0.3.css      |  1338 [32m+++[m
+ staticfiles/rest_framework/css/prettify.css        |    30 [32m+[m
+ staticfiles/rest_framework/docs/css/base.css       |   359 [32m+[m
+ staticfiles/rest_framework/docs/css/highlight.css  |   125 [32m+[m
+ .../docs/css/jquery.json-view.min.css              |    11 [32m+[m
+ staticfiles/rest_framework/docs/img/favicon.ico    |   Bin [31m0[m -> [32m5430[m bytes
+ staticfiles/rest_framework/docs/img/grid.png       |   Bin [31m0[m -> [32m1458[m bytes
+ staticfiles/rest_framework/docs/js/api.js          |   315 [32m+[m
+ .../rest_framework/docs/js/highlight.pack.js       |     2 [32m+[m
+ .../rest_framework/docs/js/jquery.json-view.min.js |     7 [32m+[m
+ .../rest_framework/fonts/fontawesome-webfont.eot   |   Bin [31m0[m -> [32m38205[m bytes
+ .../rest_framework/fonts/fontawesome-webfont.svg   |   414 [32m+[m
+ .../rest_framework/fonts/fontawesome-webfont.ttf   |   Bin [31m0[m -> [32m80652[m bytes
+ .../rest_framework/fonts/fontawesome-webfont.woff  |   Bin [31m0[m -> [32m44432[m bytes
+ .../fonts/glyphicons-halflings-regular.eot         |   Bin [31m0[m -> [32m20127[m bytes
+ .../fonts/glyphicons-halflings-regular.svg         |   288 [32m+[m
+ .../fonts/glyphicons-halflings-regular.ttf         |   Bin [31m0[m -> [32m45404[m bytes
+ .../fonts/glyphicons-halflings-regular.woff        |   Bin [31m0[m -> [32m23424[m bytes
+ .../fonts/glyphicons-halflings-regular.woff2       |   Bin [31m0[m -> [32m18028[m bytes
+ .../img/glyphicons-halflings-white.png             |   Bin [31m0[m -> [32m8777[m bytes
+ .../rest_framework/img/glyphicons-halflings.png    |   Bin [31m0[m -> [32m12762[m bytes
+ staticfiles/rest_framework/img/grid.png            |   Bin [31m0[m -> [32m1458[m bytes
+ staticfiles/rest_framework/js/ajax-form.js         |   133 [32m+[m
+ staticfiles/rest_framework/js/bootstrap.min.js     |     6 [32m+[m
+ staticfiles/rest_framework/js/coreapi-0.1.1.js     |  2043 [32m++++[m
+ staticfiles/rest_framework/js/csrf.js              |    53 [32m+[m
+ staticfiles/rest_framework/js/default.js           |    47 [32m+[m
+ staticfiles/rest_framework/js/jquery-3.7.1.min.js  |     2 [32m+[m
+ staticfiles/rest_framework/js/load-ajax-form.js    |     3 [32m+[m
+ staticfiles/rest_framework/js/prettify-min.js      |    28 [32m+[m
+ 209 files changed, 45661 insertions(+), 54 deletions(-)
+
+[33mcommit a48ee137cfb8bb1504c3c8bde08b525d424f3355[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sun Oct 20 10:39:14 2024 +0330
+
+    PageView
+
+ news/admin.py                    |  9 [32m+++++++[m
+ news/migrations/0002_pageview.py | 24 [32m++++++++++++++++++[m
+ news/models.py                   |  9 [32m++++++[m[31m-[m
+ news/serializers.py              |  9 [32m+++++[m[31m--[m
+ news/urls.py                     | 12 [32m++++++++[m[31m-[m
+ news/views.py                    | 55 [32m+++++++++++++++++++++++++++++++++++++[m[31m---[m
+ 6 files changed, 111 insertions(+), 7 deletions(-)
+
+[33mcommit eea779f8c8d7e02d48ba46a94d7a6b4e9d477183[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Oct 19 15:06:26 2024 +0330
+
+    git conmit branch
+
+ news/admin.py                                      | 181 [32m++++++++[m[31m---------[m
+ news/migrations/0001_initial.py                    | 207 [32m+++++++++++++++++[m[31m--[m
+ ...tured_remove_news_special_category1_and_more.py |  33 [31m---[m
+ news/models.py                                     | 224 [32m++++++++++++++++++[m[31m---[m
+ news/permissions.py                                |  11 [32m+[m
+ news/serializers.py                                |  86 [32m+++++++[m[31m-[m
+ news/urls.py                                       | 110 [32m+++++[m[31m-----[m
+ news/views.py                                      | 140 [32m+++++++++++[m[31m--[m
+ news_website/urls.py                               |  49 [32m+[m[31m----[m
+ 9 files changed, 753 insertions(+), 288 deletions(-)
+
+[33mcommit 2ef7ae9b325663edbe70e4c2104248c6b601b673[m[33m ([m[1;32mnew-branch[m[33m)[m
+Author: mmreza <1tapciran@gmail.com>
+Date:   Wed Oct 16 15:17:31 2024 +0330
+
+    حل مشکل ذخیره شدن کتگوری
+
+ news/models.py | 2 [32m+[m[31m-[m
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+[33mcommit 3f314278c51e8746e0d90690786b96cd553af631[m
+Author: mmreza <1tapciran@gmail.com>
+Date:   Wed Oct 16 15:17:08 2024 +0330
+
+    افزودن چند تودو
+
+ ...tured_remove_news_special_category1_and_more.py | 33 [32m++++++++++++++++++++++[m
+ news/models.py                                     | 23 [32m+++++++++++[m[31m----[m
+ news/views.py                                      |  1 [32m+[m
+ 3 files changed, 52 insertions(+), 5 deletions(-)
+
+[33mcommit e20c5aff2db76947ab27f9901b2d26a5ace98165[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Oct 16 14:39:25 2024 +0330
+
+    TODO
+
+ news/admin.py                                      | 113 [32m+++++++[m[31m--[m
+ news/migrations/0001_initial.py                    |  88 [32m++++[m[31m---[m
+ news/migrations/0002_subtitle.py                   |  28 [31m---[m
+ .../migrations/0003_reporterprofile_delete_user.py |  27 [31m--[m
+ news/models.py                                     |  97 [32m+++[m[31m-----[m
+ news/urls.py                                       |  86 [32m++++[m[31m---[m
+ news/views.py                                      | 277 [32m+++[m[31m------------------[m
+ news_website/urls.py                               |  46 [32m++[m[31m--[m
+ 8 files changed, 289 insertions(+), 473 deletions(-)
+
+[33mcommit 54026ded00f2e56cbfc287cf12f3f8451804eca8[m
+Author: mmreza <1tapciran@gmail.com>
+Date:   Sat Oct 12 15:32:16 2024 +0330
+
+    Add TODO
+
+ news/models.py |  9 [32m++++++[m[31m---[m
+ news/views.py  | 14 [32m+++++++++++++[m[31m-[m
+ 2 files changed, 19 insertions(+), 4 deletions(-)
+
+[33mcommit 2f89873500806450bf291d349cf45223132ef754[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Oct 12 14:55:39 2024 +0330
+
+    commit user
+
+ news/admin.py                                      |  12 [32m+[m[31m-[m
+ news/forms.py                                      |  26 [32m+[m[31m-[m
+ .../migrations/0003_reporterprofile_delete_user.py |  27 [32m++[m
+ news/serializers.py                                |  18 [32m+[m[31m-[m
+ news/urls.py                                       |   6 [32m+[m
+ news/views.py                                      | 481 [32m+++++++++++[m[31m----------[m
+ news_website/urls.py                               |   7 [32m+[m[31m-[m
+ 7 files changed, 333 insertions(+), 244 deletions(-)
+
+[33mcommit 5533cc5380fb18bce6cea2b55e6fde40e2db8365[m
+Merge: a5b8b47 319db3c
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Oct 12 13:42:57 2024 +0330
+
+    Merge branch 'master' of https://github.com/Daryagrs1376/news_website
+
+[33mcommit a5b8b47fd435ff8dd6c93048e3008f00e36e91bc[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Oct 12 13:42:37 2024 +0330
+
+    initial commit subtitle
+
+ news/admin.py                    | 14 [32m++++++++++[m
+ news/forms.py                    | 18 [32m++++++++++[m[31m---[m
+ news/migrations/0002_subtitle.py | 28 [32m+++++++++++++++++++[m
+ news/models.py                   | 15 [32m++++++++++[m[31m-[m
+ news/urls.py                     |  3 [32m+++[m
+ news/views.py                    | 58 [32m+++++++++++++++++++++++++++++++++++[m[31m-----[m
+ news_website/urls.py             |  8 [32m++++++[m
+ 7 files changed, 133 insertions(+), 11 deletions(-)
+
+[33mcommit 319db3c11be138f04508d698879f96a8c4f8186b[m
+Author: mmreza <1tapciran@gmail.com>
+Date:   Sat Oct 12 12:24:09 2024 +0330
+
+    Fix reporter profile architecture
+
+ news/models.py | 62 [32m+++++++++++++++++++++++++++++++[m[31m---------------------------[m
+ 1 file changed, 33 insertions(+), 29 deletions(-)
+
+[33mcommit 26905ff7c12df145a84cd1daaff11ddb05a82571[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Oct 12 11:14:34 2024 +0330
+
+    cad
+
+ requirements.txt | 5 [32m+++++[m
+ 1 file changed, 5 insertions(+)
+
+[33mcommit 5b7b41d475c789f53c9569a6457f4d7eaca79335[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Sat Oct 12 10:55:33 2024 +0330
+
+    initial commit
+
+ news/admin.py                   |  16 [32m+++[m[31m--[m
+ news/forms.py                   |  30 [32m+++++++++[m
+ news/migrations/0001_initial.py |  24 [32m++++[m[31m---[m
+ news/models.py                  |  17 [32m+++[m[31m--[m
+ news/urls.py                    |  19 [32m+++++[m[31m-[m
+ news/views.py                   | 140 [32m++++++++++++++++++++++++++++++++++[m[31m------[m
+ news_website/settings.py        |   1 [32m+[m
+ news_website/urls.py            |  12 [32m+++[m[31m-[m
+ 8 files changed, 215 insertions(+), 44 deletions(-)
+
+[33mcommit 60916114dc26ed1d2a4efdea9aa5e4de5c918090[m
+Author: Darya <dryagaroosi@gmail.com>
+Date:   Wed Oct 9 09:53:03 2024 +0330
+
+    initial commit
+
+ .gitignore                      | 174 [32m++++++++++++++++++++++++++++++[m
+ manage.py                       |  22 [32m++++[m
+ news/__init__.py                |   0
+ news/admin.py                   |  26 [32m+++++[m
+ news/apps.py                    |   6 [32m++[m
+ news/forms.py                   |  21 [32m++++[m
+ news/migrations/0001_initial.py |  65 [32m+++++++++++[m
+ news/migrations/__init__.py     |   0
+ news/models.py                  |  98 [32m+++++++++++++++++[m
+ news/serializers.py             |  51 [32m+++++++++[m
+ news/tests.py                   |   3 [32m+[m
+ news/urls.py                    |  24 [32m+++++[m
+ news/views.py                   | 232 [32m++++++++++++++++++++++++++++++++++++++++[m
+ news_website/__init__.py        |   0
+ news_website/asgi.py            |  16 [32m+++[m
+ news_website/settings.py        | 125 [32m++++++++++++++++++++++[m
+ news_website/urls.py            |  23 [32m++++[m
+ news_website/wsgi.py            |  16 [32m+++[m
+ 18 files changed, 902 insertions(+)

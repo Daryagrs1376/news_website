@@ -1,4 +1,5 @@
 from django.contrib import admin
+from .models import Article, media
 from .models import (
     Category,
     Keyword,
@@ -66,12 +67,7 @@ class NewsAdmin(admin.ModelAdmin):
 class RoleAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
-
-# class UserAdmin(admin.ModelAdmin):
-#     list_display = ('username', 'email', 'phone_number', 'role', 'status')
-#     search_fields = ('username', 'email', 'phone_number')
-#     list_filter = ('role', 'status')
-    
+      
 class AdvertisingAdmin(admin.ModelAdmin):
     list_display = ('title', 'link', 'location', 'start_date', 'expiration_date', 'status')
     search_fields = ('title', 'location')
@@ -94,6 +90,16 @@ class SettingAdmin(admin.ModelAdmin):
 class DashboardAdmin(admin.ModelAdmin):
     list_display = ('news', 'admin_panel')
     search_fields = ('news__title',)
+
+class PageViewAdmin(admin.ModelAdmin):
+    list_display = ('date', 'total_visits', 'social_visits', 'bounce_rate')  
+    list_filter = ('date',)
+    search_fields = ('date',)
+    
+# class UserAdmin(admin.ModelAdmin):
+#     list_display = ('username', 'email', 'phone_number', 'role', 'status')
+#     search_fields = ('username', 'email', 'phone_number')
+#     list_filter = ('role', 'status')
 
 # class OperationAdmin(admin.ModelAdmin):
 #     list_display = ('news', 'operation_type', 'performed_at')
@@ -122,10 +128,10 @@ admin.site.register(SpecialCategory)
 admin.site.register(NewsSpecialAttributes)
 admin.site.register(ReporterProfile)
 admin.site.register(Role, RoleAdmin)
-# admin.site.register(User, UserAdmin)
 admin.site.register(Advertising, AdvertisingAdmin)
 admin.site.register(Setting, SettingAdmin)
 admin.site.register(Dashboard)
 admin.site.register(UserProfile)
 admin.site.register(PageView)
 admin.site.register(Subtitle)
+# admin.site.register(User, UserAdmin)

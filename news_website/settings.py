@@ -10,9 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
 from datetime import timedelta
+from celery.schedules import crontab
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -115,10 +116,8 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -152,9 +151,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'static/'
+<<<<<<< HEAD
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Ensure 'static' folder exists
 
+=======
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] 
+>>>>>>> Notifiction
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
@@ -209,5 +212,37 @@ SWAGGER_SETTINGS = {
             'in': 'header',
             'description': "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
         }
+    },
+}
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    },
+}
+
+LANGUAGE_CODE = 'en'
+TIME_ZONE = 'UTC'
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
+LANGUAGES = [
+    ('en', 'English'),
+    ('fa', 'فارسی'),
+]
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # برای استفاده از Redis به عنوان broker
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+CELERY_BEAT_SCHEDULE = {
+    'publish_scheduled_articles': {
+        'task': 'news.tasks.publish_scheduled_articles',
+        'schedule': crontab(minute=0, hour=0),  # اجرای روزانه در نیمه‌شب
     },
 }
