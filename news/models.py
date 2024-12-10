@@ -1,6 +1,6 @@
 import uuid
 import random
-from haystack import indexes  # type: ignore
+# from haystack import indexes  # type: ignore
 from django import forms
 from django.db import models
 from django.conf import settings
@@ -39,11 +39,11 @@ class media(models.Model):
     def __str__(self):
         return f"{self.file.name}" 
 
-class NewsIndex(indexes.SearchIndex, indexes.Indexable):
-    text = indexes.CharField(document=True, use_template=True)
+# class NewsIndex(indexes.SearchIndex, indexes.Indexable):
+#     text = indexes.CharField(document=True, use_template=True)
 
-    def get_model(self):
-        return News
+#     def get_model(self):
+#         return News
     
 class OTP(models.Model):
     phone = models.CharField(max_length=15, unique=True)
