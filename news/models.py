@@ -1,15 +1,12 @@
 import uuid
 import random
-from haystack import indexes # type: ignore
+from haystack import indexes  # type: ignore
 from django import forms
 from django.db import models
 from django.apps import apps
 from django.conf import settings
 from django.utils import timezone
 from django.utils.timezone import now
-# from django.contrib.auth.models import User
-from django import forms
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import(
 AbstractBaseUser,
@@ -20,18 +17,10 @@ Group,
 Permission,
 PermissionsMixin,
 )
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import (
-User,
-AbstractBaseUser,
-BaseUserManager,
-PermissionsMixin,
-AbstractUser,
-Group,
-Permission )
 
 
 User = get_user_model()
+
 
 class Article(models.Model):
     title = models.CharField(max_length=200)
@@ -51,12 +40,12 @@ class media(models.Model):
     def __str__(self):
         return f"{self.file.name}" 
 
-
 class NewsIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
 
     def get_model(self):
         return News
+    
 class OTP(models.Model):
     phone = models.CharField(max_length=15, unique=True)
     code = models.CharField(max_length=6)
@@ -66,6 +55,7 @@ class OTP(models.Model):
         if not self.code:
             self.code = str(random.randint(100000, 999999))
         super().save(*args, **kwargs)
+        
 class PasswordResetToken(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="password_reset_tokens")
     token = models.UUIDField(default=uuid.uuid4, unique=True)
@@ -128,6 +118,7 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
+    
 class Keyword(models.Model):
     word = models.CharField(max_length=50)
     category = models.ForeignKey('Category', on_delete=models.CASCADE) 
@@ -181,6 +172,7 @@ class SpecialFeature(models.Model):
 
     def __str__(self):
         return self.feature_name
+    
 class SpecialCategory(models.Model):
     category_name = models.CharField(max_length=50)
 
@@ -218,6 +210,7 @@ class ReporterProfile(models.Model):
 
     def __str__(self):
         return f"Profile of {self.reporter.username}"
+    
 class UserManager(BaseUserManager):
     def create_user(self, phone_number, password=None):
         if not phone_number:
@@ -262,7 +255,6 @@ class Role(models.Model):
         (ADMIN, 'Admin'),
         (REPORTER, 'Reporter'),
     ]
-    
     name = models.CharField(max_length=50, choices=ROLE_CHOICES)
 
     def __str__(self):
@@ -278,14 +270,12 @@ class User(AbstractUser):
         blank=True,
         help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.'
     )
-
     user_permissions = models.ManyToManyField(
         Permission,
         related_name='news_user_permissions',
         blank=True,
         help_text='Specific permissions for this user.'
     )
-    
     def __str__(self):
         return self.username
 
@@ -295,7 +285,6 @@ class Advertising(models.Model):
         ('sidebar', 'Sidebar'),
         ('footer', 'Footer'),
     ]
-
     title  = models.CharField(max_length=255)
     link = models.URLField()
     banner = models.ImageField(upload_to='banners/')
@@ -322,13 +311,13 @@ class Setting(models.Model):
     def __str__(self):
         return self.subcategory_name
     
-    
 class Dashboard(models.Model):
     admin_panel = models.BooleanField(default=False)
     news = models.ForeignKey(News, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Dashboard for {self.news.title}"
+    
 class PageView(models.Model):
     date = models.DateField()
     total_visits = models.IntegerField()
@@ -343,44 +332,20 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     likes = models.IntegerField(default=0)
     dislikes = models.IntegerField(default=0)
- 
-     
-# class Operation(models.Model):
-#     EDIT = 'edit'
-#     DELETE = 'delete'
-#     OPERATION_CHOICES = [
-#         (EDIT, 'Edit'),
-#         (DELETE, 'Delete'),
-#     ]
-
-#     news = models.ForeignKey(News, on_delete=models.CASCADE)
-#     operation_type = models.CharField(max_length=10, choices=OPERATION_CHOICES, null=True, blank=True)
-#     performed_at = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return f"{self.get_operation_type_display()} on {self.news.title}"
-<<<<<<< HEAD
-    
-class PageView(models.Model):
-    date = models.DateField()
-    total_visits = models.IntegerField()
-    social_visits = models.IntegerField()
-    bounce_rate = models.FloatField()
-    page_views = models.JSONField()
 
 class Comment(models.Model):
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)  # کاربری که نظر داده
-    news_article = models.ForeignKey('NewsArticle', on_delete=models.CASCADE)  # مقاله‌ای که نظر روی آن است
-    content = models.TextField()  # محتوای نظر
-    created_at = models.DateTimeField(auto_now_add=True)  # زمان ایجاد نظر
-    approved = models.BooleanField(default=False)  # تایید شده بودن نظر
-
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)  
+    news_article = models.ForeignKey('NewsArticle', on_delete=models.CASCADE)  
+    content = models.TextField()  
+    created_at = models.DateTimeField(auto_now_add=True)  
+    approved = models.BooleanField(default=False)  
+    
     def __str__(self):
         return f"Comment by {self.user.username} on {self.news_article.title}"
 
 class Report(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)  # ارجاع به مدل Comment
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)  
     reason = models.TextField()  
     created_at = models.DateTimeField(auto_now_add=True)  
 
@@ -388,9 +353,9 @@ class Report(models.Model):
         return f"Report by {self.user.username} on comment {self.comment.id}"
 
 class Like(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)  # کاربری که لایک کرده
-    news_article = models.ForeignKey('NewsArticle', on_delete=models.CASCADE)  # اخبار مربوطه
-    created_at = models.DateTimeField(auto_now_add=True)  # زمان لایک
+    user = models.ForeignKey(User, on_delete=models.CASCADE) 
+    news_article = models.ForeignKey('NewsArticle', on_delete=models.CASCADE)  
+    created_at = models.DateTimeField(auto_now_add=True)  
 
     def __str__(self):
         return f"Like by {self.user.username} on {self.news_article.title}"
@@ -398,6 +363,3 @@ class Like(models.Model):
 class NewsArticle(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
-    
-=======
->>>>>>> Notifiction

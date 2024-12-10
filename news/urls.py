@@ -85,8 +85,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     path('send-sms/',views.send_sms),
-    path('verify_code/',views.verify_code),
-    
+    path('verify_code/', views.verify_otp), 
+        
     path('comment/report/<int:comment_id>/', views.report_comment, name='report_comment'),
     path('article/<int:article_id>/', views.article_detail, name='article_detail'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

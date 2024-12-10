@@ -17,22 +17,18 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework_simplejwt.authentication import JWTAuthentication
-<<<<<<< HEAD
 from.forms import SubtitleForm, AddCategoryForm, CommentForm
 from .models import Advertising
 from datetime import datetime, timedelta
 from django.utils.timezone import now
 from django.views import View
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-=======
->>>>>>> Notifiction
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
-<<<<<<< HEAD
 from django.contrib.auth.decorators import login_required
 from news.models import NewsCategory, NewsArticle, Category, News
 from django.utils import timezone
@@ -40,7 +36,6 @@ from random import randint
 from twilio.rest import Client
 import os
 from django.conf import settings 
-=======
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.authentication import(
 SessionAuthentication,
@@ -48,7 +43,6 @@ TokenAuthentication )
 from django.utils.http import (
 urlsafe_base64_encode,
 urlsafe_base64_decode)
->>>>>>> Notifiction
 from django.contrib.auth.tokens import (
 PasswordResetTokenGenerator)
 from rest_framework.generics import(
