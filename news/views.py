@@ -28,7 +28,8 @@ SessionAuthentication,
 TokenAuthentication )
 from django.utils.http import (
 urlsafe_base64_encode,
-urlsafe_base64_decode)
+urlsafe_base64_decode, 
+)
 from django.contrib.auth.tokens import (
 PasswordResetTokenGenerator)
 from rest_framework.generics import(
