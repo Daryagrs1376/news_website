@@ -180,16 +180,6 @@ REST_FRAMEWORK = {
     ],
 }
 
-# # REST framework settings (AllowAny gives public access to API endpoints)
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.permissions.IsAuthenticated',
-#     ],
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.AllowAny',  # Public access for all users
-#     ],
-# }
-
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60), 
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7), 
@@ -209,5 +199,13 @@ SWAGGER_SETTINGS = {
             'in': 'header',
             'description': "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
         }
+    },
+}
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://127.0.0.1:9200/',  # URL Elasticsearch
+        'INDEX_NAME': 'haystack',
     },
 }

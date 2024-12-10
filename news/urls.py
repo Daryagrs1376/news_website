@@ -45,7 +45,6 @@ UserRegistrationView,
 RegisterView,
 RequestPasswordResetAPIView,
 ResetPasswordAPIView,
-# UserProfileDetailView,
 subtitle_list,
 add_subtitle,
 edit_subtitle,
@@ -84,8 +83,8 @@ urlpatterns = [
     # path('news/', include('news.urls')),
     
     path('send-sms/',views.send_sms),
-    path('verify_code/',views.verify_code),
-    
+    path('verify_code/', views.verify_code), 
+        
     path('comment/report/<int:comment_id>/', views.report_comment, name='report_comment'),
     path('article/<int:article_id>/', views.article_detail, name='article_detail'),
 

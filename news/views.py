@@ -1,4 +1,4 @@
-from django_filters.rest_framework import DjangoFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend # type: ignore
 from .permissions import IsNotAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -20,9 +20,15 @@ from django.contrib.auth.decorators import login_required
 from news.models import NewsCategory, NewsArticle, Category, News
 from django.utils import timezone
 from random import randint
-from twilio.rest import Client
+from twilio.rest import Client # type: ignore
 import os
 from django.conf import settings 
+from rest_framework.authentication import(
+SessionAuthentication,
+TokenAuthentication )
+from django.utils.http import (
+urlsafe_base64_encode,
+urlsafe_base64_decode)
 from django.contrib.auth.tokens import (
 PasswordResetTokenGenerator)
 from rest_framework.generics import(
