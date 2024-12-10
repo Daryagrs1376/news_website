@@ -14,4 +14,5 @@ rest_framework.authtoken==3.16.0
 celery==5.3.0 
 django-haystack==3.1
 kavenegar==1.2.6
+django-haystack
 
