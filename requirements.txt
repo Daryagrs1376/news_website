@@ -1,4 +1,4 @@
-asgiref==3.8.2
+asgiref==3.8.1
 Django==5.2
 djangorestframework==3.16.0
 sqlparse==0.5.4
@@ -15,4 +15,3 @@ celery==5.3.0
 django-haystack==3.1
 kavenegar==1.2.6
 django-haystack
-
